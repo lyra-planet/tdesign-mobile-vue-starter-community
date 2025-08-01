@@ -1,0 +1,20 @@
+{
+  "Vue快速模板": {
+    "scope": "vue",
+    "prefix": "Vue",
+    "body": [
+      "<script setup lang='ts'>",
+      "defineOptions({",
+      "\tname: ''",
+      "})",
+      "</script>\n",
+      "<template>",
+      "\t<div>Ciallo~(∠・ω&lt; )⌒★!</div>",
+      "</template>\n",
+      "<style lang='scss' scoped>\n",
+      "</style>",
+      "$1"
+    ],
+    "description": "Vue快速模板"
+  }
+}

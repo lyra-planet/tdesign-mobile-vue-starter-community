@@ -1,0 +1,84 @@
+// ⚠ 不要设置 * {...}
+// [踩坑] TailwindCSS v4 默认使用了 CSS layers，其他样式优先级会将 TailwindCSS 覆盖掉
+// 按需设置样式即可
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+html {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  // 新版 chrome 默认字体设为了思源黑体，终于不用忍受微软雅黑了
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', Arial, sans-serif;
+  line-height: inherit;
+  -moz-osx-font-smoothing: grayscale; // macOS Firefox 字体抗锯齿
+  -webkit-font-smoothing: antialiased; // macOS Webkit 字体抗锯齿
+  text-rendering: optimizelegibility; // 优化字体渲染
+}
+
+a,
+a:focus,
+a:hover {
+  color: inherit; // 来个聪明人解释一下为什么要设置成 inherit 🤭
+  text-decoration: none;
+  cursor: pointer;
+}
+
+table {
+  text-indent: 0;
+  border-collapse: collapse;
+  border-color: inherit;
+}
+
+ol,
+ul,
+menu {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p {
+  margin: 0;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+}
+
+// 清除浮动，上古秘术了属于是
+.clearfix {
+  &::after {
+    display: block;
+    height: 0;
+    clear: both;
+    font-size: 0;
+    visibility: hidden;
+    content: ' ';
+  }
+}
