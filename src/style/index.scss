@@ -2,3 +2,39 @@
 :root {
   --tmv-bg-color: #f6f6f6;
 }
+
+.t-dropdown-menu::after {
+  display: none !important;
+}
+
+.auth-primary-button {
+  margin: 16px;
+  width: calc(100% - 32px);
+  height: 48px;
+  border-radius: 6px;
+}
+
+.auth-divider {
+  width: 1px;
+  background-color: #e7e7e7;
+}
+
+.auth-divider--24 {
+  height: 24px;
+}
+
+.auth-divider--20 {
+  height: 20px;
+}
+
+.auth-flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-container {
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+

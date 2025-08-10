@@ -1,48 +1,58 @@
-<script setup lang='ts'>
-import { useLayoutHook } from './hooks'
+<script lang="ts" setup>
+import { Icon as TIcon } from 'tdesign-icons-vue-next'
 
 defineOptions({
   name: 'Layout',
 })
-
-const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = useLayoutHook()
 </script>
 
 <template>
-  <div class="layout-wrapper p-4">
-    <h3 class="!mb-4">
-      layout
-    </h3>
-    <div class="mb-2">
-      Current Language: {{ locale }}
-    </div>
-    <div class="mb-2">
-      {{ t('global.title') }}
-    </div>
-    <t-cell class="mb-2 rounded-md" arrow title="Select Language" @click="localeState.show = true" />
-    <t-popup v-model="localeState.show" placement="bottom">
-      <t-picker
-        v-model="localeState.locale"
-        :columns="localeOptions"
-        @confirm="onConfirm"
-        @cancel="localeState.show = false"
-      >
-        <template #option="item">
-          {{ item.label }}
-        </template>
-      </t-picker>
-    </t-popup>
-    <t-button theme="primary" size="small" @click="add">
-      Count: {{ layoutStore.count }}
-    </t-button>
+  <t-navbar :fixed="false" left-arrow>
+    -->
+    <template #right>
+      <div class="icon-wrapper">
+        <TIcon name="ellipsis" size="18px" />
+        <div class="divider" />
+        <TIcon name="ellipsis" size="16px" />
+      </div>
+    </template>
+  </t-navbar>
 
-    <t-divider content="华丽的分割线 -- 以下是二级路由的内容" align="left" />
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
-<style lang='scss' scoped>
-.layout-wrapper {
-  background-color: var(--tmv-bg-color);
+<style lang="less" scoped>
+.t-navbar {
+  margin-bottom: 4px;
+}
+
+.custom-title {
+  margin-left: 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.t-icon-home {
+  margin-right: 8px;
+}
+
+.icon-wrapper {
+  width: 87px;
+  height: 32px;
+  border-radius: 16px;
+  opacity: 1;
+  border: 0.5px solid #e7e7e7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-right: 12px;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  opacity: 1;
+  background-color: #e7e7e7;
 }
 </style>
