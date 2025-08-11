@@ -10,11 +10,20 @@ declare module 'vue' {
   export interface GlobalComponents {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TAvatar: typeof import('tdesign-mobile-vue')['Avatar']
     TButton: typeof import('tdesign-mobile-vue')['Button']
     TCell: typeof import('tdesign-mobile-vue')['Cell']
+    TCol: typeof import('tdesign-mobile-vue')['Col']
     TConfigProvider: typeof import('tdesign-mobile-vue')['ConfigProvider']
+    TDialog: typeof import('tdesign-mobile-vue')['Dialog']
     TDivider: typeof import('tdesign-mobile-vue')['Divider']
+    TIcon: typeof import('tdesign-mobile-vue')['Icon']
+    TInput: typeof import('tdesign-mobile-vue')['Input']
     TPicker: typeof import('tdesign-mobile-vue')['Picker']
     TPopup: typeof import('tdesign-mobile-vue')['Popup']
+    TRow: typeof import('tdesign-mobile-vue')['Row']
+    TSticky: typeof import('tdesign-mobile-vue')['Sticky']
+    TTabBar: typeof import('tdesign-mobile-vue')['TabBar']
+    TTabBarItem: typeof import('tdesign-mobile-vue')['TabBarItem']
   }
 }
