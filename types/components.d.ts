@@ -8,13 +8,22 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    NavBarWithSearch: typeof import('./../src/components/NavBarWithSearch.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TButton: typeof import('tdesign-mobile-vue')['Button']
     TCell: typeof import('tdesign-mobile-vue')['Cell']
     TConfigProvider: typeof import('tdesign-mobile-vue')['ConfigProvider']
+    TContent: typeof import('tdesign-mobile-vue')['Content']
     TDivider: typeof import('tdesign-mobile-vue')['Divider']
+    TFooter: typeof import('tdesign-mobile-vue')['Footer']
+    TGrid: typeof import('tdesign-mobile-vue')['Grid']
+    TGridItem: typeof import('tdesign-mobile-vue')['GridItem']
+    THeader: typeof import('tdesign-mobile-vue')['Header']
+    TLayout: typeof import('tdesign-mobile-vue')['Layout']
+    TNavbar: typeof import('tdesign-mobile-vue')['Navbar']
     TPicker: typeof import('tdesign-mobile-vue')['Picker']
     TPopup: typeof import('tdesign-mobile-vue')['Popup']
+    TSearch: typeof import('tdesign-mobile-vue')['Search']
   }
 }

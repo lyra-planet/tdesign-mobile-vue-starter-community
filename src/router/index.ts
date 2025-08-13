@@ -8,8 +8,6 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Layout',
-      component: () => import('@/layout/index.vue'),
       redirect: '/home',
       children: routes,
     },
