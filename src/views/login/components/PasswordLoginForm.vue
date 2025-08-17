@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import AgreementCheckbox from './shared/AgreementCheckbox.vue'
 import FormContainer from './shared/FormContainer.vue'
 
-const emit = defineEmits<{
-  switchTo: [type: string]
-  login: [data: { account: string, password: string }]
-}>()
+const router = useRouter()
 
 const account = ref('')
 const password = ref('')
@@ -16,16 +14,15 @@ const canLogin = computed(() => {
   return account.value.trim() && password.value.trim() && agreedToTerms.value
 })
 
-// 处理登录
 function handleLogin() {
   if (canLogin.value) {
-    emit('login', { account: account.value, password: password.value })
+    router.push('/home')
   }
 }
 </script>
 
 <template>
-  <FormContainer title="欢迎登录 TDesign" footer-type="verify-login" @switch-to="$emit('switchTo', $event)">
+  <FormContainer title="欢迎登录 TDesign" footer-type="verify-login">
     <!-- 账号输入 -->
     <div class="input-section">
       <div class="input-wrapper auth-input-container">

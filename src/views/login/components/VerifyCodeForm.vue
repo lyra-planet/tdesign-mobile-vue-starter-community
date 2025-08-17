@@ -1,32 +1,53 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import FormContainer from './shared/FormContainer.vue'
 
-defineEmits<{
-  switchTo: [type: string]
-  verify: [code: string]
-}>()
+const router = useRouter()
 
-const countdown = ref(60)
+const countdown = ref(0)
 let countdownTimer: ReturnType<typeof setInterval> | null = null
+const verifyCode = ref('')
+const codeValid = ref(false)
 
-const isCodeComplete = ref(false)
+function validateVerifyCode(value: string) {
+  const codeRegex = /^\d{6}$/
+  codeValid.value = codeRegex.test(value)
+}
 
-// 处理验证
+watch(
+  verifyCode,
+  (newValue) => {
+    if (newValue) {
+      const cleanValue = newValue.replace(/\D/g, '')
+      if (cleanValue !== newValue) {
+        verifyCode.value = cleanValue
+        return
+      }
+      validateVerifyCode(cleanValue)
+    }
+    else {
+      codeValid.value = false
+    }
+  },
+  { immediate: true },
+)
+
 function handleVerify() {
-  if (isCodeComplete.value) {
-    // 验证码验证成功
+  if (codeValid.value) {
+    router.push('/home')
   }
 }
 
-// 重新发送验证码
 function handleResend() {
+  if (countdown.value > 0 && countdown.value < 60) {
+    return
+  }
+
   countdown.value = 60
   startCountdown()
-  // 重新发送验证码
 }
 
-// 启动倒计时
 function startCountdown() {
   if (countdownTimer) {
     clearInterval(countdownTimer)
@@ -41,10 +62,6 @@ function startCountdown() {
   }, 1000)
 }
 
-onMounted(() => {
-  startCountdown()
-})
-
 onUnmounted(() => {
   if (countdownTimer) {
     clearInterval(countdownTimer)
@@ -53,14 +70,31 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <FormContainer title="请输入验证码" subtitle="验证码已通过短信发送至 +86 138****8888">
+  <FormContainer
+    title="请输入验证码"
+    subtitle="验证码已通过短信发送至 +86 138****8888"
+  >
     <div class="verify-section">
-      <t-input placeholder="请输入验证码">
+      <t-input
+        v-model="verifyCode"
+        placeholder="请输入验证码"
+        class="auth-input-container"
+        maxlength="6"
+      >
         <template #suffix>
           <div class="suffix auth-flex-center">
             <div class="auth-divider auth-divider--24" />
-            <div class="verify" aria-role="button" @click="handleResend">
-              发送验证码
+            <div
+              class="verify"
+              :class="{ 'verify-disabled': countdown > 0 && countdown < 60 }"
+              aria-role="button"
+              @click="handleResend"
+            >
+              {{
+                countdown > 0 && countdown < 60
+                  ? `${countdown}秒后重发`
+                  : "发送验证码"
+              }}
             </div>
           </div>
         </template>
@@ -71,7 +105,7 @@ onUnmounted(() => {
       size="large"
       theme="primary"
       class="verify-button auth-primary-button"
-      :disabled="!isCodeComplete"
+      :disabled="!codeValid"
       @click="handleVerify"
     >
       登录
@@ -88,6 +122,13 @@ onUnmounted(() => {
   font-weight: 400;
   line-height: 24px;
   color: #0052d9;
+  cursor: pointer;
+  user-select: none;
+}
+
+.verify-disabled {
+  color: #b5c7ff;
+  cursor: not-allowed;
 }
 .verify-section {
   text-align: center;

@@ -1,41 +1,37 @@
 <script setup lang='ts'>
-import { ref } from 'vue'
-import PasswordLoginForm from './components/PasswordLoginForm.vue'
-import PhoneLoginForm from './components/PhoneLoginForm.vue'
-import VerifyCodeForm from './components/VerifyCodeForm.vue'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 defineOptions({
   name: 'Login',
 })
 
-// 当前显示的表单类型
-const currentForm = ref('phone') // 'phone', 'password', 'verify'
+const router = useRouter()
 
-// 处理表单类型切换
-function handleSwitchForm(type) {
-  currentForm.value = type
-}
+onMounted(() => {
+  router.replace('/login/phone')
+})
 </script>
 
 <template>
   <div class="login-container">
-    <PhoneLoginForm
-      v-if="currentForm === 'phone'"
-      @switch-to="handleSwitchForm"
-    />
-    <PasswordLoginForm
-      v-else-if="currentForm === 'password'"
-      @switch-to="handleSwitchForm"
-    />
-    <VerifyCodeForm
-      v-else-if="currentForm === 'verify'"
-      @switch-to="handleSwitchForm"
-    />
+    <div class="loading">
+      正在跳转...
+    </div>
   </div>
 </template>
 
 <style lang='scss' scoped>
 .login-container {
   margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.loading {
+  color: #666;
+  font-size: 16px;
 }
 </style>

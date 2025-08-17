@@ -9,9 +9,7 @@ interface Props {
 
 defineProps<Props>()
 
-defineEmits<{
-  switchTo: [type: string]
-}>()
+// 不再需要emit事件，跳转逻辑已移至LoginButtons组件
 </script>
 
 <template>
@@ -34,14 +32,12 @@ defineEmits<{
       <LoginButtons
         v-if="footerType === 'login-bottom'"
         type="phone"
-        @switch-to="$emit('switchTo', $event)"
       />
 
       <!-- 使用登录按钮组件 -->
       <LoginButtons
         v-else-if="footerType === 'verify-login'"
         type="password"
-        @switch-to="$emit('switchTo', $event)"
       />
     </div>
   </div>

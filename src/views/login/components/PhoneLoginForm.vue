@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import countries from 'countries-phone-masks'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import AgreementCheckbox from './shared/AgreementCheckbox.vue'
 import FormContainer from './shared/FormContainer.vue'
 
-const emit = defineEmits<{
-  switchTo: [type: string]
-  next: []
-}>()
+const router = useRouter()
 
 // 手机号相关状态
 const selectedCountry = ref('CN')
 const phoneNumber = ref('')
+const phoneValid = ref(false)
+const phoneInputTouched = ref(false)
 
 // 协议同意状态
 const agreedToTerms = ref(false)
@@ -39,14 +39,47 @@ function handleCountryChange(value: string) {
   selectedCountry.value = value
 }
 
+const phoneValidationTips = computed(() => {
+  // 只有在用户开始输入且输入不为空时才显示错误提示
+  if (!phoneInputTouched.value || phoneNumber.value === '') {
+    return ''
+  }
+  return phoneValid.value ? '' : '请输入正确的手机号格式'
+})
+
+// 验证手机号格式
+function validatePhoneNumber(value: string) {
+  phoneInputTouched.value = true // 标记用户已经开始输入
+  const phoneRegex = /^1[3-9]\d{9}$/
+  phoneValid.value = phoneRegex.test(value)
+}
+
+// 监听手机号变化并验证
+watch(phoneNumber, (newValue) => {
+  if (newValue) {
+    // 只保留数字
+    const cleanValue = newValue.replace(/\D/g, '')
+    if (cleanValue !== newValue) {
+      phoneNumber.value = cleanValue
+      return // 避免重复触发
+    }
+    validatePhoneNumber(cleanValue)
+  }
+  else {
+    phoneValid.value = false
+  }
+}, { immediate: true })
+
 function handleNext() {
-  // 获取验证码
-  emit('switchTo', 'verify')
+  if (phoneValid.value && agreedToTerms.value) {
+    // 获取验证码后跳转到验证码页面
+    router.push('/login/verify')
+  }
 }
 </script>
 
 <template>
-  <FormContainer title="欢迎登录 TDesign" footer-type="login-bottom" @switch-to="$emit('switchTo', $event)">
+  <FormContainer title="欢迎登录 TDesign" footer-type="login-bottom">
     <div class="phone-input auth-input-container">
       <t-dropdown-menu class="country-selector">
         <t-dropdown-item
@@ -62,6 +95,9 @@ function handleNext() {
         placeholder="请输入手机号"
         class="phone-number-input"
         borderless
+        maxlength="11"
+        status="error"
+        :tips="phoneValidationTips"
       />
     </div>
 
@@ -76,7 +112,7 @@ function handleNext() {
       theme="primary"
       variant="base"
       shape="rectangle"
-      :disabled="!agreedToTerms"
+      :disabled="!agreedToTerms || !phoneValid"
       class="login-button auth-primary-button"
       @click="handleNext"
     >

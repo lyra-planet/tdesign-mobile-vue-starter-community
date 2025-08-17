@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 interface Props {
   type: 'password' | 'phone'
 }
 
 const props = defineProps<Props>()
+const router = useRouter()
 
-defineEmits<{
-  switchTo: [type: string]
-}>()
-
-// 根据当前类型确定按钮文本和切换目标
+// 根据当前类型确定按钮文本和跳转路由
 const buttonText = computed(() => props.type === 'phone' ? '密码登录' : '验证码登录')
-const switchType = computed(() => props.type === 'phone' ? 'password' : 'phone')
+const targetRoute = computed(() => props.type === 'phone' ? '/login/password' : '/login/phone')
+
+// 处理跳转
+function handleSwitchLogin() {
+  router.push(targetRoute.value)
+}
 </script>
 
 <template>
@@ -29,7 +32,7 @@ const switchType = computed(() => props.type === 'phone' ? 'password' : 'phone')
       single-icon="false"
       press="false"
       class="switch-login-button"
-      @click="$emit('switchTo', switchType)"
+      @click="handleSwitchLogin"
     >
       {{ buttonText }}
     </t-button>

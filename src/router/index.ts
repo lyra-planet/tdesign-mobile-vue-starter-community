@@ -11,7 +11,29 @@ const router = createRouter({
       name: 'Layout',
       component: () => import('@/layout/index.vue'),
       redirect: '/home',
-      children: routes,
+      children: [
+        ...routes,
+        // 登录相关路由
+        {
+          path: '/login',
+          redirect: '/login/phone',
+        },
+        {
+          path: '/login/phone',
+          name: 'PhoneLogin',
+          component: () => import('@/views/login/PhoneLoginPage.vue'),
+        },
+        {
+          path: '/login/password',
+          name: 'PasswordLogin',
+          component: () => import('@/views/login/PasswordLoginPage.vue'),
+        },
+        {
+          path: '/login/verify',
+          name: 'VerifyCodeLogin',
+          component: () => import('@/views/login/VerifyCodePage.vue'),
+        },
+      ],
     },
     {
       path: '/:pathMatch(.*)*',
