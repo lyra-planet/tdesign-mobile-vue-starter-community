@@ -2,6 +2,8 @@
 import countries from 'countries-phone-masks'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { sendVerifyCode } from '@/api/auth'
+import { cleanPhoneNumber, validatePhone } from '@/utils/validators'
 import AgreementCheckbox from './shared/AgreementCheckbox.vue'
 import FormContainer from './shared/FormContainer.vue'
 
@@ -15,6 +17,10 @@ const phoneInputTouched = ref(false)
 
 // 协议同意状态
 const agreedToTerms = ref(false)
+
+// 加载状态
+const isLoading = ref(false)
+const errorMessage = ref('')
 
 const countryOptions = computed(() => {
   return countries.map(country => ({
@@ -40,6 +46,9 @@ function handleCountryChange(value: string) {
 }
 
 const phoneValidationTips = computed(() => {
+  if (errorMessage.value) {
+    return errorMessage.value
+  }
   // 只有在用户开始输入且输入不为空时才显示错误提示
   if (!phoneInputTouched.value || phoneNumber.value === '') {
     return ''
@@ -47,33 +56,62 @@ const phoneValidationTips = computed(() => {
   return phoneValid.value ? '' : '请输入正确的手机号格式'
 })
 
-// 验证手机号格式
-function validatePhoneNumber(value: string) {
-  phoneInputTouched.value = true // 标记用户已经开始输入
-  const phoneRegex = /^1[3-9]\d{9}$/
-  phoneValid.value = phoneRegex.test(value)
-}
-
 // 监听手机号变化并验证
 watch(phoneNumber, (newValue) => {
+  // 清除错误信息
+  errorMessage.value = ''
+
   if (newValue) {
-    // 只保留数字
-    const cleanValue = newValue.replace(/\D/g, '')
+    // 清理输入值
+    const cleanValue = cleanPhoneNumber(newValue)
     if (cleanValue !== newValue) {
       phoneNumber.value = cleanValue
-      return // 避免重复触发
+      return
     }
-    validatePhoneNumber(cleanValue)
+    // 标记用户已经开始输入
+    phoneInputTouched.value = true
+    // 验证手机号
+    phoneValid.value = validatePhone(cleanValue)
   }
   else {
     phoneValid.value = false
   }
 }, { immediate: true })
 
-function handleNext() {
-  if (phoneValid.value && agreedToTerms.value) {
-    // 获取验证码后跳转到验证码页面
-    router.push('/login/verify')
+async function handleNext() {
+  if (!phoneValid.value || !agreedToTerms.value || isLoading.value) {
+    return
+  }
+
+  try {
+    isLoading.value = true
+    errorMessage.value = ''
+
+    const result = await sendVerifyCode({
+      phone: phoneNumber.value,
+      countryCode: selectedCountryCode.value,
+    })
+
+    if (result.success) {
+      // 跳转到验证码页面，携带手机号信息
+      router.push({
+        path: '/login/verify',
+        query: {
+          phone: phoneNumber.value,
+          countryCode: selectedCountryCode.value,
+        },
+      })
+    }
+    else {
+      errorMessage.value = result.message
+    }
+  }
+  catch (error) {
+    console.log(error)
+    errorMessage.value = '网络错误，请稍后重试'
+  }
+  finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -112,7 +150,8 @@ function handleNext() {
       theme="primary"
       variant="base"
       shape="rectangle"
-      :disabled="!agreedToTerms || !phoneValid"
+      :disabled="!agreedToTerms || !phoneValid || isLoading"
+      :loading="isLoading"
       class="login-button auth-primary-button"
       @click="handleNext"
     >

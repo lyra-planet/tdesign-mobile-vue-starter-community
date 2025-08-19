@@ -8,8 +8,6 @@ interface Props {
 }
 
 defineProps<Props>()
-
-// 不再需要emit事件，跳转逻辑已移至LoginButtons组件
 </script>
 
 <template>

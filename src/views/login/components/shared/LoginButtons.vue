@@ -9,11 +9,9 @@ interface Props {
 const props = defineProps<Props>()
 const router = useRouter()
 
-// 根据当前类型确定按钮文本和跳转路由
 const buttonText = computed(() => props.type === 'phone' ? '密码登录' : '验证码登录')
 const targetRoute = computed(() => props.type === 'phone' ? '/login/password' : '/login/phone')
 
-// 处理跳转
 function handleSwitchLogin() {
   router.push(targetRoute.value)
 }

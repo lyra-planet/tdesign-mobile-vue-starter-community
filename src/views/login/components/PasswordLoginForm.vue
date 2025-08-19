@@ -1,22 +1,60 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { passwordLogin } from '@/api/auth'
+import { useUserStore } from '@/store/user'
 import AgreementCheckbox from './shared/AgreementCheckbox.vue'
 import FormContainer from './shared/FormContainer.vue'
 
 const router = useRouter()
+const userStore = useUserStore()
 
 const account = ref('')
 const password = ref('')
 const agreedToTerms = ref(false)
 
+// 加载状态
+const isLoading = ref(false)
+const errorMessage = ref('')
+
 const canLogin = computed(() => {
-  return account.value.trim() && password.value.trim() && agreedToTerms.value
+  return account.value.trim() && password.value.trim() && agreedToTerms.value && !isLoading.value
 })
 
-function handleLogin() {
-  if (canLogin.value) {
-    router.push('/home')
+// 清除错误信息
+watch([account, password], () => {
+  errorMessage.value = ''
+})
+
+async function handleLogin() {
+  if (!canLogin.value) {
+    return
+  }
+
+  try {
+    isLoading.value = true
+    errorMessage.value = ''
+
+    const result = await passwordLogin({
+      account: account.value.trim(),
+      password: password.value,
+    })
+
+    if (result.success && result.data) {
+      // 保存用户信息到store
+      userStore.handleLoginSuccess(result.data.token, result.data.user)
+      // 跳转到首页
+      router.push('/home')
+    }
+    else {
+      errorMessage.value = result.message
+    }
+  }
+  catch (error) {
+    errorMessage.value = '网络错误，请稍后重试'
+  }
+  finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -52,10 +90,16 @@ function handleLogin() {
       theme="primary"
       class="login-button auth-primary-button"
       :disabled="!canLogin"
+      :loading="isLoading"
       @click="handleLogin"
     >
       登录
     </t-button>
+
+    <!-- 错误信息显示 -->
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
     <div class="forgot-password auth-flex-center">
       <span class="forgot-text">忘记密码？</span>
       <span class="recovery-button">
@@ -124,5 +168,16 @@ function handleLogin() {
     line-height: 20px;
     color: #0052d9;
   }
+}
+
+.error-message {
+  margin: 16px;
+  padding: 12px;
+  background-color: #fef0f0;
+  border: 1px solid #fde2e2;
+  border-radius: 4px;
+  color: #e34d59;
+  font-size: 14px;
+  text-align: center;
 }
 </style>
