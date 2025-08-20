@@ -11,7 +11,12 @@ const router = createRouter({
       name: 'Layout',
       component: () => import('@/layout/index.vue'),
       redirect: '/home',
-      children: routes,
+      children: routes.filter(r => r.path !== '/notice'),
+    },
+    {
+      path: '/notice',
+      name: 'Notice',
+      component: () => import('@/views/notice/index.vue'),
     },
     {
       path: '/:pathMatch(.*)*',

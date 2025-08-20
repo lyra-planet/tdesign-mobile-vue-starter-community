@@ -1,113 +1,174 @@
 <script setup lang='ts'>
+import { categories } from '@vueuse/core/metadata.mjs'
+
 defineOptions({
   name: 'Notice',
 })
+const talk_content = [
+  { id: '1', tag: 'other', value: '那明天准时见哦' },
+  { id: '2', tag: 'me', value: '好的，我会记得的' },
+  { id: '3', tag: 'me', value: '在吗？' },
+  { id: '4', tag: 'time', value: '今天 10:50' },
+  { id: '5', tag: 'other', value: '有个问题想咨询一下，关于Tdesign组件库如何更好的使用' },
+  { id: '6', tag: 'me', value: '你请问' },
+]
 </script>
 
 <template>
-  <t-sticky>
-    <div class="header" />
-  </t-sticky>
-  <div class="main">
-    <div class="talkbox">
-      <div class="avatar-demo">
-        <div class="talk-list">
-          <t-avatar class="avatar-example" image="https://tdesign.gtimg.com/mobile/demos/avatar1.png" />
-          <div class="talk-content">
-            这是一条短消息
+  <div class="chat-container">
+    <!-- 顶部标题栏 -->
+    <!-- <div class="header">
+      <t-icon name="chevron-left" class="back-btn" />
+      <span class="title">聊天</span>
+      <t-icon name="more" class="more-btn" />
+    </div> -->
+    <t-navbar title="标题" :fixed="false" left-arrow @left-click="handleClick" />
+    <!-- 消息列表区域 -->
+    <div class="messages-area">
+      <div class="time-badge">
+        今天 10:00
+      </div>
+      <div v-for="item in talk_content" :key="item.id">
+        <div v-if="item.tag === 'me'" class="msg-row right">
+          <div class="msg-bubble self">
+            {{ item.value }}
+          </div>
+          <t-avatar size="32px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
+        </div>
+        <div v-if="item.tag === 'other'" class="msg-row left">
+          <t-avatar size="32px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
+          <div class="msg-bubble other">
+            {{ item.value }}
           </div>
         </div>
-        <t-divider class="custom-divider" content="今天19:00" align="center" />
-        <div class="talk-list">
-          <t-avatar class="avatar-example" image="https://tdesign.gtimg.com/mobile/demos/avatar1.png" />
-          <div class="talk-content">
-            这是一条非常长的消息内容，用来测试消息框是否能够根据文本长度自动调整宽度和高度，最大宽度应该限制在200px
-          </div>
+        <div v-if="item.tag === 'time'" class="time-badge">
+          {{ item.value }}
         </div>
       </div>
     </div>
-  </div>
-  <t-divider />
-  <div class="bottom">
-    <t-input label="" placeholder="请输入" class="inputbox">
-      <template #prefixIcon>
-        <app-icon />
-      </template>
-    </t-input>
-    <t-button class="send-button">
-      发送
-    </t-button>
+    <!-- 底部输入框 -->
+    <div class="input-area">
+      <div class="input-wrapper flex items-center justify-between">
+        <t-input placeholder="输入消息..." class="msg-input w-full" :borderless="true" />
+        <t-button size="small" theme="primary" class="send-btn">
+          发送
+        </t-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang='scss' scoped>
-.main {
+.chat-container {
+  height: calc(100vh);
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  background: #f5f5f5;
+  position: relative;
+  overflow: hidden;
 }
-
-.inputbox {
-  background-color: hsl(0, 0%, 90%);
-  width: 90%;
-  border-radius: 50px;
-  border: 1px solid #0a0a0a;
-  height: 10px;
-}
-
 .header {
-  height: 5vh;
-  background-color: #fff;
-}
-
-.talkbox {
-  flex: 1;
-  background-color: #ffffff;
-}
-
-.talk-content {
-  background-color: #dedddd;
-  margin-top: 5px;
-  margin-left: 10px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  line-height: 1.4;
-  font-size: 14px;
-  max-width: 200px;
-  min-width: 40px;
-  width: fit-content;
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
-}
-
-.talk-list {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  margin-top: 12px;
-}
-
-.bottom {
+  height: 50px;
+  background: #fff;
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  background-color: #f8f9fa;
-  border-top: 1px solid #eee;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+  /* 改为相对定位 */
+  z-index: 100;
+  flex-shrink: 0;
+  /* 防止被压缩 */
 }
 
-.send-button {
-  margin-left: 12px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 15px;
-  padding: 8px 12px;
+.title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.back-btn,
+.more-btn {
+  font-size: 20px;
+  color: #666;
   cursor: pointer;
 }
-.custom-divider {
-  margin: 0px 0;
-  --td-divider-color: #ff0000;
-  --td-divider-content-line-style: none;
+
+/* 消息区域 - 改进滚动 */
+.messages-area {
+  flex: 1;
+  padding: 8px 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #f8f9fa;
+  min-height: 0;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+}
+.time-badge {
+  text-align: center;
+  margin: 12px 0;
+  color: #999;
+  font-size: 12px;
+}
+.msg-row {
+  display: flex;
+  margin-bottom: 12px;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.msg-row.left {
+  justify-content: flex-start;
+}
+
+.msg-row.right {
+  justify-content: flex-end;
+}
+
+.msg-bubble {
+  max-width: 60%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  word-break: break-word;
+  position: relative;
+}
+
+.msg-bubble.other {
+  background: #f3f3f3;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.msg-bubble.self {
+  background: #dbe0fd;
+  color: #000000;
+  box-shadow: 0 1px 2px rgba(0, 123, 255, 0.3);
+}
+.input-area {
+  background: #fff;
+  border-top: 1px solid #eee;
+  padding: 4px 4px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.mes-input {
+  border-radius: 10px;
+  background-color: #f5f5f5;
 }
 </style>
