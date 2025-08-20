@@ -1,27 +1,22 @@
 <script setup lang='ts'>
 import { categories } from '@vueuse/core/metadata.mjs'
 import { useRoute, useRouter } from 'vue-router'
+import { talklist } from '../data/data.js'
 
 defineOptions({
   name: 'Notice',
 })
 const router = useRouter()
 const route = useRoute()
-const talklist = [
-  { id: '1', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Pite', newmessge: 'hello' },
-  { id: '2', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Bob', newmessge: 'hello' },
-  { id: '3', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Alice', newmessge: 'hello' },
-]
-const current = talklist.find(item => item.id === route.params.id)
-console.log(current)
-const talk_content = [
-  { id: '1', tag: 'other', value: '那明天准时见哦' },
-  { id: '2', tag: 'me', value: '好的，我会记得的' },
-  { id: '3', tag: 'me', value: '在吗？' },
-  { id: '4', tag: 'time', value: '今天 10:50' },
-  { id: '5', tag: 'other', value: '有个问题想咨询一下，关于Tdesign组件库如何更好的使用' },
-  { id: '6', tag: 'me', value: '你请问' },
-]
+// const talklist = [
+//   { id: '1', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Pite', newmessge: 'hello' },
+//   { id: '2', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Bob', newmessge: 'hello' },
+//   { id: '3', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Alice', newmessge: 'hello' },
+// ]
+// const current = talklist.find(item => item.id === route.params.id)
+// console.log(current)
+const current = ref(talklist.find(item => item.id === route.params.id))
+const talk_content = ref(talklist.find(item => item.id === route.params.id).message)
 function handleClick() {
   router.push('/talklist')
 }

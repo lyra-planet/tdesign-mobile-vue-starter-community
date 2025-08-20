@@ -1,16 +1,13 @@
 <script setup lang='ts'>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { talklist } from '../data/data.js'
 
 defineOptions({
   name: 'Talklist',
 })
 
 const router = useRouter()
-const talklist = ref([
-  { id: '1', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Pite', newmessge: 'hello' },
-  { id: '2', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Bob', newmessge: 'hello' },
-  { id: '3', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Alice', newmessge: 'hello' },
-])
 function goToDetail(id) {
   router.push({ name: 'Notice', params: { id } })
 }
