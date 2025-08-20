@@ -1,9 +1,19 @@
 <script setup lang='ts'>
 import { categories } from '@vueuse/core/metadata.mjs'
+import { useRoute, useRouter } from 'vue-router'
 
 defineOptions({
   name: 'Notice',
 })
+const router = useRouter()
+const route = useRoute()
+const talklist = [
+  { id: 1, picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Pite', newmessge: 'hello' },
+  { id: 2, picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Bob', newmessge: 'hello' },
+  { id: 3, picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Alice', newmessge: 'hello' },
+]
+const current = talklist.find(item => item.id === route.params.id)
+console.log(current)
 const talk_content = [
   { id: '1', tag: 'other', value: '那明天准时见哦' },
   { id: '2', tag: 'me', value: '好的，我会记得的' },
@@ -12,6 +22,9 @@ const talk_content = [
   { id: '5', tag: 'other', value: '有个问题想咨询一下，关于Tdesign组件库如何更好的使用' },
   { id: '6', tag: 'me', value: '你请问' },
 ]
+function handleClick() {
+  router.push('/talklist')
+}
 </script>
 
 <template>
@@ -22,7 +35,7 @@ const talk_content = [
       <span class="title">聊天</span>
       <t-icon name="more" class="more-btn" />
     </div> -->
-    <t-navbar title="标题" :fixed="false" left-arrow @left-click="handleClick" />
+    <t-navbar :title="current.name" :fixed="false" left-arrow @left-click="handleClick" />
     <!-- 消息列表区域 -->
     <div class="messages-area">
       <div class="time-badge">
@@ -67,6 +80,7 @@ const talk_content = [
   position: relative;
   overflow: hidden;
 }
+
 .header {
   height: 50px;
   background: #fff;
@@ -103,6 +117,7 @@ const talk_content = [
   overflow-x: hidden;
   background: #f8f9fa;
   min-height: 0;
+
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -116,12 +131,14 @@ const talk_content = [
     border-radius: 2px;
   }
 }
+
 .time-badge {
   text-align: center;
   margin: 12px 0;
   color: #999;
   font-size: 12px;
 }
+
 .msg-row {
   display: flex;
   margin-bottom: 12px;
@@ -159,6 +176,7 @@ const talk_content = [
   color: #000000;
   box-shadow: 0 1px 2px rgba(0, 123, 255, 0.3);
 }
+
 .input-area {
   background: #fff;
   border-top: 1px solid #eee;
@@ -170,5 +188,15 @@ const talk_content = [
 .mes-input {
   border-radius: 10px;
   background-color: #f5f5f5;
+}
+
+.current-chat-info {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: #fff;
+  border-top: 1px solid #eee;
+  position: relative;
+  z-index: 10;
 }
 </style>

@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('@/views/notice/index.vue'),
     },
     {
+      path: '/notice/:id',
+      name: 'Notice',
+      component: () => import('@/views/notice/index.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/error/404',
     },

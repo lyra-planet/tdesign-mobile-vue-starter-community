@@ -1,12 +1,19 @@
 <script setup lang='ts'>
+import { useRouter } from 'vue-router'
+
 defineOptions({
   name: 'Talklist',
 })
+
+const router = useRouter()
 const talklist = ref([
-  { picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Pite', newmessge: 'hello' },
-  { picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Bob', newmessge: 'hello' },
-  { picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Alice', newmessge: 'hello' },
+  { id: '1', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Pite', newmessge: 'hello' },
+  { id: '2', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Bob', newmessge: 'hello' },
+  { id: '3', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', count: '0', name: 'Alice', newmessge: 'hello' },
 ])
+function goToDetail(id) {
+  router.push({ name: 'Notice', params: { id } })
+}
 </script>
 
 <template>
@@ -27,11 +34,11 @@ const talklist = ref([
     <span class="title ">聊天</span>
     <t-icon name="more" class="more-btn" />
   </div>
-  <div class="messege bg-gray-100 h-full">
+  <div class="messege bg-gray-100 h-full ">
     <div v-for="item in talklist" :key="item.name" class="w-full h-20 bg-white  flex items-center mb-1">
       <t-avatar size="64px" :image="item.picture" />
       <t-badge :count="item.count" :offset="[20, 30]" class="flex-auto">
-        <div class="w-full bg-white h-16 flex flex-col justify-center p-0">
+        <div class="w-full bg-white h-16 flex flex-col justify-center p-2" @click="goToDetail(item.id)">
           <span class="text-sm text-gray-600">{{ item.name }}</span>
           <span class="text-base " style="color:#bababa">{{ item.newmessge }}</span>
         </div>
