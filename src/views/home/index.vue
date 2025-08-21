@@ -1,6 +1,12 @@
 <script setup lang='ts'>
+import { useUserStore } from '@/store/user'
+
 defineOptions({
   name: 'Home',
+})
+const userStore = useUserStore()
+onMounted(() => {
+  console.warn(userStore.userInfo)
 })
 </script>
 

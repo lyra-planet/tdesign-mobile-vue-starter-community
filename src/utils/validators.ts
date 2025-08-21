@@ -10,7 +10,7 @@ export function validateCode(code: string): boolean {
   return codeRegex.test(code)
 }
 
-// 清理手机号输入（只保留数字）
+// 清理手机号输入
 export function cleanPhoneNumber(value: string): string {
   return value.replace(/\D/g, '')
 }

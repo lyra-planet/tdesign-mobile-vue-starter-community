@@ -35,7 +35,7 @@ defineOptions({
   <router-view />
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .t-navbar {
   margin-bottom: 4px;
 }

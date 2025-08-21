@@ -87,17 +87,19 @@ async function handleNext() {
     isLoading.value = true
     errorMessage.value = ''
 
+    const fullPhoneNumber = `${selectedCountryCode.value}${phoneNumber.value}`
+
     const result = await sendVerifyCode({
-      phone: phoneNumber.value,
+      phone: fullPhoneNumber,
       countryCode: selectedCountryCode.value,
     })
 
     if (result.success) {
-      // 跳转到验证码页面，携带手机号信息
+      // 跳转到验证码页面，携带完整手机号信息
       router.push({
         path: '/login/verify',
         query: {
-          phone: phoneNumber.value,
+          phone: fullPhoneNumber,
           countryCode: selectedCountryCode.value,
         },
       })
@@ -107,7 +109,7 @@ async function handleNext() {
     }
   }
   catch (error) {
-    console.log(error)
+    console.error(error)
     errorMessage.value = '网络错误，请稍后重试'
   }
   finally {

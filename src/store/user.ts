@@ -4,32 +4,25 @@ import { computed, ref } from 'vue'
 import { httpClient } from '@/api/request'
 
 export const useUserStore = defineStore('user', () => {
-  // 状态
-  const token = ref<string | null>(localStorage.getItem('token'))
+  const token = ref<string | null>(null)
   const userInfo = ref<UserInfo | null>(null)
-
-  // 计算属性
   const isLoggedIn = computed(() => !!token.value)
 
   // 设置token
   const setToken = (newToken: string) => {
     token.value = newToken
-    localStorage.setItem('token', newToken)
     httpClient.setAuthToken(newToken)
   }
 
   // 设置用户信息
   const setUserInfo = (info: UserInfo) => {
     userInfo.value = info
-    localStorage.setItem('userInfo', JSON.stringify(info))
   }
 
   // 清除用户数据
   const clearUser = () => {
     token.value = null
     userInfo.value = null
-    localStorage.removeItem('token')
-    localStorage.removeItem('userInfo')
     httpClient.clearAuthToken()
   }
 
@@ -37,17 +30,6 @@ export const useUserStore = defineStore('user', () => {
   const initUser = () => {
     if (token.value) {
       httpClient.setAuthToken(token.value)
-    }
-
-    const savedUserInfo = localStorage.getItem('userInfo')
-    if (savedUserInfo) {
-      try {
-        userInfo.value = JSON.parse(savedUserInfo)
-      }
-      catch (error) {
-        console.error('Failed to parse user info:', error)
-        localStorage.removeItem('userInfo')
-      }
     }
   }
 
@@ -67,4 +49,10 @@ export const useUserStore = defineStore('user', () => {
     initUser,
     handleLoginSuccess,
   }
+}, {
+  persist: {
+    key: 'user-store',
+    storage: localStorage,
+    pick: ['token', 'userInfo'],
+  },
 })

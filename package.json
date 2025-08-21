@@ -33,8 +33,11 @@
   "dependencies": {
     "@vueuse/core": "^13.5.0",
     "axios": "^1.10.0",
+    "countries-phone-masks": "^1.1.1",
     "dayjs": "^1.11.13",
+    "phone": "^3.1.67",
     "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.5.0",
     "tdesign-mobile-vue": "^1.9.3",
     "vue": "^3.5.17",
     "vue-i18n": "^11.1.9",

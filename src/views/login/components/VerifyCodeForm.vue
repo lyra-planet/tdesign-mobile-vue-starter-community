@@ -11,7 +11,7 @@ const route = useRoute()
 const userStore = useUserStore()
 
 // 从路由参数获取手机号信息
-const phoneNumber = ref(route.query.phone as string || '138****8888')
+const phoneNumber = ref(route.query.phone as string || '188****8888')
 const countryCode = ref(route.query.countryCode as string || '+86')
 
 const countdown = ref(0)
@@ -23,10 +23,16 @@ const codeValid = ref(false)
 const isLoading = ref(false)
 const errorMessage = ref('')
 
-// 显示的手机号（脱敏处理）
+// 显示的手机号
 const displayPhone = computed(() => {
   const phone = phoneNumber.value
-  if (phone.length === 11) {
+  if (phone.startsWith('+')) {
+    const purePhone = phone.replace(/^\+\d{1,4}/, '')
+    if (purePhone.length >= 7) {
+      return `${purePhone.slice(0, 3)}****${purePhone.slice(-4)}`
+    }
+  }
+  else if (phone.length === 11) {
     return `${phone.slice(0, 3)}****${phone.slice(-4)}`
   }
   return phone
@@ -82,7 +88,7 @@ async function handleVerify() {
     }
   }
   catch (error) {
-    console.log(error)
+    console.error(error)
     errorMessage.value = '网络错误，请稍后重试'
   }
   finally {
@@ -138,7 +144,7 @@ onUnmounted(() => {
 <template>
   <FormContainer
     title="请输入验证码"
-    :subtitle="`验证码已通过短信发送至 ${countryCode} ${displayPhone}`"
+    :subtitle="`验证码已通过短信发送至 ${displayPhone}`"
   >
     <div class="verify-section">
       <t-input
