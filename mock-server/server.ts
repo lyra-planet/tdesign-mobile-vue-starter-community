@@ -74,7 +74,7 @@ function sendResponse(res, code = 200, message = 'Success', data?: any) {
 
 // 发送验证码
 app.post('/api/auth/send-code', (req, res) => {
-  const { phone, countryCode } = req.body
+  const { phone } = req.body
 
   if (!phone) {
     return sendResponse(res, 400, '手机号不能为空')
@@ -89,7 +89,7 @@ app.post('/api/auth/send-code', (req, res) => {
     expires: Date.now() + 5 * 60 * 1000,
   })
 
-  console.warn(`验证码已发送到 ${countryCode} ${phone}: ${code}`)
+  console.warn(`验证码已发送到 ${phone}: ${code}`)
 
   sendResponse(res, 200, '验证码发送成功', {
     countdown: 60,
