@@ -91,11 +91,9 @@ async function handleNext() {
 
     const result = await sendVerifyCode({
       phone: fullPhoneNumber,
-      countryCode: selectedCountryCode.value,
     })
 
     if (result.success) {
-      // 跳转到验证码页面，携带完整手机号信息
       router.push({
         path: '/login/verify',
         query: {
@@ -105,12 +103,12 @@ async function handleNext() {
       })
     }
     else {
-      errorMessage.value = result.message
+      errorMessage.value = result.message || '发送验证码失败，请稍后重试'
     }
   }
   catch (error) {
-    console.error(error)
-    errorMessage.value = '网络错误，请稍后重试'
+    console.error('发送验证码失败:', error)
+    errorMessage.value = '网络连接异常，请检查网络后重试'
   }
   finally {
     isLoading.value = false

@@ -104,7 +104,6 @@ async function handleResend() {
   try {
     const result = await sendVerifyCode({
       phone: phoneNumber.value,
-      countryCode: countryCode.value,
     })
 
     if (result.success) {
@@ -112,11 +111,12 @@ async function handleResend() {
       startCountdown()
     }
     else {
-      errorMessage.value = result.message
+      errorMessage.value = result.message || '重发验证码失败，请稍后重试'
     }
   }
   catch (error) {
-    errorMessage.value = '重发失败，请稍后重试'
+    console.error('重发验证码失败:', error)
+    errorMessage.value = '网络连接异常，请检查网络后重试'
   }
 }
 

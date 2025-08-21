@@ -1,7 +1,7 @@
 import { post } from './request'
 
 // 发送验证码
-export async function sendVerifyCode(params: any) {
+export async function sendVerifyCode(params: { phone: string }) {
   return post('/auth/send-code', params)
 }
 
