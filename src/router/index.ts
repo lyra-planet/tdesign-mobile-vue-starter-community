@@ -12,6 +12,11 @@ const router = createRouter({
       children: routes,
     },
     {
+      path: '/publish',
+      redirect: '/publish',
+      children: routes,
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/error/404',
     },

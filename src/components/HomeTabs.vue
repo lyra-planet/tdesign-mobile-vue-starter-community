@@ -1,0 +1,73 @@
+<script lang="ts" setup>
+const stickyProps = {
+  zIndex: 999,
+}
+const tabPanels = [
+  {
+    value: 'first',
+    label: '选项',
+  },
+  {
+    value: 'second',
+    label: '选项',
+  },
+  {
+    value: 'third',
+    label: '选项',
+  },
+  {
+    value: 'four',
+    label: '选项',
+  },
+]
+
+const tabPanelsNext = [
+  {
+    value: '1',
+    label: '选项',
+  },
+  {
+    value: '2',
+    label: '选项',
+  },
+  {
+    value: '3',
+    label: '选项',
+  },
+  {
+    value: '4',
+    label: '选项',
+  },
+  {
+    value: '5',
+    label: '选项',
+  },
+]
+function onChange($event: number, label: string) {
+  console.log(`change to ${$event}`, label)
+}
+
+function onNextChange($event: number) {
+  console.log(`changeNext to ${$event}`)
+}
+</script>
+
+<template>
+  <div class="demo-tab-bar">
+    <t-tabs default-value="first">
+      <t-tab-panel value="first">
+        <template #label>
+          推荐
+        </template>
+      </t-tab-panel>
+      <t-tab-panel value="second">
+        <template #label>
+          我的关注
+        </template>
+      </t-tab-panel>
+    </t-tabs>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+</style>
