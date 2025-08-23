@@ -84,7 +84,7 @@ function handleServiceClick(service: any) {
           <div class="avatar-container">
             <div class="avatar-bg">
               <div class="avatar-inner">
-                <t-icon name="user" size="28" color="#0052D9" />
+                <t-icon name="user" size="32" color="#0052D9" />
               </div>
             </div>
           </div>
@@ -166,20 +166,20 @@ function handleServiceClick(service: any) {
       <div class="menu-item" @click="handleContact">
         <div class="menu-content">
           <div class="menu-left">
-            <t-icon name="service" size="18" color="#0052D9" class="menu-icon" />
+            <t-icon name="service" size="24" color="#0052D9" class="menu-icon" />
             <span class="menu-title">联系客服</span>
           </div>
-          <t-icon name="chevron-right" size="16" color="#ccc" />
+          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
         </div>
       </div>
 
       <div class="menu-item" @click="handleSettings">
         <div class="menu-content">
           <div class="menu-left">
-            <t-icon name="setting" size="18" color="#0052D9" class="menu-icon" />
+            <t-icon name="setting" size="24" color="#0052D9" class="menu-icon" />
             <span class="menu-title">设置</span>
           </div>
-          <t-icon name="chevron-right" size="16" color="#ccc" />
+          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
         </div>
       </div>
     </div>
@@ -239,8 +239,8 @@ function handleServiceClick(service: any) {
     margin-right: 16px;
 
     .avatar-container {
-      width: 60px;
-      height: 60px;
+      width: 64px;
+      height: 64px;
 
       .avatar-bg {
         width: 100%;
@@ -253,8 +253,8 @@ function handleServiceClick(service: any) {
         // 去掉外部虚线
 
         .avatar-inner {
-          width: 48px;
-          height: 48px;
+          width: 64px;
+          height: 64px;
           background-color: #dbe1fd;
           border-radius: 50%;
           display: flex;
@@ -433,8 +433,8 @@ function handleServiceClick(service: any) {
         }
 
         .menu-title {
-          font-size: 15px;
-          color: #333;
+          font-size: 16px;
+          color: #000000;
           font-weight: 400;
         }
       }

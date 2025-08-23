@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 defineOptions({
@@ -8,6 +8,31 @@ defineOptions({
 
 const route = useRoute()
 const router = useRouter()
+
+// 实时时间
+const currentTime = ref('')
+let timeInterval: NodeJS.Timeout | null = null
+
+// 更新时间函数
+function updateTime() {
+  const now = new Date()
+  const hours = now.getHours().toString().padStart(2, '0')
+  const minutes = now.getMinutes().toString().padStart(2, '0')
+  currentTime.value = `${hours}:${minutes}`
+}
+
+// 组件挂载时开始更新时间
+onMounted(() => {
+  updateTime()
+  timeInterval = setInterval(updateTime, 1000)
+})
+
+// 组件卸载时清除定时器
+onUnmounted(() => {
+  if (timeInterval) {
+    clearInterval(timeInterval)
+  }
+})
 
 // 底部导航配置
 const tabList = ref([
@@ -57,21 +82,18 @@ function handleTabChange(value: string) {
     <!-- 状态栏模拟 -->
     <div class="status-bar">
       <div class="status-left">
-        <span class="time">9:41</span>
+        <span class="time">{{ currentTime }}</span>
       </div>
       <div class="status-right">
         <div class="signal-icons">
-          <div class="signal-bars">
-            <span class="bar" />
-            <span class="bar" />
-            <span class="bar" />
-            <span class="bar active" />
+          <div class="signal-icon">
+            <img src="/my/ios-signal.svg" alt="信号" class="icon-svg">
           </div>
           <div class="wifi-icon">
-            📶
+            <img src="/my/ios-wifi.svg" alt="WiFi" class="icon-svg">
           </div>
-          <div class="battery">
-            <div class="battery-level" />
+          <div class="battery-icon">
+            <img src="/my/ios-battery.svg" alt="电量" class="icon-svg">
           </div>
         </div>
       </div>
@@ -101,17 +123,35 @@ function handleTabChange(value: string) {
               />
               <t-badge
                 v-if="tab.badge"
-                :count="tab.badge"
-                size="small"
+                :count="tab.badge as string"
+                size="medium"
                 class="tab-badge"
               />
             </div>
-            <div class="tab-label">
+            <div
+              class="tab-label"
+              :style="{
+                color: activeTab === tab.value ? '#0052D9' : '#666',
+                width: '20px',
+                height: '16px',
+                fontSize: '10px',
+                fontWeight: 600,
+                fontFamily: 'PingFang SC',
+                textAlign: 'center',
+                lineHeight: '16px',
+                opacity: 1,
+              }"
+            >
               {{ tab.label }}
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- 苹果手机底部滑动指示器 -->
+    <div class="home-indicator">
+      <div class="indicator-bar" />
     </div>
   </div>
 </template>
@@ -126,87 +166,57 @@ function handleTabChange(value: string) {
 
 // 状态栏样式
 .status-bar {
-  height: 44px;
+  height: 46px;
   background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 14px 14px 14px 30px; // 上下14px，右14px，左30px
   font-size: 14px;
   font-weight: 600;
   color: #000;
   border-bottom: 0.5px solid #e7e7e7;
+  box-sizing: border-box;
 
-  .time {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  .status-left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    .time {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1;
+    }
   }
 
   .status-right {
     display: flex;
     align-items: center;
+    height: 100%;
 
     .signal-icons {
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
+      width: 68px; // 固定组宽68px
+      height: 100%;
+      justify-content: space-between;
+      gap: 0; // 移除间距
 
-    .signal-bars {
-      display: flex;
-      gap: 2px;
-
-      .bar {
-        width: 3px;
-        height: 4px;
-        background-color: #000;
-        border-radius: 1px;
-        opacity: 0.3;
-
-        &.active {
-          opacity: 1;
-        }
-
-        &:nth-child(2) {
-          height: 6px;
-        }
-
-        &:nth-child(3) {
-          height: 8px;
-        }
-
-        &:nth-child(4) {
-          height: 10px;
-        }
-      }
-    }
-
-    .wifi-icon {
-      font-size: 12px;
-    }
-
-    .battery {
-      width: 24px;
-      height: 12px;
-      border: 1px solid #000;
-      border-radius: 2px;
-      position: relative;
-
-      &::after {
-        content: '';
-        position: absolute;
-        right: -3px;
-        top: 3px;
-        width: 2px;
-        height: 6px;
-        background-color: #000;
-        border-radius: 0 1px 1px 0;
+      .signal-icon,
+      .wifi-icon,
+      .battery-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
       }
 
-      .battery-level {
-        width: 80%;
-        height: 100%;
-        background-color: #000;
-        border-radius: 1px;
+      .icon-svg {
+        width: 22px; // 放大图标
+        height: 16px; // 放大图标
+        object-fit: contain;
       }
     }
   }
@@ -223,16 +233,19 @@ function handleTabChange(value: string) {
 .bottom-navigation {
   background-color: #fff;
   border-top: 0.5px solid #e7e7e7;
-  padding: 8px 16px;
-  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  padding: 8px;
+  height: auto; // 移除固定高度
+  display: flex;
+  align-items: center;
 
   .tab-bar {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
     gap: 8px;
 
     .tab-item {
-      width: 114.33px;
+      flex: 1;
       height: 40px;
       border-radius: 999px;
       display: flex;
@@ -241,6 +254,8 @@ function handleTabChange(value: string) {
       cursor: pointer;
       transition: all 0.3s ease;
       background-color: transparent;
+      padding: 0 47.17px;
+      min-width: 0;
 
       &.active {
         background-color: #f2f3ff;
@@ -255,6 +270,7 @@ function handleTabChange(value: string) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        width: 100%;
 
         .tab-icon {
           position: relative;
@@ -271,16 +287,40 @@ function handleTabChange(value: string) {
           font-size: 10px;
           color: #666;
           transition: color 0.3s ease;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
     }
   }
 }
 
+// 苹果手机底部滑动指示器
+.home-indicator {
+  width: 100%;
+  height: 6.4vw; // 24px / 375px * 100vw = 6.4vw
+  background-color: #ffffff;
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+
+  .indicator-bar {
+    width: 35.73vw; // 134px / 375px * 100vw = 35.73vw
+    height: 1.33vw; // 5px / 375px * 100vw = 1.33vw
+    border-radius: 100px;
+    background-color: #000000e6;
+    opacity: 1;
+  }
+}
+
 // 适配安全区域
 @supports (padding: max(0px)) {
-  .bottom-navigation {
-    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  .home-indicator {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
   }
 }
 </style>
