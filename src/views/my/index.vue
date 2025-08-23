@@ -11,7 +11,17 @@ const isLoggedIn = ref(false)
 
 // 模拟用户信息
 const userInfo = ref({
-  avatar: '',
+  avatar: '/my/Avatar.svg',
+  nickname: '张三',
+  tags: [
+    { label: '双子座', icon: 'star', type: 'constellation' },
+    { label: '处女座', icon: 'star', type: 'constellation' },
+  ],
+  location: '深圳',
+})
+
+// 未登录状态的用户信息
+const guestInfo = ref({
   nickname: '请先登录/注册',
 })
 
@@ -41,7 +51,18 @@ const dataServices = ref([
 
 // 处理登录
 function handleLogin() {
-  router.push('/login')
+  if (!isLoggedIn.value) {
+    // 模拟登录
+    isLoggedIn.value = true
+  }
+  else {
+    router.push('/login')
+  }
+}
+
+// 处理编辑
+function handleEdit() {
+  router.push('/my/edit')
 }
 
 // 处理联系客服
@@ -51,7 +72,7 @@ function handleContact() {
 
 // 处理设置
 function handleSettings() {
-  console.log('设置')
+  router.push('/my/settings')
 }
 
 // 处理服务点击
@@ -65,7 +86,7 @@ function handleServiceClick(service: any) {
     <!-- 头部 -->
     <div class="header">
       <div class="header-left">
-        <t-icon name="menu" size="20" color="#333" />
+        <t-icon name="view-list" size="20" color="#333" />
       </div>
       <div class="header-title">
         我的
@@ -84,15 +105,53 @@ function handleServiceClick(service: any) {
           <div class="avatar-container">
             <div class="avatar-bg">
               <div class="avatar-inner">
-                <t-icon name="user" size="32" color="#0052D9" />
+                <img
+                  v-if="isLoggedIn"
+                  :src="userInfo.avatar"
+                  :alt="userInfo.nickname"
+                  class="avatar-image"
+                >
+                <t-icon v-else name="user" size="32" color="#0052D9" />
               </div>
             </div>
           </div>
         </div>
+
         <div class="user-info">
-          <div class="user-name">
-            {{ userInfo.nickname }}
+          <div class="user-name" :class="{ 'guest-name': !isLoggedIn }">
+            {{ isLoggedIn ? userInfo.nickname : guestInfo.nickname }}
           </div>
+
+          <!-- 登录状态下的标签和定位 -->
+          <div v-if="isLoggedIn" class="user-details">
+            <!-- 标签区域 -->
+            <div class="user-tags">
+              <t-tag
+                v-for="(tag, index) in userInfo.tags"
+                :key="index"
+                size="small"
+                variant="light"
+                theme="primary"
+                class="user-tag"
+              >
+                <template #icon>
+                  <t-icon :name="tag.icon" size="12" />
+                </template>
+                {{ tag.label }}
+              </t-tag>
+            </div>
+
+            <!-- 定位区域 -->
+            <div class="user-location">
+              <t-icon name="location" size="14" color="#666" />
+              <span class="location-text">{{ userInfo.location }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 编辑按钮 -->
+        <div v-if="isLoggedIn" class="edit-button" @click.stop="handleEdit">
+          <t-icon name="edit" size="20" color="#666" />
         </div>
       </div>
 
@@ -190,26 +249,36 @@ function handleServiceClick(service: any) {
 .my-page {
   min-height: 100vh;
   background-color: #f5f5f5;
-  padding-bottom: 20px;
+  padding-bottom: 62px;
 }
 
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  background-color: white;
-  border-bottom: 0.5px solid #e7e7e7;
-  height: 44px;
+  justify-content: center;
+  padding: 12px;
+  background-color: transparent;
+  border-bottom: none;
+  height: 48px;
+  position: relative;
+
+  .header-left {
+    position: absolute;
+    left: 12px;
+  }
 
   .header-title {
     font-size: 17px;
     font-weight: 600;
     color: #333;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    height: 26px;
+    line-height: 26px;
   }
 
   .header-right {
+    position: absolute;
+    right: 12px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -219,7 +288,7 @@ function handleServiceClick(service: any) {
 // 合并的用户信息和统计数据卡片
 .user-stats-card {
   background-color: white;
-  margin: 8px 12px;
+  margin: 8px 16px 16px;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -227,9 +296,10 @@ function handleServiceClick(service: any) {
 .user-section {
   padding: 20px 16px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  position: relative;
 
   &:active {
     background-color: #f8f9fa;
@@ -237,6 +307,7 @@ function handleServiceClick(service: any) {
 
   .user-avatar {
     margin-right: 16px;
+    flex-shrink: 0;
 
     .avatar-container {
       width: 64px;
@@ -250,7 +321,6 @@ function handleServiceClick(service: any) {
         display: flex;
         align-items: center;
         justify-content: center;
-        // 去掉外部虚线
 
         .avatar-inner {
           width: 64px;
@@ -260,6 +330,14 @@ function handleServiceClick(service: any) {
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: hidden;
+
+          .avatar-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+          }
         }
       }
     }
@@ -267,11 +345,81 @@ function handleServiceClick(service: any) {
 
   .user-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 
     .user-name {
       font-size: 16px;
       color: #333;
-      font-weight: 500;
+      font-weight: 600;
+      height: 24px;
+      line-height: 24px;
+      margin-top: 6px;
+
+      &.guest-name {
+        display: flex;
+        align-items: center;
+        height: 64px;
+        margin-top: 0;
+      }
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+
+      .user-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+
+        .user-tag {
+          height: 20px;
+          font-size: 11px;
+          border-radius: 10px;
+          padding: 0 8px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+      }
+
+      .user-location {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        height: 20px;
+
+        .location-text {
+          font-size: 12px;
+          color: #666;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+
+  .edit-button {
+    position: absolute;
+    top: 22px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    &:active {
+      background-color: #e0e0e0;
     }
   }
 }
@@ -334,7 +482,7 @@ function handleServiceClick(service: any) {
 .service-card {
   background: #ffffff;
   border-radius: 12px;
-  margin: 0 12px 8px;
+  margin: 16px 16px 18px;
   min-height: 200px;
 
   .service-header {
@@ -399,7 +547,7 @@ function handleServiceClick(service: any) {
 
 .menu-section {
   background-color: white;
-  margin: 0 12px;
+  margin: 0 16px;
   border-radius: 12px;
   overflow: hidden;
 
