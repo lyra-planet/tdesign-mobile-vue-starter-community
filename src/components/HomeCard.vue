@@ -3,7 +3,7 @@ import { defineProps } from 'vue'
 
 const props = defineProps<{
   title: string
-  tags: { label: string, theme: 'primary' | 'success' | 'danger' | string }[]
+  tags: { label: string, theme: 'primary' | 'success' | 'default' | 'danger' | 'warning' }[]
   imageSrc: string
 }>()
 </script>
