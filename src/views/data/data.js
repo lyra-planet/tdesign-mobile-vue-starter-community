@@ -1,8 +1,8 @@
 const talklist = [
   {
     id: '1',
-    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png',
-    count: '0',
+    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
+    count: '4',
     name: 'Pite',
     message: [
       { id: '1', tag: 'other', value: '那明天准时见哦' },
@@ -32,13 +32,12 @@ const talklist = [
         tag: 'other',
         value: '有个问题想咨询一下，关于Tdesign组件库如何更好的使用',
       },
-      { id: '6', tag: 'me', value: '你请问' },
     ],
   },
   {
     id: '3',
-    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png',
-    count: '0',
+    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar3.png',
+    count: '6',
     name: 'Alice',
     message: [
       { id: '1', tag: 'other', value: '那明天准时见哦' },
@@ -50,7 +49,6 @@ const talklist = [
         tag: 'other',
         value: '有个问题想咨询一下，关于Tdesign组件库如何更好的使用',
       },
-      { id: '6', tag: 'me', value: '你请问' },
     ],
   },
 ]

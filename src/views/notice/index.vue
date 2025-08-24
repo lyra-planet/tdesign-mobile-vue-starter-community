@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { categories } from '@vueuse/core/metadata.mjs'
+import { Input } from 'tdesign-mobile-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { talklist } from '../data/data.js'
 
@@ -15,11 +16,35 @@ const route = useRoute()
 // ]
 // const current = talklist.find(item => item.id === route.params.id)
 // console.log(current)
+const message = ref('')
 const current = ref(talklist.find(item => item.id === route.params.id))
 const talk_content = ref(talklist.find(item => item.id === route.params.id).message)
+console.log(talk_content.value)
 function handleClick() {
   router.push('/talklist')
 }
+function handleSendMessage() {
+  if (message.value.trim() === '') {
+    return
+  }
+  talklist.find(item => item.id === route.params.id).message.push({
+    id: Date.now().toString(),
+    tag: 'me',
+    value: message.value,
+  })
+  // 若以后扩展可以在这里修改为对数据库的操作
+  message.value = ''
+  // 模拟对方回复
+  setTimeout(() => {
+    talk_content.value.push({
+      id: (Date.now() + 1).toString(),
+      tag: 'other',
+      value: '这是自动回复的消息',
+    })
+  }, 1000)
+  console.log(talklist)
+}
+// 后续可以通过添加一个时间的属性然后比较两个时间之间的间隔来优化时间的显示，实现自动添加时间标签
 </script>
 
 <template>
@@ -38,7 +63,7 @@ function handleClick() {
           <t-avatar size="32px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
         </div>
         <div v-if="item.tag === 'other'" class="msg-row left">
-          <t-avatar size="32px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
+          <t-avatar size="32px" :image="current.picture" />
           <div class="msg-bubble other">
             {{ item.value }}
           </div>
@@ -51,8 +76,8 @@ function handleClick() {
     <!-- 底部输入框 -->
     <div class="input-area">
       <div class="input-wrapper flex items-center justify-between">
-        <t-input placeholder="输入消息..." class="msg-input w-full" :borderless="false" />
-        <t-button size="medium" theme="primary" shape="round" class="send-btn">
+        <t-input v-model="message" placeholder="输入消息..." class="msg-input w-full" :borderless="false" />
+        <t-button size="medium" theme="primary" shape="round" class="send-btn" @click="handleSendMessage()">
           发送
         </t-button>
       </div>
@@ -79,10 +104,8 @@ function handleClick() {
   padding: 0 16px;
   border-bottom: 1px solid #eee;
   position: relative;
-  /* 改为相对定位 */
   z-index: 100;
   flex-shrink: 0;
-  /* 防止被压缩 */
 }
 
 .title {
@@ -97,8 +120,6 @@ function handleClick() {
   color: #666;
   cursor: pointer;
 }
-
-/* 消息区域 - 改进滚动 */
 .messages-area {
   flex: 1;
   padding: 8px 12px;

@@ -6,10 +6,18 @@ import { talklist } from '../data/data.js'
 defineOptions({
   name: 'Talklist',
 })
-
+const mytalklist = ref(talklist.sort((a, b) => b.count - a.count))
+// 按消息数量排序，未读多的在前
 const router = useRouter()
 function goToDetail(id) {
+  talklist.find(item => item.id === id).count = 0
   router.push({ name: 'Notice', params: { id } })
+}
+function truncateMessage(message, maxLength = 22) {
+  if (message.length > maxLength) {
+    return `${message.substring(0, maxLength)}...`
+  }
+  return message
 }
 </script>
 
@@ -32,12 +40,14 @@ function goToDetail(id) {
     <t-icon name="more" class="more-btn" />
   </div>
   <div class="messege bg-gray-100 h-full ">
-    <div v-for="item in talklist" :key="item.name" class="w-full h-20 bg-white  flex items-center mb-1">
+    <div v-for="item in mytalklist" :key="item.name" class="w-full h-20 bg-white  flex items-center mb-1">
       <t-avatar size="64px" :image="item.picture" />
       <t-badge :count="item.count" :offset="[20, 30]" class="flex-auto">
         <div class="w-full bg-white h-16 flex flex-col justify-center p-0" @click="goToDetail(item.id)">
           <span class="text-sm text-gray-600">{{ item.name }}</span>
-          <span class="text-base " style="color:#bababa">{{ item.newmessge }}</span>
+          <span class="text-base" style="color:#bababa">
+            {{ truncateMessage(item.message[item.message.length - 1].value) }}
+          </span>
         </div>
       </t-badge>
     </div>
