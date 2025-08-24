@@ -35,7 +35,7 @@ function goToDetail(id) {
     <div v-for="item in talklist" :key="item.name" class="w-full h-20 bg-white  flex items-center mb-1">
       <t-avatar size="64px" :image="item.picture" />
       <t-badge :count="item.count" :offset="[20, 30]" class="flex-auto">
-        <div class="w-full bg-white h-16 flex flex-col justify-center p-2" @click="goToDetail(item.id)">
+        <div class="w-full bg-white h-16 flex flex-col justify-center p-0" @click="goToDetail(item.id)">
           <span class="text-sm text-gray-600">{{ item.name }}</span>
           <span class="text-base " style="color:#bababa">{{ item.newmessge }}</span>
         </div>

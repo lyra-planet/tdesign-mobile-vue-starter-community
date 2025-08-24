@@ -2,18 +2,39 @@
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { talklist } from '../views/data/data.js'
 import { useLayoutHook } from './hooks'
 
 defineOptions({
   name: 'Layout',
 })
 const router = useRouter()
+const route = useRoute()
 const value = ref('label_1')
+const sum = ref(talklist.reduce((acc, element) => {
+  return element.count - 0 + acc
+}, 0))
+console.log(sum.value)
 const list = ref([
   { value: 'label_1', label: '首页', icon: 'home', num: 0, path: '/home' },
-  { value: 'label_3', label: '聊天', icon: 'chat', num: 8, path: '/talklist' },
+  { value: 'label_3', label: '聊天', icon: 'chat', num: sum.value, path: '/talklist' },
   { value: 'label_4', label: '我的', icon: 'user', num: 0, path: '/notice' },
 ])
+
+watch(() => route.path, (newPath) => {
+  // 如果是从 notice 页面返回，或当前在 talklist 页面
+  if (newPath === '/talklist' || route.matched.some(r => r.path.includes('notice'))) {
+    value.value = 'label_3' // 设置为聊天
+  }
+  else {
+    // 根据当前路径找到对应的 tab
+    const currentTab = list.value.find(item => item.path === newPath)
+    if (currentTab) {
+      value.value = currentTab.value
+    }
+  }
+}, { immediate: true })
+
 watch(value, (val) => {
   const target = list.value.find(item => item.value === val)
   if (target && target.path) {

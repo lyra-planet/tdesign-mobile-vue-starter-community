@@ -24,12 +24,6 @@ function handleClick() {
 
 <template>
   <div class="chat-container">
-    <!-- 顶部标题栏 -->
-    <!-- <div class="header">
-      <t-icon name="chevron-left" class="back-btn" />
-      <span class="title">聊天</span>
-      <t-icon name="more" class="more-btn" />
-    </div> -->
     <t-navbar :title="current.name" :fixed="false" left-arrow @left-click="handleClick" />
     <!-- 消息列表区域 -->
     <div class="messages-area">
@@ -57,8 +51,8 @@ function handleClick() {
     <!-- 底部输入框 -->
     <div class="input-area">
       <div class="input-wrapper flex items-center justify-between">
-        <t-input placeholder="输入消息..." class="msg-input w-full" :borderless="true" />
-        <t-button size="small" theme="primary" class="send-btn">
+        <t-input placeholder="输入消息..." class="msg-input w-full" :borderless="false" />
+        <t-button size="medium" theme="primary" shape="round" class="send-btn">
           发送
         </t-button>
       </div>
@@ -180,9 +174,13 @@ function handleClick() {
   position: relative;
 }
 
-.mes-input {
-  border-radius: 10px;
-  background-color: #f5f5f5;
+.msg-input {
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 20px;
+  margin-right: 20px;
+  padding: 8px 15px;
+  background-color: #dfdddd;
+  margin: 5px 15px;
 }
 
 .current-chat-info {
