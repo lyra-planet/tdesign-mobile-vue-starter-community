@@ -14,10 +14,9 @@ const userInfo = ref({
   avatar: '/my/Avatar.svg',
   nickname: '张三',
   tags: [
-    { label: '双子座', icon: 'star', type: 'constellation' },
-    { label: '处女座', icon: 'star', type: 'constellation' },
+    { label: '双子座', icon: 'tag', type: 'constellation' },
+    { label: '深圳', icon: 'location', type: 'location' },
   ],
-  location: '深圳',
 })
 
 // 未登录状态的用户信息
@@ -131,7 +130,6 @@ function handleServiceClick(service: any) {
                 :key="index"
                 size="small"
                 variant="light"
-                theme="primary"
                 class="user-tag"
               >
                 <template #icon>
@@ -140,18 +138,12 @@ function handleServiceClick(service: any) {
                 {{ tag.label }}
               </t-tag>
             </div>
-
-            <!-- 定位区域 -->
-            <div class="user-location">
-              <t-icon name="location" size="14" color="#666" />
-              <span class="location-text">{{ userInfo.location }}</span>
-            </div>
           </div>
         </div>
 
         <!-- 编辑按钮 -->
         <div v-if="isLoggedIn" class="edit-button" @click.stop="handleEdit">
-          <t-icon name="edit" size="20" color="#666" />
+          <t-icon name="edit" size="20" color="#000000e6" />
         </div>
       </div>
 
@@ -167,7 +159,7 @@ function handleServiceClick(service: any) {
           :class="{ 'has-divider': index > 0 }"
         >
           <div class="stat-icon">
-            <t-icon :name="stat.icon" size="24" color="#666" />
+            <t-icon :name="stat.icon" size="24" color="#000000e6;" />
           </div>
           <div class="stat-label">
             {{ stat.label }}
@@ -288,13 +280,13 @@ function handleServiceClick(service: any) {
 // 合并的用户信息和统计数据卡片
 .user-stats-card {
   background-color: white;
-  margin: 8px 16px 16px;
+  margin: 0px 16px 16px 16px;
   border-radius: 12px;
   overflow: hidden;
 }
 
 .user-section {
-  padding: 20px 16px;
+  padding: 16px 16px;
   display: flex;
   align-items: flex-start;
   cursor: pointer;
@@ -350,11 +342,12 @@ function handleServiceClick(service: any) {
 
     .user-name {
       font-size: 16px;
-      color: #333;
+      color: #000000e6;
       font-weight: 600;
       height: 24px;
       line-height: 24px;
       margin-top: 6px;
+      white-space: nowrap; // 防止文字换行
 
       &.guest-name {
         display: flex;
@@ -366,23 +359,27 @@ function handleServiceClick(service: any) {
 
     .user-details {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      flex-direction: row; // 改为水平排列
+      align-items: center; // 垂直居中对齐
+      gap: 12px; // 增加间距
       margin-top: 8px;
+      flex-wrap: nowrap; // 防止换行
 
       .user-tags {
         display: flex;
         gap: 8px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap; // 防止标签换行
+        flex-shrink: 0; // 防止压缩
 
         .user-tag {
           height: 20px;
-          font-size: 11px;
-          border-radius: 10px;
-          padding: 0 8px;
+          font-size: 10px;
+          border-radius: 3px; // 降低圆角值
+          padding: 0 6px;
           display: flex;
           align-items: center;
-          gap: 4px;
+          gap: 2px;
+          white-space: nowrap; // 防止文字换行
         }
       }
 
@@ -391,11 +388,13 @@ function handleServiceClick(service: any) {
         align-items: center;
         gap: 4px;
         height: 20px;
+        flex-shrink: 0; // 防止压缩
 
         .location-text {
           font-size: 12px;
           color: #666;
           line-height: 20px;
+          white-space: nowrap; // 防止文字换行
         }
       }
     }
@@ -403,7 +402,8 @@ function handleServiceClick(service: any) {
 
   .edit-button {
     position: absolute;
-    top: 22px;
+    top: 50%; // 改为50%，相对于容器中心
+    transform: translateY(-50%); // 垂直居中
     right: 16px;
     width: 32px;
     height: 32px;
@@ -452,15 +452,15 @@ function handleServiceClick(service: any) {
       background-color: #f8f9fa;
     }
 
-    // 添加分割线（除了第一个）
-    &.has-divider::before {
+    // 只在第二个item前添加分割线
+    &:nth-child(2)::before {
       content: '';
       position: absolute;
       left: 0;
       top: 50%;
       transform: translateY(-50%);
       width: 1px;
-      height: 24px;
+      height: 68px;
       background-color: #e7e7e7;
     }
 
@@ -468,12 +468,12 @@ function handleServiceClick(service: any) {
       margin-bottom: 8px;
       padding: 8px;
       background-color: #f5f5f5;
-      border-radius: 8px;
+      border-radius: 6px;
     }
 
     .stat-label {
       font-size: 12px;
-      color: #666;
+      color: #000000e6;
       font-weight: 400;
     }
   }
@@ -482,33 +482,33 @@ function handleServiceClick(service: any) {
 .service-card {
   background: #ffffff;
   border-radius: 12px;
-  margin: 16px 16px 18px;
+  margin: 16px 16px 18px 16px;
   min-height: 200px;
 
   .service-header {
     padding: 16px 20px 0;
 
     .service-title {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
-      color: #333;
+      color: #000000e6;
     }
   }
 
   .service-content {
-    padding: 16px 20px 20px;
+    // padding: 16px 20px 20px;
 
     .service-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 20px;
+      // gap: 16px;
 
       &:last-child {
         margin-bottom: 0;
       }
 
       .service-item {
+        padding: 16px 0 0 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -533,12 +533,21 @@ function handleServiceClick(service: any) {
         }
 
         .service-name {
-          font-size: 11px;
-          color: #333;
-          text-align: center;
+          font-size: 12px;
+          width: calc(100% - 16px); // 总宽度减去左右各8px
+          height: 20px;
+          color: #000000e6;
           font-weight: 400;
-          line-height: 1.3;
-          word-break: break-all;
+          text-align: center;
+          /* 使用flex布局实现文字垂直居中 */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          /* 文字超出显示省略号 */
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin: 8px 8px; // 上下8px，左右8px
         }
       }
     }
@@ -593,17 +602,17 @@ function handleServiceClick(service: any) {
 // 移动端适配
 @media (max-width: 414px) {
   .service-card {
-    margin: 0 8px 8px;
+    // margin: 0 8px 8px;
 
     .service-header {
       padding: 16px 16px 0;
     }
 
     .service-content {
-      padding: 16px 16px 20px;
+      // padding: 16px 16px 20px;
 
       .service-row {
-        gap: 12px;
+        // gap: 12px;
 
         .service-item {
           min-height: 75px;
@@ -625,35 +634,27 @@ function handleServiceClick(service: any) {
       }
     }
   }
-
-  .user-stats-card,
-  .menu-section {
-    margin-left: 8px;
-    margin-right: 8px;
-  }
 }
 
 @media (max-width: 375px) {
   .service-card {
     .service-content {
       .service-row {
-        gap: 8px;
+        // gap: 8px;
 
         .service-item {
-          min-height: 70px;
-
+          min-height: 80px;
           .service-icon-wrapper {
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
 
             .service-icon {
               width: 18px;
               height: 18px;
             }
           }
-
           .service-name {
-            font-size: 9px;
+            font-size: 12px;
           }
         }
       }
