@@ -11,6 +11,7 @@ declare module 'vue' {
     copy: typeof import('./../src/components/PublishButtons copy.vue')['default']
     HomeCard: typeof import('./../src/components/HomeCard.vue')['default']
     HomeFab: typeof import('./../src/components/HomeFab.vue')['default']
+    HomeMessage: typeof import('./../src/components/HomeMessage.vue')['default']
     HomeSwiper: typeof import('./../src/components/HomeSwiper.vue')['default']
     HomeTabBar: typeof import('./../src/components/HomeTabBar.vue')['default']
     HomeTabs: typeof import('./../src/components/HomeTabs.vue')['default']

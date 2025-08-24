@@ -4,7 +4,7 @@ import router from '@/router'
 
 function handleClick() {
   // 回到主页
-  router.back()
+  router.push('/')
 }
 </script>
 
