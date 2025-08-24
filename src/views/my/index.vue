@@ -85,14 +85,17 @@ function handleServiceClick(service: any) {
     <!-- 头部 -->
     <div class="header">
       <div class="header-left">
-        <t-icon name="view-list" size="20" color="#333" />
+        <t-icon name="view-list" size="24" color="#000000e6" />
       </div>
       <div class="header-title">
         我的
       </div>
       <div class="header-right">
-        <t-icon name="ellipsis" size="20" color="#333" class="mr-3" />
-        <t-icon name="help-circle" size="20" color="#333" />
+        <div class="mini-program-buttons">
+          <img src="/my/MiniProgramMoreOutlined.svg" class="mini-program-icon">
+          <div class="divider-line" />
+          <img src="/my/MiniProgramCloseOutlined.svg" class="mini-program-icon">
+        </div>
       </div>
     </div>
 
@@ -240,7 +243,7 @@ function handleServiceClick(service: any) {
 <style lang='scss' scoped>
 .my-page {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #f5f6f7;
   padding-bottom: 62px;
 }
 
@@ -248,7 +251,7 @@ function handleServiceClick(service: any) {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 0 12px 0 12px;
   background-color: transparent;
   border-bottom: none;
   height: 48px;
@@ -260,9 +263,9 @@ function handleServiceClick(service: any) {
   }
 
   .header-title {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 600;
-    color: #333;
+    color: #000000e6;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     height: 26px;
     line-height: 26px;
@@ -273,7 +276,33 @@ function handleServiceClick(service: any) {
     right: 12px;
     display: flex;
     align-items: center;
-    gap: 12px;
+
+    .mini-program-buttons {
+      display: flex;
+      align-items: center;
+      height: 32px;
+      border-radius: 16px;
+      opacity: 1;
+      border: 0.5px solid #e7e7e7;
+      background-color: transparent; // 改为透明背景
+      padding: 0 13px;
+
+      .mini-program-icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .divider-line {
+        width: 1px;
+        height: 20px;
+        background-color: #e7e7e7;
+        opacity: 1;
+        margin: 0 8px;
+      }
+    }
   }
 }
 

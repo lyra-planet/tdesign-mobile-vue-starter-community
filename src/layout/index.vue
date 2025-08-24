@@ -167,7 +167,7 @@ function handleTabChange(value: string) {
 // 状态栏样式
 .status-bar {
   height: 46px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
+  background: transparent; // 改为透明背景
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -175,7 +175,7 @@ function handleTabChange(value: string) {
   font-size: 14px;
   font-weight: 600;
   color: #000;
-  border-bottom: 0.5px solid #e7e7e7;
+  // border-bottom: 0.5px solid #e7e7e7; // 移除底部边界线
   box-sizing: border-box;
 
   .status-left {
