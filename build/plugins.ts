@@ -53,7 +53,11 @@ export function usePlugins(): PluginOption[] {
     // 支持 JSX 语法
     vueJsx(),
     // 处理 SVG 图标
-    svgLoader(),
+    svgLoader({
+      defaultImport: 'url',
+      include: [/\.svg\?component$/],
+      exclude: [/\/public\//],
+    }),
     // TailwindCSS 4 新增
     Tailwindcss(),
     // 代码定位工具，按住 alt + shift 点击页面上的组件可直接跳转到 vscode 对应代码段哦 😍
