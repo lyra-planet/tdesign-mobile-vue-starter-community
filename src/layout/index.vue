@@ -1,13 +1,16 @@
 <script setup lang='ts'>
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { Icon as TIcon } from 'tdesign-icons-vue-next'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { talklist } from '../store/talklist'
+import { useLayoutHook } from './hooks'
 
 defineOptions({
   name: 'Layout',
 })
 
-const route = useRoute()
 const router = useRouter()
+const route = useRoute()
 
 // 实时时间
 const currentTime = ref('')
@@ -34,8 +37,22 @@ onUnmounted(() => {
   }
 })
 
+// Tab navigation config
+const value = ref('label_1')
+const sum = computed(() => {
+  return talklist.reduce((acc, element) => {
+    return (element.count || 0) + acc
+  }, 0)
+})
+
+const list = ref([
+  { value: 'label_1', label: '首页', icon: 'home', num: 0, path: '/home' },
+  { value: 'label_3', label: '聊天', icon: 'chat', num: sum.value, path: '/talklist' },
+  { value: 'label_4', label: '我的', icon: 'user', num: 0, path: '/notice' },
+])
+
 // 底部导航配置
-const tabList = ref([
+const tabList = computed(() => [
   {
     value: 'home',
     label: '首页',
@@ -46,8 +63,8 @@ const tabList = ref([
     value: 'message',
     label: '消息',
     icon: 'chat',
-    path: '/message',
-    badge: '2',
+    path: '/talklist',
+    badge: sum.value > 0 ? sum.value.toString() : undefined,
   },
   {
     value: 'my',
@@ -61,11 +78,31 @@ const activeTab = ref('home')
 
 // 监听路由变化更新激活状态
 watch(() => route.path, (newPath) => {
-  const tab = tabList.value.find(item => newPath.startsWith(item.path))
-  if (tab) {
-    activeTab.value = tab.value
+  // 如果是从 notice 页面返回，或当前在 talklist 页面
+  if (newPath === '/talklist' || route.matched.some(r => r.path.includes('notice'))) {
+    value.value = 'label_3' // 设置为聊天
+    activeTab.value = 'message'
+  }
+  else {
+    // 根据当前路径找到对应的 tab
+    const currentTab = list.value.find(item => item.path === newPath)
+    if (currentTab) {
+      value.value = currentTab.value
+    }
+
+    const tab = tabList.value.find(item => newPath.startsWith(item.path))
+    if (tab) {
+      activeTab.value = tab.value
+    }
   }
 }, { immediate: true })
+
+watch(value, (val) => {
+  const target = list.value.find(item => item.value === val)
+  if (target && target.path) {
+    router.push(target.path)
+  }
+})
 
 // 处理tab切换
 function handleTabChange(value: string) {
@@ -75,6 +112,8 @@ function handleTabChange(value: string) {
     router.push(tab.path)
   }
 }
+
+const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = useLayoutHook()
 </script>
 
 <template>
@@ -108,29 +147,16 @@ function handleTabChange(value: string) {
     <div class="bottom-navigation">
       <div class="tab-bar">
         <div
-          v-for="tab in tabList"
-          :key="tab.value"
-          class="tab-item"
-          :class="{ active: activeTab === tab.value }"
+          v-for="tab in tabList" :key="tab.value" class="tab-item" :class="{ active: activeTab === tab.value }"
           @click="handleTabChange(tab.value)"
         >
           <div class="tab-content">
             <div class="tab-icon">
-              <t-icon
-                :name="tab.icon"
-                size="20"
-                :color="activeTab === tab.value ? '#0052D9' : '#000'"
-              />
-              <t-badge
-                v-if="tab.badge"
-                :count="tab.badge as string"
-                size="medium"
-                class="tab-badge"
-              />
+              <TIcon :name="tab.icon" size="20" :color="activeTab === tab.value ? '#0052D9' : '#000'" />
+              <t-badge v-if="tab.badge" :count="tab.badge as string" size="medium" class="tab-badge" />
             </div>
             <div
-              class="tab-label"
-              :style="{
+              class="tab-label" :style="{
                 color: activeTab === tab.value ? '#0052D9' : '#666',
                 width: '20px',
                 height: '16px',

@@ -24,12 +24,17 @@ const router = createRouter({
           component: () => import('@/views/my/index.vue'),
         },
         {
-          path: 'message',
-          component: () => import('@/views/message/index.vue'),
+          path: 'talklist',
+          component: () => import('@/views/talklist/index.vue'),
         },
         {
           path: 'publish',
           component: () => import('@/views/publish/index.vue'),
+        },
+        {
+          path: 'notice/:id',
+          name: 'Notice',
+          component: () => import('@/views/notice/index.vue'),
         },
       ],
     },
@@ -50,14 +55,14 @@ const router = createRouter({
         title: '设置',
       },
     },
-    {
-      path: '/login',
-      component: () => import('@/views/login/index.vue'),
-    },
-    {
-      path: '/error/:code',
-      component: () => import('@/views/error/index.vue'),
-    },
+    // {
+    //   path: '/login',
+    //   component: () => import('@/views/login/index.vue'),
+    // },
+    // {
+    //   path: '/error/:code',
+    //   component: () => import('@/views/error/index.vue'),
+    // },
     {
       path: '/:pathMatch(.*)*',
       redirect: '/error/404',
