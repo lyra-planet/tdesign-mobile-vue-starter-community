@@ -20,6 +20,24 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       redirect: '/error/404',
     },
+    // 在现有路由配置中添加
+    {
+      path: '/my/edit',
+      name: 'MyEdit',
+      component: () => import('@/views/my/edit.vue'),
+      meta: {
+        title: '个人信息',
+      },
+    },
+    // 新增设置页面路由
+    {
+      path: '/my/settings',
+      name: 'MySettings',
+      component: () => import('@/views/my/settings.vue'),
+      meta: {
+        title: '设置',
+      },
+    },
   ],
 })
 
