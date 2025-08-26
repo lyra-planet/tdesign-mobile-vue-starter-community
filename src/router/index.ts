@@ -10,7 +10,7 @@ const router = createRouter({
       path: '/',
       redirect: '/home',
       children: [
-        ...routes,
+        ...routes.filter(r => r.path !== '/notice'),
         // 登录相关路由
         {
           path: '/login',
@@ -32,6 +32,16 @@ const router = createRouter({
           component: () => import('@/views/login/VerifyCodePage.vue'),
         },
       ],
+    },
+    {
+      path: '/notice',
+      name: 'Notice',
+      component: () => import('@/views/notice/index.vue'),
+    },
+    {
+      path: '/notice/:id',
+      name: 'NoticeDetail',
+      component: () => import('@/views/notice/index.vue'),
     },
     {
       path: '/publish',
