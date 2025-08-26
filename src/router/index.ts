@@ -1,5 +1,6 @@
 import { createRouter } from 'vue-router'
 import { handleHotUpdate, routes } from 'vue-router/auto-routes'
+import Layout from '@/layout/index.vue'
 
 import { getRouterMode } from './utils'
 
@@ -8,41 +9,31 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      component: Layout,
       children: [
-        ...routes,
-        // 登录相关路由
         {
-          path: '/login',
-          redirect: '/login/phone',
+          path: '',
+          redirect: '/home',
         },
         {
-          path: '/login/phone',
-          name: 'PhoneLogin',
-          component: () => import('@/views/login/PhoneLoginPage.vue'),
+          path: 'home',
+          component: () => import('@/views/home/index.vue'),
         },
         {
-          path: '/login/password',
-          name: 'PasswordLogin',
-          component: () => import('@/views/login/PasswordLoginPage.vue'),
+          path: 'my',
+          component: () => import('@/views/my/index.vue'),
         },
         {
-          path: '/login/verify',
-          name: 'VerifyCodeLogin',
-          component: () => import('@/views/login/VerifyCodePage.vue'),
+          path: 'message',
+          component: () => import('@/views/message/index.vue'),
+        },
+        {
+          path: 'publish',
+          component: () => import('@/views/publish/index.vue'),
         },
       ],
     },
-    {
-      path: '/publish',
-      redirect: '/publish',
-      children: routes,
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      redirect: '/error/404',
-    },
-    // 在现有路由配置中添加
+    // 不需要布局的页面
     {
       path: '/my/edit',
       name: 'MyEdit',
@@ -51,7 +42,6 @@ const router = createRouter({
         title: '个人信息',
       },
     },
-    // 新增设置页面路由
     {
       path: '/my/settings',
       name: 'MySettings',
@@ -59,6 +49,18 @@ const router = createRouter({
       meta: {
         title: '设置',
       },
+    },
+    {
+      path: '/login',
+      component: () => import('@/views/login/index.vue'),
+    },
+    {
+      path: '/error/:code',
+      component: () => import('@/views/error/index.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/error/404',
     },
   ],
 })
