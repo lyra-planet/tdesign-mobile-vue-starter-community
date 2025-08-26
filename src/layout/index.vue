@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { talklist } from '../views/data/data.js'
+import { talklist } from '../store/talklist'
 import { useLayoutHook } from './hooks'
 
 defineOptions({
@@ -39,9 +39,11 @@ onUnmounted(() => {
 
 // Tab navigation config
 const value = ref('label_1')
-const sum = ref(talklist.reduce((acc, element) => {
-  return element.count - 0 + acc
-}, 0))
+const sum = computed(() => {
+  return talklist.reduce((acc, element) => {
+    return (element.count || 0) + acc
+  }, 0)
+})
 
 const list = ref([
   { value: 'label_1', label: '首页', icon: 'home', num: 0, path: '/home' },
@@ -50,7 +52,7 @@ const list = ref([
 ])
 
 // 底部导航配置
-const tabList = ref([
+const tabList = computed(() => [
   {
     value: 'home',
     label: '首页',
@@ -145,29 +147,16 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
     <div class="bottom-navigation">
       <div class="tab-bar">
         <div
-          v-for="tab in tabList"
-          :key="tab.value"
-          class="tab-item"
-          :class="{ active: activeTab === tab.value }"
+          v-for="tab in tabList" :key="tab.value" class="tab-item" :class="{ active: activeTab === tab.value }"
           @click="handleTabChange(tab.value)"
         >
           <div class="tab-content">
             <div class="tab-icon">
-              <TIcon
-                :name="tab.icon"
-                size="20"
-                :color="activeTab === tab.value ? '#0052D9' : '#000'"
-              />
-              <t-badge
-                v-if="tab.badge"
-                :count="tab.badge as string"
-                size="medium"
-                class="tab-badge"
-              />
+              <TIcon :name="tab.icon" size="20" :color="activeTab === tab.value ? '#0052D9' : '#000'" />
+              <t-badge v-if="tab.badge" :count="tab.badge as string" size="medium" class="tab-badge" />
             </div>
             <div
-              class="tab-label"
-              :style="{
+              class="tab-label" :style="{
                 color: activeTab === tab.value ? '#0052D9' : '#666',
                 width: '20px',
                 height: '16px',

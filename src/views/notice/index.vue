@@ -2,7 +2,7 @@
 import { categories } from '@vueuse/core/metadata.mjs'
 import { Input } from 'tdesign-mobile-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { talklist } from '../data/data.js'
+import { talklist } from '../../store/talklist'
 
 defineOptions({
   name: 'Notice',

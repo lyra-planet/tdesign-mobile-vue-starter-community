@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { talklist } from '../data/data.js'
+import { talklist } from '../../store/talklist'
 
 defineOptions({
   name: 'Talklist',
@@ -11,6 +11,7 @@ const mytalklist = ref(talklist.sort((a, b) => b.count - a.count))
 const router = useRouter()
 function goToDetail(id) {
   talklist.find(item => item.id === id).count = 0
+  console.log(talklist)
   router.push({ name: 'Notice', params: { id } })
 }
 function truncateMessage(message, maxLength = 22) {
@@ -40,9 +41,9 @@ function truncateMessage(message, maxLength = 22) {
     <t-icon name="more" class="more-btn" />
   </div>
   <div class="messege bg-gray-100 h-full ">
-    <div v-for="item in mytalklist" :key="item.name" class="w-full h-20 bg-white  flex items-center mb-1">
-      <t-avatar size="64px" :image="item.picture" />
-      <t-badge :count="item.count" :offset="[20, 30]" class="flex-auto">
+    <div v-for="item in mytalklist" :key="item.name" class="w-full h-20 bg-white  flex items-center mb-0.5">
+      <t-avatar size="64px" :image="item.picture" class="ml-2" />
+      <t-badge :count="item.count" :offset="[20, 30]" class="flex-auto ml-2">
         <div class="w-full bg-white h-16 flex flex-col justify-center p-0" @click="goToDetail(item.id)">
           <span class="text-sm text-gray-600">{{ item.name }}</span>
           <span class="text-base" style="color:#bababa">

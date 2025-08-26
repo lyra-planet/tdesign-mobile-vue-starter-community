@@ -1,8 +1,11 @@
-const talklist = [
+import { reactive } from 'vue'
+
+// 原始数据
+const initialTalklist = [
   {
     id: '1',
     picture: 'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
-    count: '4',
+    count: 4,
     name: 'Pite',
     message: [
       { id: '1', tag: 'other', value: '那明天准时见哦' },
@@ -20,7 +23,7 @@ const talklist = [
   {
     id: '2',
     picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png',
-    count: '2',
+    count: 2,
     name: 'Bob',
     message: [
       { id: '1', tag: 'other', value: '那明天准时见哦' },
@@ -37,7 +40,7 @@ const talklist = [
   {
     id: '3',
     picture: 'https://tdesign.gtimg.com/mobile/demos/avatar3.png',
-    count: '6',
+    count: 6,
     name: 'Alice',
     message: [
       { id: '1', tag: 'other', value: '那明天准时见哦' },
@@ -52,5 +55,9 @@ const talklist = [
     ],
   },
 ]
-export { talklist }
+
+// 创建响应式的数据
+export const talklist = reactive(initialTalklist)
+
+// 导出默认值（保持兼容性）
 export default talklist
