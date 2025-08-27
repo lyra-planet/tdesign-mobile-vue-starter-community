@@ -36,6 +36,11 @@ const router = createRouter({
           name: 'Notice',
           component: () => import('@/views/notice/index.vue'),
         },
+        {
+          path: 'my/settings',
+          name: 'MySettings',
+          component: () => import('@/views/my/settings.vue'),
+        },
       ],
     },
     // 不需要布局的页面
@@ -45,14 +50,6 @@ const router = createRouter({
       component: () => import('@/views/my/edit.vue'),
       meta: {
         title: '个人信息',
-      },
-    },
-    {
-      path: '/my/settings',
-      name: 'MySettings',
-      component: () => import('@/views/my/settings.vue'),
-      meta: {
-        title: '设置',
       },
     },
     // {

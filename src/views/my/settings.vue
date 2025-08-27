@@ -67,19 +67,6 @@ function handleSettingClick(setting: any) {
 
 <template>
   <div class="settings-page">
-    <!-- 头部 -->
-    <div class="header">
-      <div class="header-left" @click="handleBack">
-        <t-icon name="chevron-left" size="24" color="#000" />
-      </div>
-      <div class="header-title">
-        设置
-      </div>
-      <div class="header-right">
-        <!-- 空白占位 -->
-      </div>
-    </div>
-
     <!-- 第一组设置 -->
     <div class="menu-section">
       <div
@@ -141,42 +128,6 @@ function handleSettingClick(setting: any) {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 20px;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background-color: white;
-  height: 48px;
-  border-bottom: 0.5px solid #e7e7e7;
-  position: relative;
-
-  .header-left {
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .header-title {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 17px;
-    font-weight: 600;
-    color: #333;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
-
-  .header-right {
-    width: 24px;
-    height: 24px;
-  }
 }
 
 .menu-section {

@@ -4,10 +4,7 @@ import HomeSwiperImageSrc from '@/assets/images/HomeSwiper.png'
 import HomeCard from '@/components/HomeCard.vue'
 import HomeFab from '@/components/HomeFab.vue'
 import HomeSwiper from '@/components/HomeSwiper.vue'
-import HomeTabBar from '@/components/HomeTabBar.vue'
 import HomeTabs from '@/components/HomeTabs.vue'
-
-import NavBarWithSearch from '@/components/NavBarWithSearch.vue'
 
 defineOptions({ name: 'Home' })
 
@@ -131,7 +128,6 @@ const loadingProps = ref({
 <template>
   <div class="h-screen flex flex-col">
     <!-- 顶部 -->
-    <NavBarWithSearch />
     <HomeTabs />
 
     <!-- 中间滚动区 -->
@@ -151,7 +147,6 @@ const loadingProps = ref({
     </div>
 
     <!-- 底部 -->
-    <HomeTabBar />
     <HomeFab />
   </div>
 </template>
