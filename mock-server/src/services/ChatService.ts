@@ -54,4 +54,15 @@ export class ChatService {
       data: { id: chatId, count: 0 },
     }
   }
+
+  // 获取未读消息总数
+  static getUnreadCount(): { success: boolean, message: string, data: { count: number } } {
+    const totalCount = talklist.reduce((acc, chat) => acc + (chat.count || 0), 0)
+
+    return {
+      success: true,
+      message: '获取未读消息总数成功',
+      data: { count: totalCount },
+    }
+  }
 }

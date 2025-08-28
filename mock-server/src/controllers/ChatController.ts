@@ -49,4 +49,10 @@ export class ChatController {
       sendResponse(res, 404, result.message)
     }
   }
+
+  // 获取未读消息总数
+  static getUnreadCount(req: Request, res: Response): void {
+    const result = ChatService.getUnreadCount()
+    sendResponse(res, 200, result.message, result.data)
+  }
 }
