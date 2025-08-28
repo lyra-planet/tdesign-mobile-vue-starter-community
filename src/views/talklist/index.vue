@@ -35,11 +35,7 @@ function truncateMessage(message, maxLength = 22) {
       third
     </t-col>
   </t-row> -->
-  <div class="header">
-    <t-icon name="chevron-left" class="back-btn" />
-    <span class="title ">聊天</span>
-    <t-icon name="more" class="more-btn" />
-  </div>
+
   <div class="messege bg-gray-100 h-full ">
     <div v-for="item in mytalklist" :key="item.name" class="w-full h-20 bg-white  flex items-center mb-0.5">
       <t-avatar size="64px" :image="item.picture" class="ml-2" />
@@ -78,19 +74,5 @@ function truncateMessage(message, maxLength = 22) {
   margin: 0px 0;
   --td-divider-color: #ff0000;
   --td-divider-content-line-style: none;
-}
-
-.header {
-  height: 50px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  border-bottom: 1px solid #eee;
-  position: relative;
-  /* 改为相对定位 */
-  z-index: 100;
-  flex-shrink: 0;
 }
 </style>

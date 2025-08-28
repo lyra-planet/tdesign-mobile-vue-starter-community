@@ -113,6 +113,35 @@ function handleTabChange(value: string) {
   }
 }
 
+// 获取页面标题
+function getPageTitle() {
+  const path = route.path
+  if (path === '/home') {
+    return '首页'
+  }
+  if (path === '/talklist') {
+    return '全部消息'
+  }
+  if (path === '/my') {
+    return '我的'
+  }
+  if (path.startsWith('/notice')) {
+    const noticeId = route.params.id
+    if (noticeId) {
+      const currentChat = talklist.find(item => item.id === noticeId)
+      return currentChat ? currentChat.name : '通知'
+    }
+    return '通知'
+  }
+  if (path === '/publish') {
+    return '发布动态'
+  }
+  if (path === '/my/settings') {
+    return '设置'
+  }
+  return '首页'
+}
+
 const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = useLayoutHook()
 </script>
 
@@ -138,13 +167,38 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
       </div>
     </div>
 
+    <!-- 页面标题栏 -->
+    <div class="page-header">
+      <div class="header-left">
+        <!-- 发布页面、对话页面和设置页面显示返回按钮，其他页面显示view-list图标 -->
+        <TIcon v-if="route.path === '/publish' || route.path.startsWith('/notice') || route.path === '/my/settings'" name="chevron-left" size="24" color="#000000e6" @click="router.back()" />
+        <TIcon v-else name="view-list" size="24" color="#000000e6" />
+        <!-- 首页显示搜索框，其他页面显示标题 -->
+        <t-search v-if="route.path === '/home'" class="navbar-search h-[32px] ml-[10px]" placeholder="请搜索你想要的内容" shape="round">
+          <template #left-icon>
+            <TIcon name="search" size="15px" />
+          </template>
+        </t-search>
+      </div>
+      <div class="header-title">
+        <span v-if="route.path !== '/home'">{{ getPageTitle() }}</span>
+      </div>
+      <div class="header-right">
+        <div class="mini-program-buttons">
+          <img src="/my/MiniProgramMoreOutlined.svg" class="mini-program-icon">
+          <div class="divider-line" />
+          <img src="/my/MiniProgramCloseOutlined.svg" class="mini-program-icon">
+        </div>
+      </div>
+    </div>
+
     <!-- 主内容区域 -->
     <div class="main-content">
       <router-view />
     </div>
 
     <!-- 底部导航栏 -->
-    <div class="bottom-navigation">
+    <div v-if="!route.path.includes('/my/settings') && !route.path.startsWith('/notice')" class="bottom-navigation">
       <div class="tab-bar">
         <div
           v-for="tab in tabList" :key="tab.value" class="tab-item" :class="{ active: activeTab === tab.value }"
@@ -193,7 +247,8 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
 // 状态栏样式
 .status-bar {
   height: 46px;
-  background: transparent; // 改为透明背景
+  background-color: #fff;
+  // background: transparent; // 改为透明背景
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -211,7 +266,7 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
 
     .time {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
       line-height: 1;
     }
@@ -240,9 +295,87 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
       }
 
       .icon-svg {
-        width: 22px; // 放大图标
-        height: 16px; // 放大图标
+        width: 20px; // 放大图标
+        height: 20px; // 放大图标
         object-fit: contain;
+      }
+    }
+  }
+}
+
+// 页面标题栏样式
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px 0 12px;
+  background-color: #fff;
+  border-bottom: none;
+  height: 48px;
+  position: relative;
+
+  .header-left {
+    position: absolute;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    .navbar-search {
+      --td-search-height: 32px;
+      width: 189px !important;
+      display: flex;
+      align-items: center;
+    }
+
+    :deep(.t-input__keyword) {
+      max-width: 140px;
+      font-size: 14px;
+    }
+  }
+
+  .header-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000e6;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    height: 26px;
+    line-height: 26px;
+    display: flex;
+    align-items: center;
+  }
+
+  .header-right {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    .mini-program-buttons {
+      display: flex;
+      align-items: center;
+      height: 32px;
+      border-radius: 16px;
+      opacity: 1;
+      border: 0.5px solid #e7e7e7;
+      background-color: #fff;
+      padding: 0 13px;
+
+      .mini-program-icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .divider-line {
+        width: 1px;
+        height: 20px;
+        background-color: #e7e7e7;
+        opacity: 1;
+        margin: 0 8px;
       }
     }
   }

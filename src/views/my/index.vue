@@ -82,23 +82,6 @@ function handleServiceClick(service: any) {
 
 <template>
   <div class="my-page">
-    <!-- 头部 -->
-    <div class="header">
-      <div class="header-left">
-        <t-icon name="view-list" size="24" color="#000000e6" />
-      </div>
-      <div class="header-title">
-        我的
-      </div>
-      <div class="header-right">
-        <div class="mini-program-buttons">
-          <img src="/my/MiniProgramMoreOutlined.svg" class="mini-program-icon">
-          <div class="divider-line" />
-          <img src="/my/MiniProgramCloseOutlined.svg" class="mini-program-icon">
-        </div>
-      </div>
-    </div>
-
     <!-- 用户信息和统计数据合并卡片 -->
     <div class="user-stats-card">
       <!-- 用户信息区域 -->
@@ -245,65 +228,6 @@ function handleServiceClick(service: any) {
   min-height: 100vh;
   background-color: #f5f6f7;
   padding-bottom: 62px;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px 0 12px;
-  background-color: transparent;
-  border-bottom: none;
-  height: 48px;
-  position: relative;
-
-  .header-left {
-    position: absolute;
-    left: 12px;
-  }
-
-  .header-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #000000e6;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    height: 26px;
-    line-height: 26px;
-  }
-
-  .header-right {
-    position: absolute;
-    right: 12px;
-    display: flex;
-    align-items: center;
-
-    .mini-program-buttons {
-      display: flex;
-      align-items: center;
-      height: 32px;
-      border-radius: 16px;
-      opacity: 1;
-      border: 0.5px solid #e7e7e7;
-      background-color: transparent; // 改为透明背景
-      padding: 0 13px;
-
-      .mini-program-icon {
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .divider-line {
-        width: 1px;
-        height: 20px;
-        background-color: #e7e7e7;
-        opacity: 1;
-        margin: 0 8px;
-      }
-    }
-  }
 }
 
 // 合并的用户信息和统计数据卡片

@@ -49,7 +49,6 @@ function handleSendMessage() {
 
 <template>
   <div class="chat-container">
-    <t-navbar :title="current.name" :fixed="false" left-arrow @left-click="handleClick" />
     <!-- 消息列表区域 -->
     <div class="messages-area">
       <div class="time-badge">
