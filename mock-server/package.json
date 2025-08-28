@@ -1,11 +1,12 @@
 {
   "name": "tdesign-mock-server",
+  "type": "module",
   "version": "1.0.0",
   "description": "Mock server for TDesign mobile vue starter",
   "main": "server.ts",
   "scripts": {
-    "start": "ts-node --esm server.ts",
-    "dev": "nodemon --exec ts-node --esm server.ts"
+    "start": "node --import tsx server.ts",
+    "dev": "nodemon --exec \"node --import tsx server.ts\""
   },
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -19,6 +20,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.0.0",
     "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "tsx": "^4.7.0"
   }
 }

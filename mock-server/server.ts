@@ -1,3 +1,9 @@
+// ========================================
+// 此文件已重构为模块化架构
+// 新的入口文件: src/server.ts
+// 重构后的代码在 src/ 目录下
+// ========================================
+
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
