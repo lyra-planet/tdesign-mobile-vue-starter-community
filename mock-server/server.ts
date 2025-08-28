@@ -29,6 +29,62 @@ const users = [
   },
 ]
 
+// 聊天列表数据
+const talklist = [
+  {
+    id: '1',
+    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
+    count: 4,
+    name: 'Pite',
+    message: [
+      { id: '1', tag: 'other', value: '那明天准时见哦' },
+      { id: '2', tag: 'me', value: '好的，我会记得的' },
+      { id: '3', tag: 'me', value: '在吗？' },
+      { id: '4', tag: 'time', value: '今天 10:50' },
+      {
+        id: '5',
+        tag: 'other',
+        value: '有个问题想咨询一下，关于Tdesign组件库如何更好的使用',
+      },
+      { id: '6', tag: 'me', value: '你请问' },
+    ],
+  },
+  {
+    id: '2',
+    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png',
+    count: 2,
+    name: 'Bob',
+    message: [
+      { id: '1', tag: 'other', value: '那明天准时见哦' },
+      { id: '2', tag: 'me', value: '好的，我会记得的' },
+      { id: '3', tag: 'me', value: '在吗？' },
+      { id: '4', tag: 'time', value: '今天 10:50' },
+      {
+        id: '5',
+        tag: 'other',
+        value: '有个问题想咨询一下，关于Tdesign组件库如何更好的使用',
+      },
+    ],
+  },
+  {
+    id: '3',
+    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar3.png',
+    count: 6,
+    name: 'Alice',
+    message: [
+      { id: '1', tag: 'other', value: '那明天准时见哦' },
+      { id: '2', tag: 'me', value: '好的，我会记得的' },
+      { id: '3', tag: 'me', value: '在吗？' },
+      { id: '4', tag: 'time', value: '今天 10:50' },
+      {
+        id: '5',
+        tag: 'other',
+        value: '有个问题想咨询一下，关于Tdesign组件库如何更好的使用',
+      },
+    ],
+  },
+]
+
 // 验证码存储
 const verifyCodes = new Map()
 
@@ -138,15 +194,15 @@ app.post('/api/auth/verify-login', (req, res) => {
   }
 
   // 生成token
-  const token = generateToken(user!)
+  const token = generateToken(user)
 
   sendResponse(res, 200, '登录成功', {
     token,
     user: {
-      id: user!.id,
-      name: user!.name,
-      phone: user!.phone, // 返回完整的手机号
-      avatar: user!.avatar,
+      id: user.id,
+      name: user.name,
+      phone: user.phone,
+      avatar: user.avatar,
     },
   })
 })
@@ -219,6 +275,62 @@ app.post('/api/auth/refresh-token', (req, res) => {
   })
 })
 
+// 获取聊天列表
+app.get('/api/talklist', (req, res) => {
+  sendResponse(res, 200, '获取聊天列表成功', talklist)
+})
+
+// 根据ID获取聊天详情
+app.get('/api/talklist/:id', (req, res) => {
+  const { id } = req.params
+  const chat = talklist.find(item => item.id === id)
+
+  if (!chat) {
+    return sendResponse(res, 404, '聊天记录不存在')
+  }
+
+  sendResponse(res, 200, '获取聊天详情成功', chat)
+})
+
+// 发送消息到指定聊天
+app.post('/api/talklist/:id/message', (req, res) => {
+  const { id } = req.params
+  const { message } = req.body
+
+  if (!message || !message.trim()) {
+    return sendResponse(res, 400, '消息内容不能为空')
+  }
+
+  const chat = talklist.find(item => item.id === id)
+  if (!chat) {
+    return sendResponse(res, 404, '聊天记录不存在')
+  }
+
+  // 添加新消息
+  const newMessage = {
+    id: Date.now().toString(),
+    tag: 'me',
+    value: message.trim(),
+  }
+
+  chat.message.push(newMessage)
+
+  sendResponse(res, 200, '消息发送成功', newMessage)
+})
+
+// 清除聊天未读消息数量
+app.put('/api/talklist/:id/read', (req, res) => {
+  const { id } = req.params
+  const chat = talklist.find(item => item.id === id)
+
+  if (!chat) {
+    return sendResponse(res, 404, '聊天记录不存在')
+  }
+
+  chat.count = 0
+  sendResponse(res, 200, '标记为已读成功', { id, count: 0 })
+})
+
 // 404处理
 app.use((req, res) => {
   sendResponse(res, 404, '接口不存在')
@@ -233,8 +345,15 @@ app.listen(PORT, () => {
   console.warn('  POST /api/auth/password-login - 密码登录')
   console.warn('  POST /api/auth/logout - 退出登录')
   console.warn('  POST /api/auth/refresh-token - 刷新Token')
+  console.warn('  GET  /api/talklist - 获取聊天列表')
+  console.warn('  GET  /api/talklist/:id - 获取聊天详情')
+  console.warn('  POST /api/talklist/:id/message - 发送消息')
+  console.warn('  PUT  /api/talklist/:id/read - 标记为已读')
 
   console.warn('\n📝 测试账号:')
   console.warn('  手机号: 13812345678, 密码: 123456')
   console.warn('  手机号: 13987654321, 密码: 123456')
+
+  console.warn('\n💬 聊天列表测试数据:')
+  console.warn('  共3个聊天记录: Pite(id:1), Bob(id:2), Alice(id:3)')
 })
