@@ -3,7 +3,6 @@ import { Icon as TIcon } from 'tdesign-icons-vue-next'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { talklist } from '../store/talklist'
-import { useLayoutHook } from './hooks'
 
 defineOptions({
   name: 'Layout',
@@ -34,22 +33,16 @@ onMounted(() => {
 onUnmounted(() => {
   if (timeInterval) {
     clearInterval(timeInterval)
+    timeInterval = null
   }
 })
 
-// Tab navigation config
-const value = ref('label_1')
+// 消息总数计算
 const sum = computed(() => {
   return talklist.reduce((acc, element) => {
     return (element.count || 0) + acc
   }, 0)
 })
-
-const list = ref([
-  { value: 'label_1', label: '首页', icon: 'home', num: 0, path: '/home' },
-  { value: 'label_3', label: '聊天', icon: 'chat', num: sum.value, path: '/talklist' },
-  { value: 'label_4', label: '我的', icon: 'user', num: 0, path: '/notice' },
-])
 
 // 底部导航配置
 const tabList = computed(() => [
@@ -74,35 +67,52 @@ const tabList = computed(() => [
   },
 ])
 
+const PAGE_TITLES: Record<string, string> = {
+  '/home': '首页',
+  '/talklist': '全部消息',
+  '/my': '我的',
+  '/publish': '发布动态',
+  '/my/settings': '设置',
+}
+
+function getPageTitle(): string {
+  const path = route.path
+
+  // 直接匹配
+  if (PAGE_TITLES[path]) {
+    return PAGE_TITLES[path]
+  }
+
+  // 特殊处理 notice 页面
+  if (path.startsWith('/notice')) {
+    const params = route.params as Record<string, string>
+    const noticeId = params.id
+    if (noticeId) {
+      const currentChat = talklist.find(item => item.id === noticeId)
+      return currentChat?.name || '通知'
+    }
+    return '通知'
+  }
+
+  return '首页'
+}
+
 const activeTab = ref('home')
+
+// 根据路径获取对应的tab
+function getActiveTabByPath(path: string): string {
+  if (path === '/talklist' || path.startsWith('/notice')) {
+    return 'message'
+  }
+
+  const tab = tabList.value.find(item => path.startsWith(item.path))
+  return tab?.value || 'home'
+}
 
 // 监听路由变化更新激活状态
 watch(() => route.path, (newPath) => {
-  // 如果是从 notice 页面返回，或当前在 talklist 页面
-  if (newPath === '/talklist' || route.matched.some(r => r.path.includes('notice'))) {
-    value.value = 'label_3' // 设置为聊天
-    activeTab.value = 'message'
-  }
-  else {
-    // 根据当前路径找到对应的 tab
-    const currentTab = list.value.find(item => item.path === newPath)
-    if (currentTab) {
-      value.value = currentTab.value
-    }
-
-    const tab = tabList.value.find(item => newPath.startsWith(item.path))
-    if (tab) {
-      activeTab.value = tab.value
-    }
-  }
+  activeTab.value = getActiveTabByPath(newPath)
 }, { immediate: true })
-
-watch(value, (val) => {
-  const target = list.value.find(item => item.value === val)
-  if (target && target.path) {
-    router.push(target.path)
-  }
-})
 
 // 处理tab切换
 function handleTabChange(value: string) {
@@ -113,36 +123,25 @@ function handleTabChange(value: string) {
   }
 }
 
-// 获取页面标题
-function getPageTitle() {
+const showBackButton = computed(() => {
   const path = route.path
-  if (path === '/home') {
-    return '首页'
-  }
-  if (path === '/talklist') {
-    return '全部消息'
-  }
-  if (path === '/my') {
-    return '我的'
-  }
-  if (path.startsWith('/notice')) {
-    const noticeId = route.params.id
-    if (noticeId) {
-      const currentChat = talklist.find(item => item.id === noticeId)
-      return currentChat ? currentChat.name : '通知'
-    }
-    return '通知'
-  }
-  if (path === '/publish') {
-    return '发布动态'
-  }
-  if (path === '/my/settings') {
-    return '设置'
-  }
-  return '首页'
-}
+  return path === '/publish'
+    || path.includes('/login')
+    || path.startsWith('/notice')
+    || path === '/my/settings'
+})
 
-const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = useLayoutHook()
+const showBottomNav = computed(() => {
+  const path = route.path
+  return !path.includes('/my/settings')
+    && !path.startsWith('/notice')
+    && !path.startsWith('/login')
+})
+
+const showTitle = computed(() => {
+  const path = route.path
+  return path !== '/home' && !path.includes('/login')
+})
 </script>
 
 <template>
@@ -170,24 +169,40 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
     <!-- 页面标题栏 -->
     <div class="page-header">
       <div class="header-left">
-        <!-- 发布页面、对话页面和设置页面显示返回按钮，其他页面显示view-list图标 -->
-        <TIcon v-if="route.path === '/publish' || route.path.startsWith('/notice') || route.path === '/my/settings'" name="chevron-left" size="24" color="#000000e6" @click="router.back()" />
-        <TIcon v-else name="view-list" size="24" color="#000000e6" />
-        <!-- 首页显示搜索框，其他页面显示标题 -->
-        <t-search v-if="route.path === '/home'" class="navbar-search h-[32px] ml-[10px]" placeholder="请搜索你想要的内容" shape="round">
+        <!-- 根据条件显示返回按钮或菜单图标 -->
+        <TIcon
+          v-if="showBackButton"
+          name="chevron-left"
+          size="24"
+          color="#000000e6"
+          @click="router.back()"
+        />
+        <TIcon
+          v-else
+          name="view-list"
+          size="24"
+          color="#000000e6"
+        />
+        <!-- 首页显示搜索框 -->
+        <t-search
+          v-if="route.path === '/home'"
+          class="navbar-search"
+          placeholder="请搜索你想要的内容"
+          shape="round"
+        >
           <template #left-icon>
             <TIcon name="search" size="15px" />
           </template>
         </t-search>
       </div>
       <div class="header-title">
-        <span v-if="route.path !== '/home'">{{ getPageTitle() }}</span>
+        <span v-if="showTitle">{{ getPageTitle() }}</span>
       </div>
       <div class="header-right">
         <div class="mini-program-buttons">
-          <img src="/my/MiniProgramMoreOutlined.svg" class="mini-program-icon">
+          <img src="/my/MiniProgramMoreOutlined.svg" alt="更多" class="mini-program-icon">
           <div class="divider-line" />
-          <img src="/my/MiniProgramCloseOutlined.svg" class="mini-program-icon">
+          <img src="/my/MiniProgramCloseOutlined.svg" alt="关闭" class="mini-program-icon">
         </div>
       </div>
     </div>
@@ -198,29 +213,32 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
     </div>
 
     <!-- 底部导航栏 -->
-    <div v-if="!route.path.includes('/my/settings') && !route.path.startsWith('/notice')" class="bottom-navigation">
+    <div v-if="showBottomNav" class="bottom-navigation">
       <div class="tab-bar">
         <div
-          v-for="tab in tabList" :key="tab.value" class="tab-item" :class="{ active: activeTab === tab.value }"
+          v-for="tab in tabList"
+          :key="tab.value"
+          class="tab-item"
+          :class="{ active: activeTab === tab.value }"
           @click="handleTabChange(tab.value)"
         >
           <div class="tab-content">
             <div class="tab-icon">
-              <TIcon :name="tab.icon" size="20" :color="activeTab === tab.value ? '#0052D9' : '#000'" />
-              <t-badge v-if="tab.badge" :count="tab.badge as string" size="medium" class="tab-badge" />
+              <TIcon
+                :name="tab.icon"
+                size="20"
+                :color="activeTab === tab.value ? '#0052D9' : '#000'"
+              />
+              <t-badge
+                v-if="tab.badge"
+                :count="tab.badge"
+                size="medium"
+                class="tab-badge"
+              />
             </div>
             <div
-              class="tab-label" :style="{
-                color: activeTab === tab.value ? '#0052D9' : '#666',
-                width: '20px',
-                height: '16px',
-                fontSize: '10px',
-                fontWeight: 600,
-                fontFamily: 'PingFang SC',
-                textAlign: 'center',
-                lineHeight: '16px',
-                opacity: 1,
-              }"
+              class="tab-label"
+              :class="{ 'tab-label--active': activeTab === tab.value }"
             >
               {{ tab.label }}
             </div>
@@ -324,6 +342,8 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
     .navbar-search {
       --td-search-height: 32px;
       width: 189px !important;
+      height: 32px;
+      margin-left: 10px;
       display: flex;
       align-items: center;
     }
@@ -443,12 +463,23 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
         }
 
         .tab-label {
+          width: 20px;
+          height: 16px;
           font-size: 10px;
+          font-weight: 600;
+          font-family: 'PingFang SC', sans-serif;
+          text-align: center;
+          line-height: 16px;
           color: #666;
           transition: color 0.3s ease;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          opacity: 1;
+
+          &--active {
+            color: #0052d9;
+          }
         }
       }
     }
