@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { talklist } from '../store/talklist'
 
@@ -10,6 +11,7 @@ defineOptions({
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 // 实时时间
 const currentTime = ref('')
@@ -48,31 +50,31 @@ const sum = computed(() => {
 const tabList = computed(() => [
   {
     value: 'home',
-    label: '首页',
+    label: t('pages.home.title'),
     icon: 'home',
     path: '/home',
   },
   {
     value: 'message',
-    label: '消息',
+    label: t('common.navigation.message'),
     icon: 'chat',
     path: '/talklist',
     badge: sum.value > 0 ? sum.value.toString() : undefined,
   },
   {
     value: 'my',
-    label: '我的',
+    label: t('pages.my.title'),
     icon: 'user',
     path: '/my',
   },
 ])
 
-const PAGE_TITLES: Record<string, string> = {
-  '/home': '首页',
-  '/talklist': '全部消息',
-  '/my': '我的',
-  '/publish': '发布动态',
-  '/my/settings': '设置',
+const PAGE_TITLES: Record<string, () => string> = {
+  '/home': () => t('pages.home.title'),
+  '/talklist': () => t('pages.talklist.title'),
+  '/my': () => t('pages.my.title'),
+  '/publish': () => t('pages.publish.title'),
+  '/my/settings': () => t('pages.my.settings'),
 }
 
 function getPageTitle(): string {
@@ -80,7 +82,7 @@ function getPageTitle(): string {
 
   // 直接匹配
   if (PAGE_TITLES[path]) {
-    return PAGE_TITLES[path]
+    return PAGE_TITLES[path]()
   }
 
   // 特殊处理 notice 页面

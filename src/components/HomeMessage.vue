@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { Message } from 'tdesign-mobile-vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 function showMessage(theme: string, content = '这是一条普通通知信息', duration = 5000) {
   if (Message[theme]) {
@@ -15,28 +18,28 @@ function showMessage(theme: string, content = '这是一条普通通知信息', 
   }
 }
 
-const showInfoMessage = () => showMessage('info')
+const showInfoMessage = () => showMessage('info', '这是一条普通通知信息')
 
 const showWarnMessage = () => showMessage('warning', '这是一条需要用户关注到的警示通知')
 
-const showSuccessMessage = () => showMessage('success', '这是一条成功的提示消息')
+const showSuccessMessage = () => showMessage('success', t('common.messages.success'))
 
-const showErrorMessage = () => showMessage('error', '这是一条错误提示通知')
+const showErrorMessage = () => showMessage('error', t('common.messages.error'))
 </script>
 
 <template>
   <div class="button-demo">
     <t-button block size="large" variant="outline" theme="primary" @click="showInfoMessage">
-      普通通知
+      {{ t('common.buttons.info_notification') }}
     </t-button>
     <t-button block size="large" variant="outline" theme="primary" @click="showSuccessMessage">
-      成功通知
+      {{ t('common.buttons.success_notification') }}
     </t-button>
     <t-button block size="large" variant="outline" theme="primary" @click="showWarnMessage">
-      警示通知
+      {{ t('common.buttons.warning_notification') }}
     </t-button>
     <t-button block size="large" variant="outline" theme="primary" @click="showErrorMessage">
-      错误通知
+      {{ t('common.buttons.error_notification') }}
     </t-button>
   </div>
 </template>

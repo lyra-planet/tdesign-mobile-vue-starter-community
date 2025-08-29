@@ -1,2 +1,44 @@
 global:
   title: Hello, Tencent Open Source!
+  app_name: TDesign Mobile Vue
+
+# Page translations
+pages:
+  home:
+    title: Home
+    welcome: Welcome back
+  login:
+    title: User Login
+    phone_placeholder: Enter phone number
+    password_placeholder: Enter password
+  my:
+    title: My Profile
+    settings: Settings
+    edit_profile: Edit Profile
+  talklist:
+    title: All Messages
+  publish:
+    title: Create Post
+  notice:
+    title: Message Details
+
+# Common translations
+common:
+  buttons:
+    submit: Submit
+    cancel: Cancel
+    confirm: Confirm
+    save: Save
+    login: Login
+    register: Register
+    send_code: Send Code
+    info_notification: Info Notification
+    success_notification: Success Notification
+    warning_notification: Warning Notification
+    error_notification: Error Notification
+  messages:
+    success: Operation successful
+    error: Operation failed
+    loading: Loading...
+  navigation:
+    message: Messages

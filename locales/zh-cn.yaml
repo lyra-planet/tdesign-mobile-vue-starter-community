@@ -1,2 +1,44 @@
 global:
   title: 你好，腾讯开源！
+  app_name: TDesign Mobile Vue
+
+# 页面翻译
+pages:
+  home:
+    title: 首页
+    welcome: 欢迎回来
+  login:
+    title: 用户登录
+    phone_placeholder: 请输入手机号
+    password_placeholder: 请输入密码
+  my:
+    title: 我的
+    settings: 设置
+    edit_profile: 编辑资料
+  talklist:
+    title: 全部消息
+  publish:
+    title: 发布动态
+  notice:
+    title: 消息详情
+
+# 通用翻译
+common:
+  buttons:
+    submit: 提交
+    cancel: 取消
+    confirm: 确认
+    save: 保存
+    login: 登录
+    register: 注册
+    send_code: 发送验证码
+    info_notification: 普通通知
+    success_notification: 成功通知
+    warning_notification: 警示通知
+    error_notification: 错误通知
+  messages:
+    success: 操作成功
+    error: 操作失败
+    loading: 加载中...
+  navigation:
+    message: 消息
