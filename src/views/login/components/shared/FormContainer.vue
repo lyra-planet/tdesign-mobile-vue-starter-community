@@ -52,7 +52,7 @@ defineProps<Props>()
 
 .title {
   height: 36px;
-  color: #000000e6;
+  color: var(--td-text-color-primary);
   font-size: 28px;
   font-weight: 600;
   font-family: 'PingFang SC';
@@ -75,7 +75,7 @@ defineProps<Props>()
 
   :deep(.t-button) {
     font-size: 14px;
-    color: #000000e6;
+    color: var(--td-text-color-primary);
     font-family: 'PingFang SC';
   }
 }

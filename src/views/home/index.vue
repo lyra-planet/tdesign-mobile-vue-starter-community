@@ -131,13 +131,13 @@ const loadingProps = ref({
     <HomeTabs />
 
     <!-- 中间滚动区 -->
-    <div class="flex-1 min-h-0 overflow-y-auto scroll-area bg-[#F3F3F3] pb-[56px]">
+    <div class="flex-1 min-h-0 overflow-y-auto scroll-area bg-[var(--td-bg-color-page)] pb-[56px]">
       <t-pull-down-refresh
         v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
         :loading-props="loadingProps"
         :loading-texts="['下拉刷新', '松开刷新', '正在刷新', '刷新完成']" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
       >
-        <t-grid :column="2" :gutter="12" class="bg-[#F3F3F3] p-[12px] ">
+        <t-grid :column="2" :gutter="12" class="bg-[var(--td-bg-color-page)] p-[12px] ">
           <template v-for="item in homeItems" :key="item.id">
             <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />
             <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />

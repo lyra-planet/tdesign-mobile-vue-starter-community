@@ -5,7 +5,23 @@ import { useRouter } from 'vue-router'
 defineOptions({
   name: 'My',
 })
+const checked = ref(true)
 
+function onChange(val: any) {
+  checked.value = val
+  if (val) {
+    enableDarkMode()
+  }
+  else {
+    disableDarkMode()
+  }
+}
+function enableDarkMode() {
+  document.documentElement.setAttribute('theme-mode', 'dark')
+}
+function disableDarkMode() {
+  document.documentElement.setAttribute('theme-mode', 'light')
+}
 const router = useRouter()
 const isLoggedIn = ref(false)
 
@@ -90,12 +106,7 @@ function handleServiceClick(service: any) {
           <div class="avatar-container">
             <div class="avatar-bg">
               <div class="avatar-inner">
-                <img
-                  v-if="isLoggedIn"
-                  :src="userInfo.avatar"
-                  :alt="userInfo.nickname"
-                  class="avatar-image"
-                >
+                <img v-if="isLoggedIn" :src="userInfo.avatar" :alt="userInfo.nickname" class="avatar-image">
                 <t-icon v-else name="user" size="32" color="#0052D9" />
               </div>
             </div>
@@ -111,13 +122,7 @@ function handleServiceClick(service: any) {
           <div v-if="isLoggedIn" class="user-details">
             <!-- 标签区域 -->
             <div class="user-tags">
-              <t-tag
-                v-for="(tag, index) in userInfo.tags"
-                :key="index"
-                size="small"
-                variant="light"
-                class="user-tag"
-              >
+              <t-tag v-for="(tag, index) in userInfo.tags" :key="index" size="small" variant="light" class="user-tag">
                 <template #icon>
                   <t-icon :name="tag.icon" size="12" />
                 </template>
@@ -129,7 +134,7 @@ function handleServiceClick(service: any) {
 
         <!-- 编辑按钮 -->
         <div v-if="isLoggedIn" class="edit-button" @click.stop="handleEdit">
-          <t-icon name="edit" size="20" color="#000000e6" />
+          <t-icon name="edit" size="20" color="var(--td-text-color-primary)" />
         </div>
       </div>
 
@@ -138,14 +143,9 @@ function handleServiceClick(service: any) {
 
       <!-- 统计数据 -->
       <div class="stats-section">
-        <div
-          v-for="(stat, index) in stats"
-          :key="index"
-          class="stat-item"
-          :class="{ 'has-divider': index > 0 }"
-        >
+        <div v-for="(stat, index) in stats" :key="index" class="stat-item" :class="{ 'has-divider': index > 0 }">
           <div class="stat-icon">
-            <t-icon :name="stat.icon" size="24" color="#000000e6;" />
+            <t-icon :name="stat.icon" size="24" color="var(--td-text-color-primary)" />
           </div>
           <div class="stat-label">
             {{ stat.label }}
@@ -165,9 +165,7 @@ function handleServiceClick(service: any) {
         <!-- 第一行服务 -->
         <div class="service-row">
           <div
-            v-for="(service, index) in services"
-            :key="index"
-            class="service-item"
+            v-for="(service, index) in services" :key="index" class="service-item"
             @click="handleServiceClick(service)"
           >
             <div class="service-icon-wrapper">
@@ -182,9 +180,7 @@ function handleServiceClick(service: any) {
         <!-- 第二行服务 -->
         <div class="service-row">
           <div
-            v-for="(service, index) in dataServices"
-            :key="index"
-            class="service-item"
+            v-for="(service, index) in dataServices" :key="index" class="service-item"
             @click="handleServiceClick(service)"
           >
             <div class="service-icon-wrapper">
@@ -203,7 +199,7 @@ function handleServiceClick(service: any) {
       <div class="menu-item" @click="handleContact">
         <div class="menu-content">
           <div class="menu-left">
-            <t-icon name="service" size="24" color="#0052D9" class="menu-icon" />
+            <t-icon name="service" size="24" color="var(--td-text-color-primary)" class="menu-icon" />
             <span class="menu-title">联系客服</span>
           </div>
           <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
@@ -213,12 +209,17 @@ function handleServiceClick(service: any) {
       <div class="menu-item" @click="handleSettings">
         <div class="menu-content">
           <div class="menu-left">
-            <t-icon name="setting" size="24" color="#0052D9" class="menu-icon" />
+            <t-icon name="setting" size="24" color="var(--td-text-color-primary)" class="menu-icon" />
             <span class="menu-title">设置</span>
           </div>
           <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
         </div>
       </div>
+      <t-cell title="深色模式">
+        <template #rightIcon>
+          <t-switch :value="checked" @change="onChange" />
+        </template>
+      </t-cell>
     </div>
   </div>
 </template>
@@ -226,13 +227,14 @@ function handleServiceClick(service: any) {
 <style lang='scss' scoped>
 .my-page {
   min-height: 100vh;
-  background-color: #f5f6f7;
+  background-color: var(--td-bg-color-page);
   padding-bottom: 62px;
+  color: var(--td-text-color-primary);
 }
 
 // 合并的用户信息和统计数据卡片
 .user-stats-card {
-  background-color: white;
+  background-color: var(--td-bg-color-container);
   margin: 0px 16px 16px 16px;
   border-radius: 12px;
   overflow: hidden;
@@ -247,7 +249,7 @@ function handleServiceClick(service: any) {
   position: relative;
 
   &:active {
-    background-color: #f8f9fa;
+    background-color: var(--td-bg-color-container);
   }
 
   .user-avatar {
@@ -261,7 +263,7 @@ function handleServiceClick(service: any) {
       .avatar-bg {
         width: 100%;
         height: 100%;
-        background-color: white;
+        background-color: var(--td-bg-color);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -295,7 +297,7 @@ function handleServiceClick(service: any) {
 
     .user-name {
       font-size: 16px;
-      color: #000000e6;
+      color: var(--td-text-color-primary);
       font-weight: 600;
       height: 24px;
       line-height: 24px;
@@ -402,7 +404,7 @@ function handleServiceClick(service: any) {
     position: relative;
 
     &:hover {
-      background-color: #f8f9fa;
+      background-color: var(--td-bg-color-page);
     }
 
     // 只在第二个item前添加分割线
@@ -420,20 +422,20 @@ function handleServiceClick(service: any) {
     .stat-icon {
       margin-bottom: 8px;
       padding: 8px;
-      background-color: #f5f5f5;
+      background-color: var(--td-bg-color-page);
       border-radius: 6px;
     }
 
     .stat-label {
       font-size: 12px;
-      color: #000000e6;
+      color: var(--td-text-color-primary);
       font-weight: 400;
     }
   }
 }
 
 .service-card {
-  background: #ffffff;
+  background: var(--td-mask-background);
   border-radius: 12px;
   margin: 16px 16px 18px 16px;
   min-height: 200px;
@@ -444,7 +446,7 @@ function handleServiceClick(service: any) {
     .service-title {
       font-size: 14px;
       font-weight: 600;
-      color: #000000e6;
+      color: var(--td-text-color-primary);
     }
   }
 
@@ -489,7 +491,7 @@ function handleServiceClick(service: any) {
           font-size: 12px;
           width: calc(100% - 16px); // 总宽度减去左右各8px
           height: 20px;
-          color: #000000e6;
+          color: var(--td-text-color-primary);
           font-weight: 400;
           text-align: center;
           /* 使用flex布局实现文字垂直居中 */
@@ -508,14 +510,14 @@ function handleServiceClick(service: any) {
 }
 
 .menu-section {
-  background-color: white;
+  background-color: var(--td-mask-background);
   margin: 0 16px;
   border-radius: 12px;
   overflow: hidden;
 
   .menu-item {
     height: 56px;
-    border-bottom: 0.5px solid #e7e7e7;
+    border-bottom: 0.5px solid var(--td-mask-background);
     cursor: pointer;
     transition: background-color 0.2s ease;
 
@@ -544,7 +546,7 @@ function handleServiceClick(service: any) {
 
         .menu-title {
           font-size: 16px;
-          color: #000000;
+          color: var(--td-text-color-primary);
           font-weight: 400;
         }
       }

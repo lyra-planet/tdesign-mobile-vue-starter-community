@@ -95,7 +95,7 @@ function handleSwitchLogin() {
 }
 
 .switch-login-button {
-  color: #000000e6;
+  color: var(--td-text-color-primary);
   font-size: 14px;
   font-weight: 600;
   font-family: 'PingFang SC';

@@ -6,6 +6,7 @@ import { talklist } from '../../store/talklist'
 defineOptions({
   name: 'Talklist',
 })
+
 const mytalklist = ref(talklist.sort((a, b) => b.count - a.count))
 // 按消息数量排序，未读多的在前
 const router = useRouter()
@@ -36,18 +37,19 @@ function truncateMessage(message, maxLength = 22) {
     </t-col>
   </t-row> -->
 
-  <div class="messege bg-gray-100 h-full ">
-    <div v-for="item in mytalklist" :key="item.name" class="w-full h-20 bg-white  flex items-center mb-0.5">
+  <div class="messege h-full" style="background-color: var(--td-bg-color-page);">
+    <div v-for="item in mytalklist" :key="item.name" class="w-full h-20 flex items-center mb-0.5" style="background-color: var(--td-bg-color-container);">
       <t-avatar size="64px" :image="item.picture" class="ml-2" />
       <t-badge :count="item.count" :offset="[20, 30]" class="flex-auto ml-2">
-        <div class="w-full bg-white h-16 flex flex-col justify-center p-0" @click="goToDetail(item.id)">
-          <span class="text-sm text-gray-600">{{ item.name }}</span>
-          <span class="text-base" style="color:#bababa">
+        <div class="w-full h-16 flex flex-col justify-center p-0" style="background-color: var(--td-bg-color-container);" @click="goToDetail(item.id)">
+          <span class="text-sm" style="color: var(--td-text-color-secondary);">{{ item.name }}</span>
+          <span class="text-base" style="color: var(--td-text-color-placeholder);">
             {{ truncateMessage(item.message[item.message.length - 1].value) }}
           </span>
         </div>
       </t-badge>
     </div>
+
     <!-- <div class="w-full h-20 bg-white  flex items-center mb-1">
       <t-avatar size="64px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
       <t-badge count="8" :offset="[20, 30]" class="flex-auto">

@@ -89,19 +89,19 @@ function handleSendMessage() {
   height: calc(100vh);
   display: flex;
   flex-direction: column;
-  background: #f5f5f5;
+  background: var(--td-bg-color-page);
   position: relative;
   overflow: hidden;
 }
 
 .header {
   height: 50px;
-  background: #fff;
+  background: var(--td-bg-color-container);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--td-border-level-1-color);
   position: relative;
   z-index: 100;
   flex-shrink: 0;
@@ -124,7 +124,7 @@ function handleSendMessage() {
   padding: 8px 12px;
   overflow-y: auto;
   overflow-x: hidden;
-  background: #f8f9fa;
+  background: var(--td-bg-color-page);
   min-height: 0;
 
   &::-webkit-scrollbar {
@@ -175,8 +175,8 @@ function handleSendMessage() {
 }
 
 .msg-bubble.other {
-  background: #f3f3f3;
-  color: #333;
+  background: var(--td-bg-color-container);
+  color: var(--td-text-color-primary);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -187,8 +187,8 @@ function handleSendMessage() {
 }
 
 .input-area {
-  background: #fff;
-  border-top: 1px solid #eee;
+  background: var(--td-bg-color-container);
+  border-top: 1px solid var(--td-border-level-1-color);
   padding: 4px 4px;
   flex-shrink: 0;
   position: relative;
