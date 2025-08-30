@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { Message } from 'tdesign-mobile-vue'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import HomeSwiperImageSrc from '@/assets/images/HomeSwiper.png'
 import HomeCard from '@/components/HomeCard.vue'
 import HomeFab from '@/components/HomeFab.vue'
@@ -123,21 +125,41 @@ const loadingProps = ref({
     }),
   ]),
 })
+
+function showMessage(theme: string, content = '这是一条普通通知信息', duration = 2000) {
+  if (Message[theme]) {
+    Message[theme]({
+      offset: [154, 16],
+      content,
+      duration,
+      icon: true,
+      zIndex: 20000,
+      context: document.querySelector('.content'),
+    })
+  }
+}
+const route = useRoute()
+const showSuccessMessage = () => showMessage('success', '发布成功')
+onMounted(() => {
+  if (route.query.success === '1') {
+    showSuccessMessage()
+  }
+})
 </script>
 
 <template>
-  <div class="h-screen flex flex-col">
+  <div class="h-[calc(100vh-174.5px)] flex flex-col overflow-hidden">
     <!-- 顶部 -->
     <HomeTabs />
 
     <!-- 中间滚动区 -->
-    <div class="flex-1 min-h-0 overflow-y-auto scroll-area bg-[#F3F3F3] pb-[56px]">
+    <div class="content flex-1 min-h-0 overflow-y-auto scroll-area bg-[#F3F3F3]">
       <t-pull-down-refresh
         v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
-        :loading-props="loadingProps"
-        :loading-texts="['下拉刷新', '松开刷新', '正在刷新', '刷新完成']" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
+        :loading-props="loadingProps" :loading-texts="['下拉刷新', '松开刷新', '正在刷新', '刷新完成']" @refresh="handleRefresh"
+        @scrolltolower="handleScrolltolower"
       >
-        <t-grid :column="2" :gutter="12" class="bg-[#F3F3F3] p-[12px] ">
+        <t-grid :column="2" :gutter="12" class="bg-[#F3F3F3] p-[12px] justify-center place-items-center  items-center">
           <template v-for="item in homeItems" :key="item.id">
             <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />
             <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />

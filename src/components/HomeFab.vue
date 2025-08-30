@@ -9,7 +9,7 @@ function onClick() {
   console.log('点击了发布')
   try {
     // 先尝试使用 router.push
-    router.push('/publish')
+    router.push({ name: 'Publish' })
   }
   catch (error) {
     // 如果 router.push 失败，尝试使用 window.location
@@ -19,5 +19,5 @@ function onClick() {
 </script>
 
 <template>
-  <t-fab :icon="iconFunc" style="right: 16px; bottom: 80px;" text="发布" @click="onClick" />
+  <t-fab :icon="iconFunc" style="right: 16px; bottom: 104px;" text="发布" @click="onClick" />
 </template>

@@ -53,7 +53,7 @@ function onNextChange($event: number) {
 </script>
 
 <template>
-  <div class="demo-tab-bar text-[16px]">
+  <div class="demo-tab-bar text-[16px] sticky top-0 bg-white z-50">
     <t-tabs default-value="first" size="large">
       <t-tab-panel value="first">
         <template #label>
