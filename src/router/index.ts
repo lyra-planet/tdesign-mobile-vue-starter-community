@@ -16,6 +16,7 @@ const router = createRouter({
           redirect: '/home',
         },
         {
+          name: 'Home',
           path: 'home',
           component: () => import('@/views/home/index.vue'),
         },
@@ -28,6 +29,7 @@ const router = createRouter({
           component: () => import('@/views/talklist/index.vue'),
         },
         {
+          name: 'Publish',
           path: 'publish',
           component: () => import('@/views/publish/index.vue'),
         },

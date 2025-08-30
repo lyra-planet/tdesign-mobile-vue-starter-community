@@ -7,12 +7,12 @@ const { t } = useI18n()
 function showMessage(theme: string, content = '这是一条普通通知信息', duration = 5000) {
   if (Message[theme]) {
     Message[theme]({
-      offset: [10, 16],
+      offset: [154, 16],
       content,
       duration,
       icon: true,
       zIndex: 20000,
-      context: document.querySelector('.ddd'),
+      context: document.querySelector('.content'),
       // single: false, // 打开注释，体验多个消息叠加效果
     })
   }
