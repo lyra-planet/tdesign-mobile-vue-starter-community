@@ -53,6 +53,7 @@ declare module 'vue' {
     TSticky: typeof import('tdesign-mobile-vue')['Sticky']
     TSwiper: typeof import('tdesign-mobile-vue')['Swiper']
     TSwiperItem: typeof import('tdesign-mobile-vue')['SwiperItem']
+    TSwitch: typeof import('tdesign-mobile-vue')['Switch']
     TTabBar: typeof import('tdesign-mobile-vue')['TabBar']
     TTabBarItem: typeof import('tdesign-mobile-vue')['TabBarItem']
     TTabPanel: typeof import('tdesign-mobile-vue')['TabPanel']

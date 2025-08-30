@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 defineOptions({
@@ -6,16 +7,17 @@ defineOptions({
 })
 
 const router = useRouter()
+const { t } = useI18n()
 
 // 第一组设置项（通用设置、通知设置）
 const firstGroup = [
   {
-    name: '通用设置',
+    name: t('pages.my.general_settings.title'),
     icon: 'app',
-    action: () => console.log('通用设置'),
+    action: () => router.push('/my/general-settings'),
   },
   {
-    name: '通知设置',
+    name: t('pages.my.settings_page.notifications'),
     icon: 'notification',
     action: () => console.log('通知设置'),
   },
@@ -24,17 +26,17 @@ const firstGroup = [
 // 第二组设置项（深色模式、字体大小、播放设置）
 const secondGroup = [
   {
-    name: '深色模式',
+    name: t('pages.my.settings_page.dark_mode'),
     icon: 'image',
     action: () => console.log('深色模式'),
   },
   {
-    name: '字体大小',
+    name: t('pages.my.settings_page.font_size'),
     icon: 'chart',
     action: () => console.log('字体大小设置'),
   },
   {
-    name: '播放设置',
+    name: t('pages.my.settings_page.playback_settings'),
     icon: 'sound',
     action: () => console.log('播放设置'),
   },
@@ -43,12 +45,12 @@ const secondGroup = [
 // 第三组设置项（账号安全、隐私）
 const thirdGroup = [
   {
-    name: '账号安全',
+    name: t('pages.my.settings_page.account_security'),
     icon: 'secured',
     action: () => console.log('账号安全'),
   },
   {
-    name: '隐私',
+    name: t('pages.my.settings_page.privacy'),
     icon: 'info-circle',
     action: () => console.log('隐私设置'),
   },

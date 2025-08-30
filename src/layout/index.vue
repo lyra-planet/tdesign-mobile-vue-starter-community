@@ -75,6 +75,7 @@ const PAGE_TITLES: Record<string, () => string> = {
   '/my': () => t('pages.my.title'),
   '/publish': () => t('pages.publish.title'),
   '/my/settings': () => t('pages.my.settings'),
+  '/my/general-settings': () => t('pages.my.general_settings.title'),
 }
 
 function getPageTitle(): string {
@@ -130,7 +131,7 @@ const showBackButton = computed(() => {
   return path === '/publish'
     || path.includes('/login')
     || path.startsWith('/notice')
-    || path === '/my/settings'
+    || path.includes('/my')
 })
 
 const showBottomNav = computed(() => {
@@ -189,7 +190,7 @@ const showTitle = computed(() => {
         <t-search
           v-if="route.path === '/home'"
           class="navbar-search"
-          placeholder="请搜索你想要的内容"
+          :placeholder="t('common.search.placeholder')"
           shape="round"
         >
           <template #left-icon>

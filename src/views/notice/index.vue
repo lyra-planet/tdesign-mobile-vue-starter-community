@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import { categories } from '@vueuse/core/metadata.mjs'
 import { Input } from 'tdesign-mobile-vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { talklist } from '../../store/talklist'
 
@@ -9,6 +10,7 @@ defineOptions({
 })
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 // const talklist = [
 //   { id: '1', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Pite', newmessge: 'hello' },
 //   { id: '2', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Bob', newmessge: 'hello' },
@@ -17,8 +19,10 @@ const route = useRoute()
 // const current = talklist.find(item => item.id === route.params.id)
 // console.log(current)
 const message = ref('')
-const current = ref(talklist.find(item => item.id === route.params.id))
-const talk_content = ref(talklist.find(item => item.id === route.params.id).message)
+const currentId = (route.params as { id: string }).id
+const current = ref(talklist.find(item => item.id === currentId))
+const foundItem = talklist.find(item => item.id === currentId)
+const talk_content = ref(foundItem ? foundItem.message : [])
 console.log(talk_content.value)
 function handleClick() {
   router.push('/talklist')
@@ -27,11 +31,14 @@ function handleSendMessage() {
   if (message.value.trim() === '') {
     return
   }
-  talklist.find(item => item.id === route.params.id).message.push({
-    id: Date.now().toString(),
-    tag: 'me',
-    value: message.value,
-  })
+  const targetItem = talklist.find(item => item.id === currentId)
+  if (targetItem) {
+    targetItem.message.push({
+      id: Date.now().toString(),
+      tag: 'me',
+      value: message.value,
+    })
+  }
   // 若以后扩展可以在这里修改为对数据库的操作
   message.value = ''
   // 模拟对方回复
@@ -52,7 +59,7 @@ function handleSendMessage() {
     <!-- 消息列表区域 -->
     <div class="messages-area">
       <div class="time-badge">
-        今天 10:00
+        {{ t('pages.notice.today_time') }}
       </div>
       <div v-for="item in talk_content" :key="item.id">
         <div v-if="item.tag === 'me'" class="msg-row right">
@@ -75,9 +82,9 @@ function handleSendMessage() {
     <!-- 底部输入框 -->
     <div class="input-area">
       <div class="input-wrapper flex items-center justify-between">
-        <t-input v-model="message" placeholder="输入消息..." class="msg-input w-full" :borderless="false" />
+        <t-input v-model="message" :placeholder="t('pages.notice.input_placeholder')" class="msg-input w-full" :borderless="false" />
         <t-button size="medium" theme="primary" shape="round" class="send-btn" @click="handleSendMessage()">
-          发送
+          {{ t('pages.notice.send') }}
         </t-button>
       </div>
     </div>

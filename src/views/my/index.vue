@@ -1,5 +1,6 @@
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 defineOptions({
@@ -7,45 +8,46 @@ defineOptions({
 })
 
 const router = useRouter()
+const { t } = useI18n()
 const isLoggedIn = ref(false)
 
 // 模拟用户信息
-const userInfo = ref({
+const userInfo = computed(() => ({
   avatar: '/my/Avatar.svg',
-  nickname: '张三',
+  nickname: t('pages.my.nickname'),
   tags: [
-    { label: '双子座', icon: 'tag', type: 'constellation' },
-    { label: '深圳', icon: 'location', type: 'location' },
+    { label: t('pages.my.constellation'), icon: 'tag', type: 'constellation' },
+    { label: t('pages.my.location'), icon: 'location', type: 'location' },
   ],
-})
+}))
 
 // 未登录状态的用户信息
-const guestInfo = ref({
-  nickname: '请先登录/注册',
-})
+const guestInfo = computed(() => ({
+  nickname: t('pages.my.login_register'),
+}))
 
 // 统计数据 - 使用TDesign图标
-const stats = ref([
-  { label: '全部发布', icon: 'form', count: 0 },
-  { label: '审核中', icon: 'search', count: 0 },
-  { label: '已发布', icon: 'upload', count: 0 },
-  { label: '草稿箱', icon: 'file-copy', count: 0 },
+const stats = computed(() => [
+  { label: t('pages.my.stats.all_posts'), icon: 'form', count: 0 },
+  { label: t('pages.my.stats.under_review'), icon: 'search', count: 0 },
+  { label: t('pages.my.stats.published'), icon: 'upload', count: 0 },
+  { label: t('pages.my.stats.drafts'), icon: 'file-copy', count: 0 },
 ])
 
 // 推荐服务 - 使用SVG图标
-const services = ref([
-  { name: '微信', icon: '/my/wechat.svg' },
-  { name: 'QQ', icon: '/my/qq.svg' },
-  { name: '腾讯文档', icon: '/my/Tdoc.svg' },
-  { name: '腾讯地图', icon: '/my/Tmap.svg' },
+const services = computed(() => [
+  { name: t('pages.my.services.wechat'), icon: '/my/wechat.svg' },
+  { name: t('pages.my.services.qq'), icon: '/my/qq.svg' },
+  { name: t('pages.my.services.tdoc'), icon: '/my/Tdoc.svg' },
+  { name: t('pages.my.services.tmap'), icon: '/my/Tmap.svg' },
 ])
 
 // 数据中心服务
-const dataServices = ref([
-  { name: '数据中心', icon: '/my/default.svg' },
-  { name: '数据中心', icon: '/my/default.svg' },
-  { name: '数据中心', icon: '/my/default.svg' },
-  { name: '数据中心', icon: '/my/default.svg' },
+const dataServices = computed(() => [
+  { name: t('pages.my.services.data_center'), icon: '/my/default.svg' },
+  { name: t('pages.my.services.data_center'), icon: '/my/default.svg' },
+  { name: t('pages.my.services.data_center'), icon: '/my/default.svg' },
+  { name: t('pages.my.services.data_center'), icon: '/my/default.svg' },
 ])
 
 // 处理登录
@@ -158,7 +160,7 @@ function handleServiceClick(service: any) {
     <div class="service-card">
       <div class="service-header">
         <div class="service-title">
-          推荐服务
+          {{ t('pages.my.services.title') }}
         </div>
       </div>
       <div class="service-content">
@@ -204,7 +206,7 @@ function handleServiceClick(service: any) {
         <div class="menu-content">
           <div class="menu-left">
             <t-icon name="service" size="24" color="#0052D9" class="menu-icon" />
-            <span class="menu-title">联系客服</span>
+            <span class="menu-title">{{ t('pages.my.contact_service') }}</span>
           </div>
           <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
         </div>
@@ -214,7 +216,7 @@ function handleServiceClick(service: any) {
         <div class="menu-content">
           <div class="menu-left">
             <t-icon name="setting" size="24" color="#0052D9" class="menu-icon" />
-            <span class="menu-title">设置</span>
+            <span class="menu-title">{{ t('pages.my.settings') }}</span>
           </div>
           <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
         </div>
@@ -439,6 +441,7 @@ function handleServiceClick(service: any) {
   min-height: 200px;
 
   .service-header {
+    height: 20px;
     padding: 16px 20px 0;
 
     .service-title {
@@ -545,6 +548,18 @@ function handleServiceClick(service: any) {
         .menu-title {
           font-size: 16px;
           color: #000000;
+          font-weight: 400;
+        }
+      }
+
+      .menu-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .language-text {
+          font-size: 14px;
+          color: rgba(0, 0, 0, 0.6);
           font-weight: 400;
         }
       }

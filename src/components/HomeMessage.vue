@@ -18,9 +18,9 @@ function showMessage(theme: string, content = '这是一条普通通知信息', 
   }
 }
 
-const showInfoMessage = () => showMessage('info', '这是一条普通通知信息')
+const showInfoMessage = () => showMessage('info', t('common.messages.info'))
 
-const showWarnMessage = () => showMessage('warning', '这是一条需要用户关注到的警示通知')
+const showWarnMessage = () => showMessage('warning', t('common.messages.warning'))
 
 const showSuccessMessage = () => showMessage('success', t('common.messages.success'))
 

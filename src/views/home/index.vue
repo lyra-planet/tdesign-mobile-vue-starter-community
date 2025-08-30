@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import HomeSwiperImageSrc from '@/assets/images/HomeSwiper.png'
 import HomeCard from '@/components/HomeCard.vue'
 import HomeFab from '@/components/HomeFab.vue'
@@ -7,6 +8,8 @@ import HomeSwiper from '@/components/HomeSwiper.vue'
 import HomeTabs from '@/components/HomeTabs.vue'
 
 defineOptions({ name: 'Home' })
+
+const { t } = useI18n()
 
 const refreshing = ref(false)
 
@@ -25,11 +28,11 @@ const homeItems = ref<HomeItem[]>([
   {
     type: 'card',
     id: 1,
-    title: '少年,星空与梦想',
+    title: t('pages.home.content.card_title_1'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
   {
@@ -46,41 +49,41 @@ const homeItems = ref<HomeItem[]>([
   {
     type: 'card',
     id: 3,
-    title: '仰望星空的少女',
+    title: t('pages.home.content.card_title_2'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
   {
     type: 'card',
     id: 4,
-    title: '少年,星空与梦想',
+    title: t('pages.home.content.card_title_1'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
   {
     type: 'card',
     id: 5,
-    title: '少年,星空与梦想',
+    title: t('pages.home.content.card_title_1'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
   {
     type: 'card',
     id: 6,
-    title: '少年,星空与梦想',
+    title: t('pages.home.content.card_title_1'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
 ])
@@ -93,9 +96,9 @@ function handleRefresh() {
     homeItems.value.push({
       type: 'card',
       id: nextId,
-      title: `新卡片 ${nextId}`,
+      title: `${t('pages.home.content.new_card_prefix')} ${nextId}`,
       image: '/src/assets/images/HomeCard.png',
-      tags: [{ label: '新内容', theme: 'success' }],
+      tags: [{ label: t('pages.home.content.tags.new_content'), theme: 'success' }],
     })
     refreshing.value = false
   }, 1200)
@@ -135,7 +138,7 @@ const loadingProps = ref({
       <t-pull-down-refresh
         v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
         :loading-props="loadingProps"
-        :loading-texts="['下拉刷新', '松开刷新', '正在刷新', '刷新完成']" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
+        :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
       >
         <t-grid :column="2" :gutter="12" class="bg-[#F3F3F3] p-[12px] ">
           <template v-for="item in homeItems" :key="item.id">

@@ -7,6 +7,22 @@ pages:
   home:
     title: 首页
     welcome: 欢迎回来
+    tabs:
+      recommended: 推荐
+      following: 我的关注
+    content:
+      card_title_1: 少年,星空与梦想
+      card_title_2: 仰望星空的少女
+      new_card_prefix: 新卡片
+      tags:
+        ai_art: AI绘画
+        copyright_material: 版权素材
+        new_content: 新内容
+      refresh:
+        pull_down: 下拉刷新
+        release: 松开刷新
+        refreshing: 正在刷新
+        completed: 刷新完成
   login:
     title: 用户登录
     phone_placeholder: 请输入手机号
@@ -15,12 +31,56 @@ pages:
     title: 我的
     settings: 设置
     edit_profile: 编辑资料
-  talklist:
-    title: 全部消息
+    language: 语言设置
+    contact_service: 联系客服
+    general_settings:
+      title: 通用设置
+      language: 语言设置
+    settings_page:
+      notifications: 通知设置
+      dark_mode: 深色模式
+      font_size: 字体大小
+      playback_settings: 播放设置
+      account_security: 账号安全
+      privacy: 隐私
+    login_register: 请先登录/注册
+    nickname: 张三
+    constellation: 双子座
+    location: 深圳
+    stats:
+      all_posts: 全部发布
+      under_review: 审核中
+      published: 已发布
+      drafts: 草稿箱
+    services:
+      title: 推荐服务
+      wechat: 微信
+      qq: QQ
+      tdoc: 腾讯文档
+      tmap: 腾讯地图
+      data_center: 数据中心
   publish:
     title: 发布动态
+    save_draft: 存草稿
+    publish_action: 发布
+    location: 所在位置
+    add_description: 添加描述
+    share_thoughts: 分享你此刻的想法
+    add_tags: 添加标签
+    tags:
+      ai_art: "#AI绘画"
+      copyright_material: "#版权素材"
+      original: "#原创"
+      style_inspiration: "#风格灵感"
   notice:
     title: 消息详情
+    today_time: 今天 10:00
+    input_placeholder: 输入消息...
+    send: 发送
+  talklist:
+    title: 全部消息
+    user_nickname: 用户昵称
+    message_content: 这是一条消息内容
 
 # 通用翻译
 common:
@@ -40,5 +100,14 @@ common:
     success: 操作成功
     error: 操作失败
     loading: 加载中...
+    info: 这是一条普通通知信息
+    warning: 这是一条需要用户关注到的警示通知
   navigation:
     message: 消息
+  search:
+    placeholder: 请搜索你想要的内容
+  error:
+    404_title: 页面未找到
+    404_message: 抱歉，您访问的页面不存在
+    403_title: 访问被拒绝
+    403_message: 抱歉，您没有权限访问此页面

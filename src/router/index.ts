@@ -42,6 +42,11 @@ const router = createRouter({
           component: () => import('@/views/my/settings.vue'),
         },
         {
+          path: 'my/general-settings',
+          name: 'MyGeneralSettings',
+          component: () => import('@/views/my/general-settings.vue'),
+        },
+        {
           path: 'login/phone',
           name: 'PhoneLogin',
           component: () => import('@/views/login/PhoneLoginPage.vue'),
