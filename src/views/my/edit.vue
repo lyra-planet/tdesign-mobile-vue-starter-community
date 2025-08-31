@@ -236,7 +236,7 @@ function removePhoto(index: number) {
     <!-- 头部 -->
     <div class="header">
       <div class="header-left" @click="handleBack">
-        <t-icon name="chevron-left" size="24" color="#000" />
+        <t-icon name="chevron-left" size="24" color="var(--td-text-color-primary)" />
       </div>
       <div class="header-title">
         个人信息

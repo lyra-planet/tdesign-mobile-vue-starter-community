@@ -4,7 +4,7 @@ const variants = ['light', 'dark', 'outline', 'light-outline']
 
 <template>
   <div class="flex flex-row h-[52px] items-center flex-nowrap">
-    <div class="summary text-[16px] px-[16px] flex-shrink-0">
+    <div class="summary text-[16px] px-[16px] flex-shrink-0 text-[var(--td-text-color-primary)]">
       添加标签
     </div>
     <div class="tag-demo overflow-hidden">

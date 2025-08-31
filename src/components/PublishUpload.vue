@@ -69,7 +69,7 @@ const files = ref([
 
 <style scoped lang="scss">
 .upload-demo {
-  background: var(--bg-color-demo, #fff);
+  background: var(--bg-color-demo, --bg-color-container);
 
   .upload-title {
     font-size: 16px;

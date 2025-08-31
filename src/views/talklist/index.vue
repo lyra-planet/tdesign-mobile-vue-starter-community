@@ -39,8 +39,10 @@ function truncateMessage(message, maxLength = 22) {
 
   <div class="messege h-full" style="background-color: var(--td-bg-color-page);">
     <div v-for="item in mytalklist" :key="item.name" class="w-full h-20 flex items-center mb-0.5" style="background-color: var(--td-bg-color-container);">
-      <t-avatar size="64px" :image="item.picture" class="ml-2" />
-      <t-badge :count="item.count" :offset="[20, 30]" class="flex-auto ml-2">
+      <div class="pl-4">
+        <t-avatar size="64px" :image="item.picture" class="" />
+      </div>
+      <t-badge :count="item.count" :offset="[20, 30]" class="flex-auto ml-4">
         <div class="w-full h-16 flex flex-col justify-center p-0" style="background-color: var(--td-bg-color-container);" @click="goToDetail(item.id)">
           <span class="text-sm" style="color: var(--td-text-color-secondary);">{{ item.name }}</span>
           <span class="text-base" style="color: var(--td-text-color-placeholder);">

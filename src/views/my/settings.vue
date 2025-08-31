@@ -80,7 +80,7 @@ function handleSettingClick(setting: any) {
             <t-icon :name="setting.icon" size="24" color="#0052D9" class="menu-icon" />
             <span class="menu-title">{{ setting.name }}</span>
           </div>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
+          <t-icon name="chevron-right" size="24" color="var(--td-text-color-secondary)" />
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@ function handleSettingClick(setting: any) {
             <t-icon :name="setting.icon" size="24" color="#0052D9" class="menu-icon" />
             <span class="menu-title">{{ setting.name }}</span>
           </div>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
+          <t-icon name="chevron-right" size="24" color="var(--td-text-color-secondary)" />
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@ function handleSettingClick(setting: any) {
             <t-icon :name="setting.icon" size="24" color="#0052D9" class="menu-icon" />
             <span class="menu-title">{{ setting.name }}</span>
           </div>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
+          <t-icon name="chevron-right" size="24" color="var(--td-text-color-secondary)" />
         </div>
       </div>
     </div>
