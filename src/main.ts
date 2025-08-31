@@ -4,7 +4,7 @@ import { createApp } from 'vue'
 
 import { initGlobalConfig, injectStorageConfig } from '@/config'
 import * as directives from '@/directives'
-import { useI18n } from '@/plugins/i18n'
+import { initializeI18n, useI18n } from '@/plugins/i18n'
 import { useUserStore } from '@/store/user'
 
 import App from './App.vue'
@@ -25,10 +25,14 @@ Object.keys((directives as { [k: string]: Directive })).forEach((k) => {
 })
 
 // 初始化全局配置
-initGlobalConfig(app).then(() => {
+initGlobalConfig(app).then(async () => {
   useStore(app)
   injectStorageConfig(app)
-  app.use(useI18n).use(router)
+  useI18n(app)
+  app.use(router)
+
+  // 初始化 i18n
+  await initializeI18n()
 
   // 初始化用户数据
   const userStore = useUserStore()

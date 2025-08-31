@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 defineOptions({
@@ -6,16 +7,17 @@ defineOptions({
 })
 
 const router = useRouter()
+const { t } = useI18n()
 
 // 第一组设置项（通用设置、通知设置）
 const firstGroup = [
   {
-    name: '通用设置',
+    name: t('pages.my.general_settings.title'),
     icon: 'app',
-    action: () => console.log('通用设置'),
+    action: () => router.push('/my/general-settings'),
   },
   {
-    name: '通知设置',
+    name: t('pages.my.settings_page.notifications'),
     icon: 'notification',
     action: () => console.log('通知设置'),
   },
@@ -24,17 +26,17 @@ const firstGroup = [
 // 第二组设置项（深色模式、字体大小、播放设置）
 const secondGroup = [
   {
-    name: '深色模式',
+    name: t('pages.my.settings_page.dark_mode'),
     icon: 'image',
     action: () => console.log('深色模式'),
   },
   {
-    name: '字体大小',
+    name: t('pages.my.settings_page.font_size'),
     icon: 'chart',
     action: () => console.log('字体大小设置'),
   },
   {
-    name: '播放设置',
+    name: t('pages.my.settings_page.playback_settings'),
     icon: 'sound',
     action: () => console.log('播放设置'),
   },
@@ -43,12 +45,12 @@ const secondGroup = [
 // 第三组设置项（账号安全、隐私）
 const thirdGroup = [
   {
-    name: '账号安全',
+    name: t('pages.my.settings_page.account_security'),
     icon: 'secured',
     action: () => console.log('账号安全'),
   },
   {
-    name: '隐私',
+    name: t('pages.my.settings_page.privacy'),
     icon: 'info-circle',
     action: () => console.log('隐私设置'),
   },
@@ -67,19 +69,6 @@ function handleSettingClick(setting: any) {
 
 <template>
   <div class="settings-page">
-    <!-- 头部 -->
-    <div class="header">
-      <div class="header-left" @click="handleBack">
-        <t-icon name="chevron-left" size="24" color="#000" />
-      </div>
-      <div class="header-title">
-        设置
-      </div>
-      <div class="header-right">
-        <!-- 空白占位 -->
-      </div>
-    </div>
-
     <!-- 第一组设置 -->
     <div class="menu-section">
       <div
@@ -141,42 +130,6 @@ function handleSettingClick(setting: any) {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 20px;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background-color: white;
-  height: 48px;
-  border-bottom: 0.5px solid #e7e7e7;
-  position: relative;
-
-  .header-left {
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .header-title {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 17px;
-    font-weight: 600;
-    color: #333;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
-
-  .header-right {
-    width: 24px;
-    height: 24px;
-  }
 }
 
 .menu-section {

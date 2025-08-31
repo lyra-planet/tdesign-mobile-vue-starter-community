@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const stickyProps = {
   zIndex: 999,
 }
@@ -53,16 +57,16 @@ function onNextChange($event: number) {
 </script>
 
 <template>
-  <div class="demo-tab-bar text-[16px]">
+  <div class="demo-tab-bar text-[16px] sticky top-0 bg-white z-50">
     <t-tabs default-value="first" size="large">
       <t-tab-panel value="first">
         <template #label>
-          推荐
+          {{ t('pages.home.tabs.recommended') }}
         </template>
       </t-tab-panel>
       <t-tab-panel value="second">
         <template #label>
-          我的关注
+          {{ t('pages.home.tabs.following') }}
         </template>
       </t-tab-panel>
     </t-tabs>

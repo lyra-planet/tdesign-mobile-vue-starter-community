@@ -1,12 +1,15 @@
 <script lang="ts" setup>
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 </script>
 
 <template>
   <t-navbar :fixed="false" class="h-[48px]">
     <template #left>
       <TIcon name="view-list" class="mr-[8px]" size="24px" @click="$router.back()" />
-      <t-search class="navbar-search h-[32px]" placeholder="请搜索你想要的内容" shape="round ">
+      <t-search class="navbar-search h-[32px]" :placeholder="t('common.search.placeholder')" shape="round">
         <template #left-icon>
           <TIcon name="search" size="15px" />
         </template>

@@ -1,12 +1,19 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const value = ref('')
 </script>
 
 <template>
   <t-textarea
-    v-model="value" class="textarea-publish" name="添加描述" label="添加描述" placeholder="分享你此刻的想法" :maxlength="500"
+    v-model="value"
+    class="textarea-publish"
+    :name="t('pages.publish.add_description')"
+    :label="t('pages.publish.add_description')"
+    :placeholder="t('pages.publish.share_thoughts')"
+    :maxlength="500"
     indicator
   />
 </template>

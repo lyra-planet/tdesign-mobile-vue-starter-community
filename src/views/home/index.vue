@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { Message } from 'tdesign-mobile-vue'
+import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import HomeSwiperImageSrc from '@/assets/images/HomeSwiper.png'
 import HomeCard from '@/components/HomeCard.vue'
 import HomeFab from '@/components/HomeFab.vue'
 import HomeSwiper from '@/components/HomeSwiper.vue'
-import HomeTabBar from '@/components/HomeTabBar.vue'
 import HomeTabs from '@/components/HomeTabs.vue'
 
-import NavBarWithSearch from '@/components/NavBarWithSearch.vue'
-
 defineOptions({ name: 'Home' })
+
+const { t } = useI18n()
 
 const refreshing = ref(false)
 
@@ -28,11 +30,11 @@ const homeItems = ref<HomeItem[]>([
   {
     type: 'card',
     id: 1,
-    title: '少年,星空与梦想',
+    title: t('pages.home.content.card_title_1'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
   {
@@ -49,41 +51,41 @@ const homeItems = ref<HomeItem[]>([
   {
     type: 'card',
     id: 3,
-    title: '仰望星空的少女',
+    title: t('pages.home.content.card_title_2'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
   {
     type: 'card',
     id: 4,
-    title: '少年,星空与梦想',
+    title: t('pages.home.content.card_title_1'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
   {
     type: 'card',
     id: 5,
-    title: '少年,星空与梦想',
+    title: t('pages.home.content.card_title_1'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
   {
     type: 'card',
     id: 6,
-    title: '少年,星空与梦想',
+    title: t('pages.home.content.card_title_1'),
     image: '/src/assets/images/HomeCard.png',
     tags: [
-      { label: 'AI绘画', theme: 'primary' },
-      { label: '版权素材', theme: 'success' },
+      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
+      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
     ],
   },
 ])
@@ -96,9 +98,9 @@ function handleRefresh() {
     homeItems.value.push({
       type: 'card',
       id: nextId,
-      title: `新卡片 ${nextId}`,
+      title: `${t('pages.home.content.new_card_prefix')} ${nextId}`,
       image: '/src/assets/images/HomeCard.png',
-      tags: [{ label: '新内容', theme: 'success' }],
+      tags: [{ label: t('pages.home.content.tags.new_content'), theme: 'success' }],
     })
     refreshing.value = false
   }, 1200)
@@ -126,22 +128,41 @@ const loadingProps = ref({
     }),
   ]),
 })
+
+function showMessage(theme: string, content = '这是一条普通通知信息', duration = 2000) {
+  if (Message[theme]) {
+    Message[theme]({
+      offset: [154, 16],
+      content,
+      duration,
+      icon: true,
+      zIndex: 20000,
+      context: document.querySelector('.content'),
+    })
+  }
+}
+const route = useRoute()
+const showSuccessMessage = () => showMessage('success', '发布成功')
+onMounted(() => {
+  if (route.query.success === '1') {
+    showSuccessMessage()
+  }
+})
 </script>
 
 <template>
-  <div class="h-screen flex flex-col">
+  <div class="h-[calc(100vh-174.5px)] flex flex-col overflow-hidden">
     <!-- 顶部 -->
-    <NavBarWithSearch />
     <HomeTabs />
 
     <!-- 中间滚动区 -->
-    <div class="flex-1 min-h-0 overflow-y-auto scroll-area bg-[#F3F3F3] pb-[56px]">
+    <div class="content flex-1 min-h-0 overflow-y-auto scroll-area bg-[#F3F3F3]">
       <t-pull-down-refresh
         v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
         :loading-props="loadingProps"
-        :loading-texts="['下拉刷新', '松开刷新', '正在刷新', '刷新完成']" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
+        :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
       >
-        <t-grid :column="2" :gutter="12" class="bg-[#F3F3F3] p-[12px] ">
+        <t-grid :column="2" :gutter="12" class="bg-[#F3F3F3] p-[12px] justify-center place-items-center  items-center">
           <template v-for="item in homeItems" :key="item.id">
             <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />
             <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />
@@ -151,7 +172,6 @@ const loadingProps = ref({
     </div>
 
     <!-- 底部 -->
-    <HomeTabBar />
     <HomeFab />
   </div>
 </template>

@@ -48,6 +48,7 @@ export function usePlugins(): PluginOption[] {
     // i18n 支持
     VueI18nPlugin({
       include: [processPath('../locales/**')],
+      compositionOnly: true,
     }),
     vue(),
     // 支持 JSX 语法

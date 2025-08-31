@@ -16,6 +16,7 @@ const router = createRouter({
           redirect: '/home',
         },
         {
+          name: 'Home',
           path: 'home',
           component: () => import('@/views/home/index.vue'),
         },
@@ -28,6 +29,7 @@ const router = createRouter({
           component: () => import('@/views/talklist/index.vue'),
         },
         {
+          name: 'Publish',
           path: 'publish',
           component: () => import('@/views/publish/index.vue'),
         },
@@ -35,6 +37,40 @@ const router = createRouter({
           path: 'notice/:id',
           name: 'Notice',
           component: () => import('@/views/notice/index.vue'),
+        },
+        {
+          path: 'my/settings',
+          name: 'MySettings',
+          component: () => import('@/views/my/settings.vue'),
+        },
+        {
+          path: 'my/general-settings',
+          name: 'MyGeneralSettings',
+          component: () => import('@/views/my/general-settings.vue'),
+        },
+        {
+          path: 'login/phone',
+          name: 'PhoneLogin',
+          component: () => import('@/views/login/PhoneLoginPage.vue'),
+          meta: {
+            title: '手机号登录',
+          },
+        },
+        {
+          path: 'login/password',
+          name: 'PasswordLogin',
+          component: () => import('@/views/login/PasswordLoginPage.vue'),
+          meta: {
+            title: '密码登录',
+          },
+        },
+        {
+          path: 'login/verify',
+          name: 'VerifyCodeLogin',
+          component: () => import('@/views/login/VerifyCodePage.vue'),
+          meta: {
+            title: '验证码登录',
+          },
         },
       ],
     },
@@ -47,18 +83,11 @@ const router = createRouter({
         title: '个人信息',
       },
     },
+    // 登录页面重定向
     {
-      path: '/my/settings',
-      name: 'MySettings',
-      component: () => import('@/views/my/settings.vue'),
-      meta: {
-        title: '设置',
-      },
+      path: '/login',
+      redirect: '/login/phone',
     },
-    // {
-    //   path: '/login',
-    //   component: () => import('@/views/login/index.vue'),
-    // },
     // {
     //   path: '/error/:code',
     //   component: () => import('@/views/error/index.vue'),

@@ -41,3 +41,33 @@ export interface UserInfo {
   phone: string
   avatar?: string
 }
+
+// 消息相关类型定义
+export interface ChatMessage {
+  id: string
+  tag: 'me' | 'other' | 'time'
+  value: string
+}
+
+export interface Chat {
+  id: string
+  picture: string
+  count: number
+  name: string
+  message: ChatMessage[]
+}
+
+export interface SendMessageRequest {
+  message: string
+}
+
+export interface SendMessageResponse {
+  id: string
+  tag: 'me' | 'other' | 'time'
+  value: string
+}
+
+export interface MarkAsReadResponse {
+  id: string
+  count: number
+}

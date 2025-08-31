@@ -1,11 +1,18 @@
 <script setup lang='ts'>
+import { useI18n } from 'vue-i18n'
+
 defineOptions({
   name: '404',
 })
+
+const { t } = useI18n()
 </script>
 
 <template>
-  <h3>404 Not Found!</h3>
+  <div class="error-page">
+    <h3>{{ t('common.error.404_title') }}</h3>
+    <p>{{ t('common.error.404_message') }}</p>
+  </div>
 </template>
 
 <style lang='scss' scoped>
