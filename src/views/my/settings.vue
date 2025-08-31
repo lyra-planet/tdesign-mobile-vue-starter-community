@@ -82,7 +82,7 @@ function handleSettingClick(setting: any) {
             <t-icon :name="setting.icon" size="24" color="#0052D9" class="menu-icon" />
             <span class="menu-title">{{ setting.name }}</span>
           </div>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
+          <t-icon name="chevron-right" size="24" color="var(--td-text-color-secondary)" />
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@ function handleSettingClick(setting: any) {
             <t-icon :name="setting.icon" size="24" color="#0052D9" class="menu-icon" />
             <span class="menu-title">{{ setting.name }}</span>
           </div>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
+          <t-icon name="chevron-right" size="24" color="var(--td-text-color-secondary)" />
         </div>
       </div>
     </div>
@@ -118,7 +118,7 @@ function handleSettingClick(setting: any) {
             <t-icon :name="setting.icon" size="24" color="#0052D9" class="menu-icon" />
             <span class="menu-title">{{ setting.name }}</span>
           </div>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
+          <t-icon name="chevron-right" size="24" color="var(--td-text-color-secondary)" />
         </div>
       </div>
     </div>
@@ -128,19 +128,19 @@ function handleSettingClick(setting: any) {
 <style lang='scss' scoped>
 .settings-page {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--td-bg-color-page);
   padding-bottom: 20px;
 }
 
 .menu-section {
-  background-color: white;
+  background-color: var(--td-bg-color-container);
   margin: 16px 16px 0;
   border-radius: 12px;
   overflow: hidden;
 
   .menu-item {
     height: 56px;
-    border-bottom: 0.5px solid #e7e7e7;
+    border-bottom: 0.5px solid var(--td-border-level-1-color);
     cursor: pointer;
     transition: background-color 0.2s ease;
 
@@ -149,7 +149,7 @@ function handleSettingClick(setting: any) {
     }
 
     &:active {
-      background-color: #f5f5f5;
+      background-color: var(--td-bg-color-component);
     }
 
     .menu-content {
@@ -169,7 +169,7 @@ function handleSettingClick(setting: any) {
 
         .menu-title {
           font-size: 16px;
-          color: #000000;
+          color: var(--td-text-color-primary);
           font-weight: 400;
         }
       }

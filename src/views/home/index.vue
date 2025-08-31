@@ -156,13 +156,17 @@ onMounted(() => {
     <HomeTabs />
 
     <!-- 中间滚动区 -->
-    <div class="content flex-1 min-h-0 overflow-y-auto scroll-area bg-[#F3F3F3]">
+    <div class="content flex-1 min-h-0 overflow-y-auto scroll-area bg-[var(--td-bg-color-page)]">
       <t-pull-down-refresh
         v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
         :loading-props="loadingProps"
-        :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
+        :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]"
+        @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
       >
-        <t-grid :column="2" :gutter="12" class="bg-[#F3F3F3] p-[12px] justify-center place-items-center  items-center">
+        <t-grid
+          :column="2" :gutter="12"
+          class="bg-[var(--td-bg-color-page)] p-[12px] justify-center place-items-center  items-center "
+        >
           <template v-for="item in homeItems" :key="item.id">
             <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />
             <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />

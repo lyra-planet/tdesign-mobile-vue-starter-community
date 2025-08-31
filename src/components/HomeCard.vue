@@ -13,8 +13,8 @@ const props = defineProps<{
     <div class="h-[170px] bg-blue-100">
       <t-image class="image-container" fit="fill" :src="props.imageSrc" />
     </div>
-    <div class="h-[74px] w-[170px] box-border bg-white py-[12px] px-[16px]">
-      <div class="text-[14px] font-[400] mb-[8px]">
+    <div class="h-[74px] w-[170px] box-border bg-[var(--td-bg-color-container)] py-[12px] px-[16px]">
+      <div class="text-[14px] font-[400] mb-[8px] text-[var(--td-text-color-primary)]">
         {{ props.title }}
       </div>
       <div>

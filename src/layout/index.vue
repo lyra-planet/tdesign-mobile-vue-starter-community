@@ -11,8 +11,6 @@ defineOptions({
 
 const router = useRouter()
 const route = useRoute()
-const { t } = useI18n()
-
 // 实时时间
 const currentTime = ref('')
 let timeInterval: NodeJS.Timeout | null = null
@@ -174,23 +172,13 @@ const showTitle = computed(() => {
       <div class="header-left">
         <!-- 根据条件显示返回按钮或菜单图标 -->
         <TIcon
-          v-if="showBackButton"
-          name="chevron-left"
-          size="24"
-          color="#000000e6"
+          v-if="showBackButton" name="chevron-left" size="24" color="var(--td-text-color-primary)"
           @click="router.back()"
         />
-        <TIcon
-          v-else
-          name="view-list"
-          size="24"
-          color="#000000e6"
-        />
+        <TIcon v-else name="view-list" size="24" color="var(--td-text-color-primary)" />
         <!-- 首页显示搜索框 -->
         <t-search
-          v-if="route.path === '/home'"
-          class="navbar-search"
-          :placeholder="t('common.search.placeholder')"
+          v-if="route.path === '/home'" class="navbar-search" :placeholder="t('common.search.placeholder')"
           shape="round"
         >
           <template #left-icon>
@@ -219,30 +207,18 @@ const showTitle = computed(() => {
     <div v-if="showBottomNav" class="bottom-navigation">
       <div class="tab-bar">
         <div
-          v-for="tab in tabList"
-          :key="tab.value"
-          class="tab-item"
-          :class="{ active: activeTab === tab.value }"
+          v-for="tab in tabList" :key="tab.value" class="tab-item" :class="{ active: activeTab === tab.value }"
           @click="handleTabChange(tab.value)"
         >
           <div class="tab-content">
             <div class="tab-icon">
               <TIcon
-                :name="tab.icon"
-                size="20"
-                :color="activeTab === tab.value ? '#0052D9' : '#000'"
+                :name="tab.icon" size="20"
+                :color="activeTab === tab.value ? 'var(--td-brand-color-7)' : 'var(--td-text-color-primary)'"
               />
-              <t-badge
-                v-if="tab.badge"
-                :count="tab.badge"
-                size="medium"
-                class="tab-badge"
-              />
+              <t-badge v-if="tab.badge" :count="tab.badge" size="medium" class="tab-badge" />
             </div>
-            <div
-              class="tab-label"
-              :class="{ 'tab-label--active': activeTab === tab.value }"
-            >
+            <div class="tab-label" :class="{ 'tab-label--active': activeTab === tab.value }">
               {{ tab.label }}
             </div>
           </div>
@@ -262,13 +238,13 @@ const showTitle = computed(() => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--td-bg-color-page);
 }
 
 // 状态栏样式
 .status-bar {
   height: 46px;
-  background-color: #fff;
+  background-color: var(--td-bg-color-container);
   // background: transparent; // 改为透明背景
   display: flex;
   justify-content: space-between;
@@ -276,7 +252,7 @@ const showTitle = computed(() => {
   padding: 14px 14px 14px 30px; // 上下14px，右14px，左30px
   font-size: 14px;
   font-weight: 600;
-  color: #000;
+  color: var(--td-text-color-primary);
   // border-bottom: 0.5px solid #e7e7e7; // 移除底部边界线
   box-sizing: border-box;
 
@@ -330,7 +306,7 @@ const showTitle = computed(() => {
   align-items: center;
   justify-content: center;
   padding: 0 12px 0 12px;
-  background-color: #fff;
+  background-color: var(--td-bg-color-container);
   border-bottom: none;
   height: 48px;
   position: relative;
@@ -360,7 +336,7 @@ const showTitle = computed(() => {
   .header-title {
     font-size: 18px;
     font-weight: 600;
-    color: #000000e6;
+    color: var(--td-text-color-primary);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     height: 26px;
     line-height: 26px;
@@ -382,7 +358,7 @@ const showTitle = computed(() => {
       border-radius: 16px;
       opacity: 1;
       border: 0.5px solid #e7e7e7;
-      background-color: #fff;
+      background-color: var(--td-bg-color-container);
       padding: 0 13px;
 
       .mini-program-icon {
@@ -396,7 +372,7 @@ const showTitle = computed(() => {
       .divider-line {
         width: 1px;
         height: 20px;
-        background-color: #e7e7e7;
+        background-color: var(--td-border-level-1-color);
         opacity: 1;
         margin: 0 8px;
       }
@@ -413,8 +389,8 @@ const showTitle = computed(() => {
 
 // 底部导航栏
 .bottom-navigation {
-  background-color: #fff;
-  border-top: 0.5px solid #e7e7e7;
+  background-color: var(--td-bg-color-container);
+  border-top: 0.5px solid var(--td-border-level-1-color);
   padding: 8px;
   height: auto; // 移除固定高度
   display: flex;
@@ -440,10 +416,10 @@ const showTitle = computed(() => {
       min-width: 0;
 
       &.active {
-        background-color: #f2f3ff;
+        background-color: var(--td-brand-color-1);
 
         .tab-label {
-          color: #0052d9;
+          color: var(--td-brand-color-7);
         }
       }
 
@@ -473,7 +449,7 @@ const showTitle = computed(() => {
           font-family: 'PingFang SC', sans-serif;
           text-align: center;
           line-height: 16px;
-          color: #666;
+          color: var(--td-text-color-secondary);
           transition: color 0.3s ease;
           white-space: nowrap;
           overflow: hidden;
@@ -481,7 +457,7 @@ const showTitle = computed(() => {
           opacity: 1;
 
           &--active {
-            color: #0052d9;
+            color: var(--td-brand-color-7);
           }
         }
       }
@@ -493,7 +469,7 @@ const showTitle = computed(() => {
 .home-indicator {
   width: 100%;
   height: 6.4vw; // 24px / 375px * 100vw = 6.4vw
-  background-color: #ffffff;
+  background-color: var(--td-bg-color-container);
   opacity: 1;
   display: flex;
   justify-content: center;
@@ -505,7 +481,7 @@ const showTitle = computed(() => {
     width: 35.73vw; // 134px / 375px * 100vw = 35.73vw
     height: 1.33vw; // 5px / 375px * 100vw = 1.33vw
     border-radius: 100px;
-    background-color: #000000e6;
+    background-color: var(--td-text-color-primary);
     opacity: 1;
   }
 }

@@ -43,6 +43,6 @@ const agreed = computed({
   font-size: 12px;
   font-weight: 400;
   line-height: 20px;
-  color: #000000e6;
+  color: var(--td-text-color-primary);
 }
 </style>
