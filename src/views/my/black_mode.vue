@@ -11,10 +11,20 @@ defineOptions({
 const router = useRouter()
 const { t, locale } = useI18n()
 const checked = ref(false)
+if (localStorage.getItem('theme-mode') === 'dark') {
+  checked.value = true
+}
+else {
+  checked.value = false
+}
 onMounted(() => {
-  const savedTheme = localStorage.getItem('theme-mode') || 'light'
-  document.documentElement.setAttribute('theme-mode', savedTheme)
-  checked.value = savedTheme === 'dark'
+  const themeMode = localStorage.getItem('theme-mode')
+  if (themeMode === 'dark') {
+    enableDarkMode()
+  }
+  else {
+    disableDarkMode()
+  }
 })
 
 function onChange(val: any) {

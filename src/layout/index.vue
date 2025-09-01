@@ -10,7 +10,6 @@ defineOptions({
 })
 
 const { t } = useI18n()
-
 const router = useRouter()
 const route = useRoute()
 
@@ -218,7 +217,7 @@ const isMyPage = computed(() => {
   justify-content: center;
   padding: 0 12px 0 12px;
   background-color: var(--td-bg-color-container);
-  border-bottom: none;
+  border-bottom: 1.5px solid var(--td-border-level-2-color);
   height: 48px;
   position: relative;
 
