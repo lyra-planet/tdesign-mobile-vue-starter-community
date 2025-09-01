@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { talklist } from '../store/talklist'
@@ -13,6 +13,41 @@ const visible = ref(false)
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+// 实时时间
+const currentTime = ref('')
+let timeInterval: NodeJS.Timeout | null = null
+
+// 更新时间函数
+function updateTime() {
+  const now = new Date()
+  const hours = now.getHours().toString().padStart(2, '0')
+  const minutes = now.getMinutes().toString().padStart(2, '0')
+  currentTime.value = `${hours}:${minutes}`
+}
+function changeToSearch() {
+  // 点击搜索框时跳转到搜索页面
+  router.push('/home/search')
+}
+
+// 组件挂载时开始更新时间
+onMounted(() => {
+  updateTime()
+  timeInterval = setInterval(updateTime, 1000)
+  if (localStorage.getItem('theme-mode') === 'dark') {
+    document.documentElement.setAttribute('theme-mode', 'dark')
+  }
+  else {
+    document.documentElement.setAttribute('theme-mode', 'light')
+  }
+})
+
+// 组件卸载时清除定时器
+onUnmounted(() => {
+  if (timeInterval) {
+    clearInterval(timeInterval)
+    timeInterval = null
+  }
+})
 
 // 消息总数计算
 const sum = computed(() => {
@@ -60,7 +95,7 @@ const baseSidebar = ref([
   },
   {
     title: '搜索页',
-    path: '/search', // 你需要在 router 里加一个对应页面
+    path: '/home/search', // 你需要在 router 里加一个对应页面
   },
   {
     title: '发布页',
@@ -209,6 +244,7 @@ function itemClick(index: number, item, context: { e: MouseEvent }) {
         <t-search
           v-if="route.path === '/home'" class="navbar-search" :placeholder="t('common.search.placeholder')"
           shape="round"
+          @click="changeToSearch()"
         >
           <template #left-icon>
             <TIcon name="search" size="15px" />

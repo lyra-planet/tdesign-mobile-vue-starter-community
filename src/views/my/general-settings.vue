@@ -75,12 +75,12 @@ const generalSettings = [
 <style lang='scss' scoped>
 .general-settings-page {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--td-bg-color-container);
   padding-bottom: 20px;
 }
 
 .menu-section {
-  background-color: white;
+  background-color: var(--td-bg-color-page);
   margin: 16px 16px 0;
   border-radius: 12px;
   overflow: hidden;
