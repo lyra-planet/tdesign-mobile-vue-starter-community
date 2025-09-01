@@ -157,13 +157,13 @@ const showTitle = computed(() => {
       <div class="status-right">
         <div class="signal-icons">
           <div class="signal-icon">
-            <img src="/my/ios-signal.svg" alt="信号" class="icon-svg">
+            <div class="icon-svg signal-svg" />
           </div>
           <div class="wifi-icon">
-            <img src="/my/ios-wifi.svg" alt="WiFi" class="icon-svg">
+            <div class="icon-svg wifi-svg" />
           </div>
           <div class="battery-icon">
-            <img src="/my/ios-battery.svg" alt="电量" class="icon-svg">
+            <div class="icon-svg battery-svg" />
           </div>
         </div>
       </div>
@@ -193,9 +193,9 @@ const showTitle = computed(() => {
       </div>
       <div class="header-right">
         <div class="mini-program-buttons">
-          <img src="/my/MiniProgramMoreOutlined.svg" alt="更多" class="mini-program-icon">
+          <div class="mini-program-icon mini-program-more" />
           <div class="divider-line" />
-          <img src="/my/MiniProgramCloseOutlined.svg" alt="关闭" class="mini-program-icon">
+          <div class="mini-program-icon mini-program-close" />
         </div>
       </div>
     </div>
@@ -296,7 +296,30 @@ const showTitle = computed(() => {
       .icon-svg {
         width: 20px; // 放大图标
         height: 20px; // 放大图标
-        object-fit: contain;
+
+        &.signal-svg {
+          background-color: var(--td-text-color-primary);
+          mask: url('/my/ios-signal.svg') no-repeat center;
+          mask-size: contain;
+          -webkit-mask: url('/my/ios-signal.svg') no-repeat center;
+          -webkit-mask-size: contain;
+        }
+
+        &.wifi-svg {
+          background-color: var(--td-text-color-primary);
+          mask: url('/my/ios-wifi.svg') no-repeat center;
+          mask-size: contain;
+          -webkit-mask: url('/my/ios-wifi.svg') no-repeat center;
+          -webkit-mask-size: contain;
+        }
+
+        &.battery-svg {
+          background-color: var(--td-text-color-primary);
+          mask: url('/my/ios-battery.svg') no-repeat center;
+          mask-size: contain;
+          -webkit-mask: url('/my/ios-battery.svg') no-repeat center;
+          -webkit-mask-size: contain;
+        }
       }
     }
   }
@@ -369,6 +392,22 @@ const showTitle = computed(() => {
         display: flex;
         align-items: center;
         justify-content: center;
+
+        &.mini-program-more {
+          background-color: var(--td-text-color-primary);
+          mask: url('/my/MiniProgramMoreOutlined.svg') no-repeat center;
+          mask-size: contain;
+          -webkit-mask: url('/my/MiniProgramMoreOutlined.svg') no-repeat center;
+          -webkit-mask-size: contain;
+        }
+
+        &.mini-program-close {
+          background-color: var(--td-text-color-primary);
+          mask: url('/my/MiniProgramCloseOutlined.svg') no-repeat center;
+          mask-size: contain;
+          -webkit-mask: url('/my/MiniProgramCloseOutlined.svg') no-repeat center;
+          -webkit-mask-size: contain;
+        }
       }
 
       .divider-line {

@@ -11,6 +11,11 @@ defineOptions({
 const router = useRouter()
 const { t, locale } = useI18n()
 const checked = ref(false)
+onMounted(() => {
+  const savedTheme = localStorage.getItem('theme-mode') || 'light'
+  document.documentElement.setAttribute('theme-mode', savedTheme)
+  checked.value = savedTheme === 'dark'
+})
 
 function onChange(val: any) {
   checked.value = val
@@ -23,10 +28,14 @@ function onChange(val: any) {
 }
 function enableDarkMode() {
   document.documentElement.setAttribute('theme-mode', 'dark')
+  localStorage.setItem('theme-mode', 'dark')
 }
+
 function disableDarkMode() {
   document.documentElement.setAttribute('theme-mode', 'light')
+  localStorage.setItem('theme-mode', 'light')
 }
+
 // 语言相关
 const isEnglish = computed({
   get: () => locale.value === 'en-us',
