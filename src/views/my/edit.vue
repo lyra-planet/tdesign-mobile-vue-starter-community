@@ -1,13 +1,28 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { getAllProvinces, getCitiesByProvince } from '@/components/AddressData'
+import dayjs from 'dayjs'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { useEditHook } from './edit/hooks'
 
 defineOptions({
   name: 'MyEdit',
 })
 
-const router = useRouter()
+const {
+  formRef,
+  formData,
+  genderOptions,
+  formVisible,
+  addressLabel,
+  addressColumns,
+  birthdayValue,
+  handleBack,
+  handleSave,
+  handleAddressConfirm,
+  onAddressColumnChange,
+  handleDatePickerOpen,
+  handleAddressPickerOpen,
+  handlePicChange,
+} = useEditHook()
 
 // 实时时间
 const currentTime = ref('')
@@ -34,181 +49,6 @@ onUnmounted(() => {
     timeInterval = null
   }
 })
-
-// 表单数据
-const formData = ref({
-  username: '',
-  gender: '',
-  birthday: '',
-  address: [] as string[],
-  bio: '',
-  photos: [] as string[],
-})
-
-// 性别选项
-const genderOptions = [
-  { label: '男', value: '男' },
-  { label: '女', value: '女' },
-  { label: '保密', value: '保密' },
-] as const
-
-// 选择器状态
-const showDatePicker = ref(false)
-const showAddressPicker = ref(false)
-
-// 规范化日期为 YYYY-MM-DD
-function formatDate(input: string): string {
-  if (!input)
-    return ''
-  const d = new Date(input)
-  if (Number.isNaN(d.getTime())) {
-    // 兜底处理如 1994-9-27 -> 1994-09-27
-    const [y, m, day] = input.split('-')
-    const mm = String(m).padStart(2, '0')
-    const dd = String(day).padStart(2, '0')
-    return `${y}-${mm}-${dd}`
-  }
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
-}
-
-// 将任意日期类型归一化为 YYYY-MM-DD（兼容 string/Date/数组）
-function normalizeDateValue(v: unknown): string {
-  if (!v)
-    return ''
-  if (typeof v === 'string')
-    return formatDate(v)
-  if (v instanceof Date) {
-    const y = v.getFullYear()
-    const m = String(v.getMonth() + 1).padStart(2, '0')
-    const d = String(v.getDate()).padStart(2, '0')
-    return `${y}-${m}-${d}`
-  }
-  if (Array.isArray(v)) {
-    const [y, m, d] = v as Array<number | string>
-    const yy = String(y ?? '').trim()
-    const mm = String(m ?? '').padStart(2, '0')
-    const dd = String(d ?? '').padStart(2, '0')
-    if (yy)
-      return `${yy}-${mm}-${dd}`
-  }
-  return ''
-}
-
-const dateValue = ref<string>('') // 始终使用字符串，配合 format 输出
-const addressValue = ref<string[]>([])
-
-// 动态计算地址选择器的列数据
-const provincesOptions = computed(() => getAllProvinces())
-const addressColumns = computed(() => {
-  const selectedProvince
-    = addressValue.value[0] || provincesOptions.value[0]?.value || ''
-  const cities = selectedProvince ? getCitiesByProvince(selectedProvince) : []
-  return [provincesOptions.value, cities]
-})
-
-// 监听省份变化，自动更新城市
-watch(
-  () => addressValue.value[0],
-  (newProvince, oldProvince) => {
-    if (newProvince && newProvince !== oldProvince) {
-      const cities = getCitiesByProvince(newProvince)
-      if (cities.length > 0) {
-        addressValue.value = [newProvince, cities[0].value]
-      }
-      else {
-        addressValue.value = [newProvince]
-      }
-    }
-  },
-)
-
-// 事件处理函数
-const handleBack = () => router.back()
-
-function handleSave() {
-  console.log('保存个人信息:', formData.value)
-  router.back()
-}
-
-// 修复：不再通过参数传递（避免传入 ref 对象），直接使用当前的 dateValue
-function handleDateConfirm() {
-  const normalized = normalizeDateValue(dateValue.value)
-  if (normalized) {
-    formData.value.birthday = normalized
-  }
-  showDatePicker.value = false
-}
-
-// 修复：不再通过参数传递（避免传入 ref 对象），直接使用当前的 addressValue
-function handleAddressConfirm() {
-  if (Array.isArray(addressValue.value) && addressValue.value.length) {
-    formData.value.address = [...addressValue.value]
-  }
-  showAddressPicker.value = false
-}
-
-// 打开日期选择器时进行初始化，避免未同步问题
-function handleDatePickerOpen() {
-  dateValue.value = formData.value.birthday || ''
-  showDatePicker.value = true
-}
-
-// 打开地址选择器时根据当前表单或默认进行兜底初始化
-function handleAddressPickerOpen() {
-  const provinces = provincesOptions.value
-  const firstProvince = provinces[0]?.value || ''
-  const province = formData.value.address[0] || firstProvince
-  const cities = province ? getCitiesByProvince(province) : []
-  const firstCity = cities[0]?.value || ''
-
-  let city = ''
-  if (formData.value.address[1] && cities.some(c => c.value === formData.value.address[1])) {
-    city = formData.value.address[1]
-  }
-  else {
-    city = firstCity
-  }
-
-  addressValue.value = city ? [province, city] : [province]
-  showAddressPicker.value = true
-}
-
-function handlePhotoUpload(e: any) {
-  let file: File | null = null
-
-  // 兼容原 t-upload 的 files 数组形式
-  if (Array.isArray(e)) {
-    const f = e[0]
-    file = f?.raw instanceof File ? f.raw : null
-  }
-  // 兼容 t-upload 的事件对象 { files: [...] }
-  else if (Array.isArray(e?.files)) {
-    const f = e.files[0]
-    file = f?.raw instanceof File ? f.raw : null
-  }
-  // 原生 input[type=file]
-  else if (e?.target?.files?.length) {
-    file = e.target.files[0] as File
-  }
-
-  if (!file)
-    return
-
-  const url = URL.createObjectURL(file)
-  formData.value.photos.push(url)
-
-  // 重置 input，允许选择相同文件再次触发
-  if (e?.target) {
-    e.target.value = ''
-  }
-}
-
-function removePhoto(index: number) {
-  formData.value.photos.splice(index, 1)
-}
 </script>
 
 <template>
@@ -250,111 +90,85 @@ function removePhoto(index: number) {
       </div>
     </div>
 
-    <!-- 表单内容 -->
+    <!-- 表单内容 - 使用 t-form 布局 -->
     <div class="form-content">
-      <!-- 用户名 -->
-      <div class="form-item">
-        <div class="form-label">
-          用户名
-        </div>
-        <t-input
-          v-model="formData.username"
-          placeholder="请输入用户名"
-          :borderless="true"
-          class="form-input"
-        />
-      </div>
+      <t-form
+        ref="formRef"
+        :data="formData"
+        reset-type="initial"
+        scroll-to-first-error="auto"
+        label-align="left"
+        class="edit-form"
+      >
+        <!-- 用户名 -->
+        <t-form-item label="用户名" name="username">
+          <t-input
+            v-model="formData.username"
+            borderless
+            placeholder="请输入用户名"
+            :maxlength="30"
+          />
+        </t-form-item>
 
-      <!-- 性别 -->
-      <div class="form-item">
-        <div class="form-label">
-          性别
-        </div>
-        <t-radio-group v-model="formData.gender" class="gender-group">
-          <t-radio
-            v-for="option in genderOptions"
-            :key="option.value"
-            :value="option.value"
-            class="gender-radio"
-          >
-            {{ option.label }}
-          </t-radio>
-        </t-radio-group>
-      </div>
+        <!-- 性别 -->
+        <t-form-item label="性别" name="gender">
+          <t-radio-group v-model="formData.gender" class="w-full flex justify-between" borderless>
+            <t-radio :block="false" name="gender" value="男" label="男" />
+            <t-radio :block="false" name="gender" value="女" label="女" />
+            <t-radio :block="false" name="gender" value="保密" label="保密" />
+          </t-radio-group>
+        </t-form-item>
 
-      <!-- 生日 -->
-      <div class="form-item clickable" @click="handleDatePickerOpen">
-        <div class="form-label">
-          生日
-        </div>
-        <div class="form-value">
-          <span class="form-text">{{ formData.birthday || '请选择生日' }}</span>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
-        </div>
-      </div>
+        <!-- 生日 -->
+        <t-form-item arrow label="生日" name="birthday" content-align="right">
+          <t-input
+            v-model="formData.birthday"
+            borderless
+            align="right"
+            placeholder="请选择生日"
+            readonly
+            class="picker-input"
+            @click="handleDatePickerOpen"
+          />
+        </t-form-item>
 
-      <!-- 地址 -->
-      <div class="form-item clickable" @click="handleAddressPickerOpen">
-        <div class="form-label">
-          地址
-        </div>
-        <div class="form-value">
-          <span class="form-text">{{ formData.address.join(' ') || '请选择地址' }}</span>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
-        </div>
-      </div>
+        <!-- 地址 -->
+        <t-form-item arrow label="地址" name="address" content-align="right">
+          <t-input
+            v-model="addressLabel"
+            borderless
+            align="right"
+            placeholder="请选择地址"
+            readonly
+            class="picker-input"
+            @click="handleAddressPickerOpen"
+          />
+        </t-form-item>
 
-      <!-- 个人简介 -->
-      <div class="form-item bio-item">
-        <div class="form-label">
-          个人简介
-        </div>
-        <t-textarea
-          v-model="formData.bio"
-          placeholder="请输入个人简介"
-          :maxlength="50"
-          indicator
-          class="bio-textarea"
-          :borderless="true"
-        />
-      </div>
+        <!-- 个人简介 -->
+        <t-form-item label="个人简介" name="bio">
+          <t-textarea
+            v-model="formData.bio"
+            class="w-full h-[100px]"
+            indicator
+            :maxlength="50"
+            placeholder="请输入个人简介"
+          />
+        </t-form-item>
 
-      <!-- 相片墙 -->
-      <div class="form-item photo-item">
-        <div class="form-label">
-          相片墙
-        </div>
-        <div class="photo-wall">
-          <div
-            v-for="(photo, index) in formData.photos"
-            :key="index"
-            class="photo-container"
-          >
-            <img :src="photo" alt="照片" class="photo-image">
-            <div class="photo-remove" @click.stop="removePhoto(index)">
-              <t-icon name="close" size="12" color="#fff" />
-            </div>
-          </div>
-
-          <div
-            v-if="formData.photos.length < 9"
-            class="photo-container upload-container"
-          >
-            <!-- 改为原生 input，实现纯前端上传 -->
-            <label class="photo-upload">
-              <input
-                type="file"
-                accept="image/*"
-                class="file-input"
-                @change="handlePhotoUpload"
-              >
-              <div class="upload-trigger">
-                <t-icon name="add" size="26.91" color="#00000066" />
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
+        <!-- 相片墙 -->
+        <t-form-item label="相片墙" name="photo">
+          <t-upload
+            v-model="formData.photos"
+            class="upload-pic"
+            multiple
+            theme="image"
+            :max="9"
+            action="https://service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo"
+            @change="handlePicChange"
+          />
+        </t-form-item>
+      </t-form>
     </div>
 
     <!-- 保存按钮 -->
@@ -370,53 +184,103 @@ function removePhoto(index: number) {
     </div>
 
     <!-- 日期选择器弹窗 -->
-    <div v-if="showDatePicker" class="picker-overlay" @click="showDatePicker = false">
-      <div class="picker-container date-picker-container" @click.stop>
-        <div class="picker-header">
-          <button class="picker-cancel" @click="showDatePicker = false">
-            取消
-          </button>
-          <span class="picker-title">选择生日</span>
-          <button class="picker-confirm" @click="handleDateConfirm">
-            确定
-          </button>
-        </div>
-        <div class="picker-content">
-          <t-date-time-picker
-            v-model="dateValue"
-            mode="date"
-            format="YYYY-MM-DD"
-            :steps="[1, 1, 1]"
-            class="date-picker"
-          />
-        </div>
-      </div>
-    </div>
+    <t-popup v-model="formVisible.birthday" placement="bottom">
+      <t-date-time-picker
+        v-model="birthdayValue"
+        :mode="['date']"
+        title="选择日期"
+        format="YYYY-MM-DD"
+        :start="dayjs().subtract(100, 'year').format('YYYY-MM-DD')"
+        :end="dayjs().format('YYYY-MM-DD')"
+        @confirm="formVisible.birthday = false"
+        @cancel="formVisible.birthday = false"
+      />
+    </t-popup>
 
     <!-- 地址选择器弹窗 -->
-    <div v-if="showAddressPicker" class="picker-overlay" @click="showAddressPicker = false">
-      <div class="picker-container address-picker-container" @click.stop>
-        <div class="picker-header">
-          <button class="picker-cancel" @click="showAddressPicker = false">
-            取消
-          </button>
-          <span class="picker-title">选择地址</span>
-          <button class="picker-confirm" @click="handleAddressConfirm">
-            确定
-          </button>
-        </div>
-        <div class="picker-content">
-          <t-picker
-            v-model="addressValue"
-            :columns="addressColumns"
-            class="address-picker"
-          />
-        </div>
-      </div>
-    </div>
+    <t-popup v-model="formVisible.address" placement="bottom">
+      <t-picker
+        title="选择地址"
+        :columns="addressColumns"
+        @confirm="handleAddressConfirm"
+        @cancel="formVisible.address = false"
+        @pick="onAddressColumnChange"
+      />
+    </t-popup>
   </div>
 </template>
 
 <style lang="scss" scoped>
 @use './edit.scss' as *;
+
+// t-form 样式优化
+.edit-form {
+  background-color: var(--td-bg-color-container);
+
+  :deep(.t-form-item) {
+    border-bottom: 0.5px solid var(--td-border-level-1-color);
+    padding: 16px;
+    margin: 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  :deep(.t-form-item__label) {
+    color: var(--td-text-color-primary);
+    font-size: 16px;
+    font-weight: 400;
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  :deep(.t-form-item__content) {
+    flex: 1;
+  }
+
+  // 输入框样式
+  :deep(.t-input) {
+    --td-input-default-text-color: var(--td-text-color-primary);
+  }
+
+  :deep(.t-input__inner) {
+    color: var(--td-text-color-primary) !important;
+    font-size: 16px;
+  }
+
+  :deep(input) {
+    color: var(--td-text-color-primary) !important;
+  }
+
+  // 文本域样式
+  :deep(.t-textarea__inner) {
+    color: var(--td-text-color-primary) !important;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  :deep(textarea) {
+    color: var(--td-text-color-primary) !important;
+  }
+}
+
+// 选择器输入框样式
+.picker-input {
+  --td-input-default-text-color: rgba(0, 0, 0, 0.4);
+}
+
+// 相片墙样式
+.upload-pic {
+  --td-upload-grid-columns: 3;
+
+  :deep(.t-upload__delete-btn path) {
+    transform: scale(0.725);
+    transform-origin: center;
+  }
+
+  :deep(.t-upload__wrapper) {
+    gap: 8px;
+  }
+}
 </style>
