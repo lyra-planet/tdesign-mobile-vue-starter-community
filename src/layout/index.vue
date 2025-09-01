@@ -23,6 +23,10 @@ function updateTime() {
   const minutes = now.getMinutes().toString().padStart(2, '0')
   currentTime.value = `${hours}:${minutes}`
 }
+function changeToSearch() {
+  // 点击搜索框时跳转到搜索页面
+  router.push('/home/search')
+}
 
 // 组件挂载时开始更新时间
 onMounted(() => {
@@ -187,6 +191,7 @@ const showTitle = computed(() => {
         <t-search
           v-if="route.path === '/home'" class="navbar-search" :placeholder="t('common.search.placeholder')"
           shape="round"
+          @click="changeToSearch()"
         >
           <template #left-icon>
             <TIcon name="search" size="15px" />
