@@ -34,6 +34,7 @@ declare module 'vue' {
     TDateTimePicker: typeof import('tdesign-mobile-vue')['DateTimePicker']
     TDialog: typeof import('tdesign-mobile-vue')['Dialog']
     TDivider: typeof import('tdesign-mobile-vue')['Divider']
+    TDrawer: typeof import('tdesign-mobile-vue')['Drawer']
     TDropdownItem: typeof import('tdesign-mobile-vue')['DropdownItem']
     TDropdownMenu: typeof import('tdesign-mobile-vue')['DropdownMenu']
     TFab: typeof import('tdesign-mobile-vue')['Fab']
