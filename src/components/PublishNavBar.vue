@@ -9,14 +9,10 @@ function handleClick() {
 </script>
 
 <template>
-  <t-navbar title="发布动态" left-arrow :title-max-length="5" :fixed="false" @left-click="handleClick">
-    <!-- <template #right>
-      <div class="custom-capsule border-[0.5px] border-solid border-[#E7E7E7] rounded-full ">
-        <TIcon name="chevron-left" size="20px" class="custom-capsule__icon" />
-        <t-divider layout="vertical" />
-        <TIcon name="home" size="20px" class="custom-capsule__icon" />
-      </div>
-    </template> -->
+  <t-navbar title="发布动态" :title-max-length="5" :fixed="false" @left-click="handleClick">
+    <template #left>
+      <TIcon name="chevron-left" size="24px" />
+    </template>
   </t-navbar>
 </template>
 

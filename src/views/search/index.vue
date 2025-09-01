@@ -57,14 +57,14 @@ const searchQuery = ref('')
     flex-direction: row;
     width: 100%;
     opacity: 1;
-    background: #ffffff;
+    background: var(--td-bg-color-container);
     .search {
       flex: 1;
       height: 40px;
       padding: 8px 16px;
       opacity: 1;
 
-      background: #ffffff;
+      background: var(--td-bg-color-container);
     }
     .cancel {
       width: 32px;
@@ -87,12 +87,12 @@ const searchQuery = ref('')
       font-family: 'PingFang SC';
       text-align: left;
       line-height: 26px;
-      color: var(--td-text-color);
+      color: var(--td-text-color-primary);
       margin: 16px auto 16px 16px;
     }
     .recode-detail {
       font-size: 14px;
-      color: var(--td-text-color);
+      color: var(--td-text-color-primary);
       margin: 16px;
       .tag {
         margin: 10px 8px 0 0;
@@ -106,7 +106,7 @@ const searchQuery = ref('')
     font-family: 'PingFang SC';
     text-align: left;
     line-height: 26px;
-    color: var(--td-text-color);
+    color: var(--td-text-color-primary);
     margin: 24px auto 16px 16px;
   }
   .find-detail {

@@ -190,6 +190,11 @@ async function handleNext() {
   }
 }
 
+// 深色模式下的颜色覆盖
+:root[theme-mode='dark'] .country-selector {
+  --design-color: #fff;
+}
+
 .phone-number-input {
   flex: 1;
 }

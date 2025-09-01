@@ -1,9 +1,17 @@
-:root {
-  --tmv-bg-color: #f6f6f6;
-}
+
 
 .t-dropdown-menu::after {
   display: none !important;
+}
+
+// 设置 dropdown-menu 的背景为透明
+.t-dropdown-menu {
+  background: transparent !important;
+}
+
+// 深色模式下去掉 dropdown-menu 的背景
+:root[theme-mode="dark"] .t-dropdown-menu {
+  background: transparent !important;
 }
 
 .auth-primary-button {
@@ -22,9 +30,7 @@
   height: 24px;
 }
 
-.auth-divider--20 {
-  height: 20px;
-}
+
 
 .auth-flex-center {
   display: flex;

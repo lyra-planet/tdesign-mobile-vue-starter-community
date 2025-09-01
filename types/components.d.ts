@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     HomeCard: typeof import('./../src/components/HomeCard.vue')['default']
+    HomeDrawer: typeof import('./../src/components/HomeDrawer.vue')['default']
     HomeFab: typeof import('./../src/components/HomeFab.vue')['default']
     HomeMessage: typeof import('./../src/components/HomeMessage.vue')['default']
     HomeSwiper: typeof import('./../src/components/HomeSwiper.vue')['default']
@@ -28,6 +29,7 @@ declare module 'vue' {
     TButton: typeof import('tdesign-mobile-vue')['Button']
     TCell: typeof import('tdesign-mobile-vue')['Cell']
     TCellGroup: typeof import('tdesign-mobile-vue')['CellGroup']
+    TCheckbox: typeof import('tdesign-mobile-vue')['Checkbox']
     TCheckTag: typeof import('tdesign-mobile-vue')['CheckTag']
     TCol: typeof import('tdesign-mobile-vue')['Col']
     TConfigProvider: typeof import('tdesign-mobile-vue')['ConfigProvider']
@@ -38,6 +40,8 @@ declare module 'vue' {
     TDropdownItem: typeof import('tdesign-mobile-vue')['DropdownItem']
     TDropdownMenu: typeof import('tdesign-mobile-vue')['DropdownMenu']
     TFab: typeof import('tdesign-mobile-vue')['Fab']
+    TForm: typeof import('tdesign-mobile-vue')['Form']
+    TFormItem: typeof import('tdesign-mobile-vue')['FormItem']
     TGrid: typeof import('tdesign-mobile-vue')['Grid']
     TIcon: typeof import('tdesign-mobile-vue')['Icon']
     TImage: typeof import('tdesign-mobile-vue')['Image']

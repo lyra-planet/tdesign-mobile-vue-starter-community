@@ -69,11 +69,12 @@ const dataServices = computed(() => [
 // 处理登录
 function handleLogin() {
   if (!isLoggedIn.value) {
-    // 模拟登录
-    isLoggedIn.value = true
+    // 跳转到登录页面而不是自动登录
+    router.push('/login')
   }
   else {
-    router.push('/login')
+    // 已登录状态下可以跳转到个人信息编辑页面或其他操作
+    router.push('/my/edit')
   }
 }
 
@@ -224,7 +225,6 @@ function handleServiceClick(service: any) {
 <style lang='scss' scoped>
 .my-page {
   min-height: 100vh;
-  background-color: var(--td-bg-color-page);
   padding-bottom: 62px;
   color: var(--td-text-color-primary);
 }

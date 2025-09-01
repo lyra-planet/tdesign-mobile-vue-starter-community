@@ -22,17 +22,6 @@ const variants = ['light', 'dark', 'outline', 'light-outline']
 </template>
 
 <style lang="scss">
-.check-tag-block {
-  display: flex;
-  align-items: center;
-
-  &__title {
-    color: var(--td-text-color-disabled, rgba(0, 0, 0, 0.4));
-    font-size: 14px;
-    width: 80px;
-    margin-right: 16px;
-  }
-}
 .scrollbar-hidden {
   scrollbar-width: none;
   /* Firefox */
