@@ -10,7 +10,6 @@ defineOptions({
 })
 
 const { t } = useI18n()
-
 const router = useRouter()
 const route = useRoute()
 // 实时时间
@@ -29,6 +28,12 @@ function updateTime() {
 onMounted(() => {
   updateTime()
   timeInterval = setInterval(updateTime, 1000)
+  if (localStorage.getItem('theme-mode') === 'dark') {
+    document.documentElement.setAttribute('theme-mode', 'dark')
+  }
+  else {
+    document.documentElement.setAttribute('theme-mode', 'light')
+  }
 })
 
 // 组件卸载时清除定时器
@@ -332,7 +337,7 @@ const showTitle = computed(() => {
   justify-content: center;
   padding: 0 12px 0 12px;
   background-color: var(--td-bg-color-container);
-  border-bottom: none;
+  border-bottom: 1.5px solid var(--td-border-level-2-color);
   height: 48px;
   position: relative;
 

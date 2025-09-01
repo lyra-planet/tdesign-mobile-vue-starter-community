@@ -66,7 +66,7 @@ function handleSendMessage() {
           <div class="msg-bubble self">
             {{ item.value }}
           </div>
-          <t-avatar size="32px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
+          <t-avatar size="40px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
         </div>
         <div v-if="item.tag === 'other'" class="msg-row left">
           <t-avatar size="32px" :image="current.picture" />
@@ -81,8 +81,8 @@ function handleSendMessage() {
     </div>
     <!-- 底部输入框 -->
     <div class="input-area">
-      <div class="input-wrapper flex items-center justify-between">
-        <t-input v-model="message" :placeholder="t('pages.notice.input_placeholder')" class="msg-input w-full" :borderless="false" />
+      <div class="input-wrapper flex items-center ">
+        <input v-model="message" :placeholder="t('pages.notice.input_placeholder')" class="msg-input w-full" :borderless="false">
         <t-button size="medium" theme="primary" shape="round" class="send-btn" @click="handleSendMessage()">
           {{ t('pages.notice.send') }}
         </t-button>
@@ -93,7 +93,7 @@ function handleSendMessage() {
 
 <style lang='scss' scoped>
 .chat-container {
-  height: calc(100vh);
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   background: var(--td-bg-color-page);
@@ -108,7 +108,7 @@ function handleSendMessage() {
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-bottom: 1px solid var(--td-border-level-1-color);
+  border-bottom: 5px solid var(--td-border-level-2-color);
   position: relative;
   z-index: 100;
   flex-shrink: 0;
@@ -128,10 +128,10 @@ function handleSendMessage() {
 }
 .messages-area {
   flex: 1;
-  padding: 8px 12px;
+  padding: 8px 12px 80px 12px;
   overflow-y: auto;
   overflow-x: hidden;
-  background: var(--td-bg-color-page);
+  background: var(--td-bg-color-container);
   min-height: 0;
 
   &::-webkit-scrollbar {
@@ -157,7 +157,8 @@ function handleSendMessage() {
 
 .msg-row {
   display: flex;
-  margin-bottom: 12px;
+  margin-top: 16px;
+
   align-items: flex-start;
   gap: 8px;
 }
@@ -171,43 +172,65 @@ function handleSendMessage() {
 }
 
 .msg-bubble {
-  max-width: 60%;
+  max-width: 70%;
   padding: 10px 14px;
   border-radius: 16px;
   font-size: 14px;
-  line-height: 1.4;
-  word-wrap: break-word;
-  word-break: break-word;
+  font-weight: 400;
+  font-family: 'PingFang SC';
+  text-align: left;
+  line-height: 22px;
+  opacity: 1;
+  background: #f3f3f3;
+  // word-wrap: break-word;
+  // word-break: break-word;
   position: relative;
+  padding: 12px;
 }
 
 .msg-bubble.other {
-  background: var(--td-bg-color-container);
+  background: var(--td-bg-color-page);
   color: var(--td-text-color-primary);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 0 12px 12px 12px;
 }
 
 .msg-bubble.self {
-  background: #dbe0fd;
-  color: #000000;
-  box-shadow: 0 1px 2px rgba(0, 123, 255, 0.3);
+  background: #d9e1ff;
+  color: var(--td-text-color-primary);
+  border-radius: 12px 0 12px 12px;
 }
 
 .input-area {
   background: var(--td-bg-color-container);
-  border-top: 1px solid var(--td-border-level-1-color);
-  padding: 4px 4px;
-  flex-shrink: 0;
-  position: relative;
+  border-top: 1px solid var(--td-border-level-2-color);
+  position: fixed;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  padding-top: 5px;
+  z-index: 100;
+  width: 100%;
+
+  opacity: 1;
+  border-top: 0.5px solid #e7e7e7;
 }
 
 .msg-input {
-  border: 1px solid rgb(0, 0, 0);
-  border-radius: 20px;
-  margin-right: 20px;
-  padding: 8px 15px;
-  background-color: #dfdddd;
-  margin: 5px 15px;
+  background-color: var(--td-bg-color-component);
+  margin: 12px;
+  font-size: 14px;
+  color: var(--td-text-color-primary);
+  padding: 8px 16px;
+  height: 24px;
+  border-radius: 99px;
+  opacity: 1;
+  border: 1px solid #dcdcdc;
+  &:focus {
+    border-color: var(--td-brand-color);
+  }
+}
+.send-btn {
+  height: 40px;
 }
 
 .current-chat-info {
