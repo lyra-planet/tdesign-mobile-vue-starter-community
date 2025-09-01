@@ -14,7 +14,3 @@ const { t } = useI18n()
     <p>{{ t('common.error.403_message') }}</p>
   </div>
 </template>
-
-<style lang='scss' scoped>
-
-</style>

@@ -224,7 +224,6 @@ function handleServiceClick(service: any) {
 <style lang='scss' scoped>
 .my-page {
   min-height: 100vh;
-  background-color: var(--td-bg-color-page);
   padding-bottom: 62px;
   color: var(--td-text-color-primary);
 }
