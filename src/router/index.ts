@@ -49,6 +49,11 @@ const router = createRouter({
           component: () => import('@/views/my/general-settings.vue'),
         },
         {
+          path: 'my/black_mode',
+          name: 'MyBlackMode',
+          component: () => import('@/views/my/black_mode.vue'),
+        },
+        {
           path: 'login/phone',
           name: 'PhoneLogin',
           component: () => import('@/views/login/PhoneLoginPage.vue'),

@@ -28,7 +28,7 @@ const secondGroup = [
   {
     name: t('pages.my.settings_page.dark_mode'),
     icon: 'image',
-    action: () => console.log('深色模式'),
+    action: () => router.push('/my/black_mode'),
   },
   {
     name: t('pages.my.settings_page.font_size'),

@@ -9,6 +9,8 @@ defineOptions({
   name: 'Layout',
 })
 
+const { t } = useI18n()
+
 const router = useRouter()
 const route = useRoute()
 // 实时时间

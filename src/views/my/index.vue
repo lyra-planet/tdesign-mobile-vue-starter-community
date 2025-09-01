@@ -217,11 +217,6 @@ function handleServiceClick(service: any) {
           <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
         </div>
       </div>
-      <t-cell title="深色模式">
-        <template #rightIcon>
-          <t-switch :value="checked" @change="onChange" />
-        </template>
-      </t-cell>
     </div>
   </div>
 </template>
