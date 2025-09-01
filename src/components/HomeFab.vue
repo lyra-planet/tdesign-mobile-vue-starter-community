@@ -21,5 +21,5 @@ function onClick() {
 </script>
 
 <template>
-  <t-fab :icon="iconFunc" style="right: 16px; bottom: 104px;" :text="t('pages.publish.publish_action')" @click="onClick" />
+  <t-fab :icon="iconFunc" style="right: 16px; bottom: 80px;" :text="t('pages.publish.publish_action')" @click="onClick" />
 </template>

@@ -9,6 +9,7 @@ defineOptions({
   name: 'Layout',
 })
 
+const visible = ref(false)
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
@@ -51,6 +52,57 @@ const PAGE_TITLES: Record<string, () => string> = {
   '/my/settings': () => t('pages.my.settings'),
   '/my/general-settings': () => t('pages.my.general_settings.title'),
 }
+
+const baseSidebar = ref([
+  {
+    title: '首页',
+    path: '/home',
+  },
+  {
+    title: '搜索页',
+    path: '/search', // 你需要在 router 里加一个对应页面
+  },
+  {
+    title: '发布页',
+    path: '/publish',
+  },
+  {
+    title: '消息列表页',
+    path: '/notice/1', // 示例，动态参数自己传
+  },
+  {
+    title: '对话页',
+    path: '/talklist',
+  },
+  {
+    title: '个人中心页（已登录）',
+    path: '/my',
+  },
+  {
+    title: '个人中心页（未登录）',
+    path: '/login/phone',
+  },
+  {
+    title: '个人信息表单页',
+    path: '/my/edit',
+  },
+  {
+    title: '设置页',
+    path: '/my/settings',
+  },
+  {
+    title: '数据图表页',
+    path: '/chart',
+  },
+  {
+    title: '登录注册页（验证登录）',
+    path: '/login/verify',
+  },
+  {
+    title: '登录注册页（密码登录）',
+    path: '/login/password',
+  },
+])
 
 function getPageTitle(): string {
   const path = route.path
@@ -127,9 +179,22 @@ const isLoginPage = computed(() => {
 const isMyPage = computed(() => {
   return route.path === '/my' || route.path.includes('/login')
 })
+
+function itemClick(index: number, item, context: { e: MouseEvent }) {
+  console.log('itemclick: ', index, item, context)
+  if (item.path) {
+    console.log('路由跳转到: ', item.path)
+    router.push(item.path)
+    visible.value = false
+  }
+}
 </script>
 
 <template>
+  <t-drawer
+    v-model:visible="visible" style="--td-drawer-title-font-size:24px;--td-drawer-sidebar-height:90vh;"
+    class="drawer-c" placement="left" title="页面目录" :items="baseSidebar" @item-click="itemClick"
+  />
   <div class="layout-container" :class="{ 'login-layout': isLoginPage, 'show-background': isMyPage }">
     <!-- 页面标题栏 -->
     <div class="page-header" :class="{ 'page-header--transparent': isMyPage }">
@@ -139,7 +204,7 @@ const isMyPage = computed(() => {
           v-if="showBackButton" name="chevron-left" size="24" color="var(--td-text-color-primary)"
           @click="router.back()"
         />
-        <TIcon v-else name="view-list" size="24" color="var(--td-text-color-primary)" />
+        <TIcon v-else name="view-list" size="24" color="var(--td-text-color-primary)" @click="visible = true" />
         <!-- 首页显示搜索框 -->
         <t-search
           v-if="route.path === '/home'" class="navbar-search" :placeholder="t('common.search.placeholder')"

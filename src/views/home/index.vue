@@ -151,7 +151,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="h-[calc(100vh-174.5px)] flex flex-col overflow-hidden">
+  <div class="h-[calc(100vh-106px)] flex flex-col overflow-hidden">
     <!-- 顶部 -->
     <HomeTabs />
 
