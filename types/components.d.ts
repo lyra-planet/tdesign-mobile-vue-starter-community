@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BottomNavigation: typeof import('./../src/components/layout/BottomNavigation.vue')['default']
     HomeCard: typeof import('./../src/components/HomeCard.vue')['default']
     HomeDrawer: typeof import('./../src/components/HomeDrawer.vue')['default']
     HomeFab: typeof import('./../src/components/HomeFab.vue')['default']
@@ -16,6 +17,7 @@ declare module 'vue' {
     HomeTabBar: typeof import('./../src/components/HomeTabBar.vue')['default']
     HomeTabs: typeof import('./../src/components/HomeTabs.vue')['default']
     NavBarWithSearch: typeof import('./../src/components/NavBarWithSearch.vue')['default']
+    PageHeader: typeof import('./../src/components/layout/PageHeader.vue')['default']
     PublishButtons: typeof import('./../src/components/PublishButtons.vue')['default']
     PublishCell: typeof import('./../src/components/PublishCell.vue')['default']
     PublishNavBar: typeof import('./../src/components/PublishNavBar.vue')['default']
