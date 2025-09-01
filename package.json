@@ -41,6 +41,7 @@
     "phone": "^3.1.67",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",
+    "tdesign-icons-vue-next": "^0.3.7",
     "tdesign-mobile-vue": "^1.10.2",
     "vue": "^3.5.17",
     "vue-i18n": "^11.1.9",

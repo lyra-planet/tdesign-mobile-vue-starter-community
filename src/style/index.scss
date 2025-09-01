@@ -26,6 +26,11 @@
   background-color: #e7e7e7;
 }
 
+.t-loading__gradient-conic {
+  transform: none !important;
+  transform-origin: center center !important;
+}
+
 .auth-divider--24 {
   height: 24px;
 }

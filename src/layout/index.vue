@@ -318,7 +318,6 @@ function itemClick(index: number, item, context: { e: MouseEvent }) {
   justify-content: center;
   padding: 0 12px 0 12px;
   background-color: var(--td-bg-color-container);
-  border-bottom: 1.5px solid var(--td-border-level-2-color);
   height: 48px;
   position: relative;
 

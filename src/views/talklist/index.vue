@@ -86,6 +86,7 @@ function truncateMessage(message, maxLength = 22) {
 .list-container {
   background-color: var(--td-bg-color-container);
   width: 100%;
+  border-top: 0.5px solid #e7e7e7;
 }
 .list-item {
   width: calc(100% - 16px);

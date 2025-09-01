@@ -110,25 +110,6 @@ function handleScrolltolower() {
   console.log('触底，可以加载更多数据')
 }
 
-const loadingProps = ref({
-  indicator: () => h('svg', {
-    't': '1756052813561',
-    'class': 'icon animate-spin',
-    'viewBox': '0 0 1024 1024',
-    'version': '1.1',
-    'xmlns': 'http://www.w3.org/2000/svg',
-    'p-id': '10046',
-    'width': '24',
-    'height': '24',
-  }, [
-    h('path', {
-      'd': 'M469.333333 1022.250667C206.520889 1000.561778 0 780.401778 0 512 0 229.233778 229.233778 0 512 0c268.401778 0 488.561778 206.520889 510.250667 469.333333H907.946667C886.670222 269.468444 717.525333 113.777778 512 113.777778 292.067556 113.777778 113.777778 292.067556 113.777778 512c0 205.511111 155.690667 374.670222 355.555555 395.960889v114.289778z',
-      'fill': '#417FF9',
-      'p-id': '10047',
-    }),
-  ]),
-})
-
 function showMessage(theme: string, content = '这是一条普通通知信息', duration = 2000) {
   if (Message[theme]) {
     Message[theme]({
@@ -159,7 +140,6 @@ onMounted(() => {
     <div class="content flex-1 min-h-0 overflow-y-auto scroll-area bg-[var(--td-bg-color-page)]">
       <t-pull-down-refresh
         v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
-        :loading-props="loadingProps"
         :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]"
         @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
       >

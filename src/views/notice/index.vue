@@ -128,6 +128,7 @@ function handleSendMessage() {
 }
 .messages-area {
   flex: 1;
+  border-top: 0.5px solid #e7e7e7;
   padding: 8px 12px 80px 12px;
   overflow-y: auto;
   overflow-x: hidden;
