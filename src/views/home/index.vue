@@ -2,12 +2,12 @@
 import { Message } from 'tdesign-mobile-vue'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import HomeSwiperImageSrc from '@/assets/images/HomeSwiper.png'
-import HomeCard from '@/components/HomeCard.vue'
-import HomeFab from '@/components/HomeFab.vue'
-import HomeSwiper from '@/components/HomeSwiper.vue'
-import HomeTabs from '@/components/HomeTabs.vue'
+import HomeCard from '@/components/home/HomeCard.vue'
+import HomeFab from '@/components/home/HomeFab.vue'
+import HomeSwiper from '@/components/home/HomeSwiper.vue'
+import HomeTabs from '@/components/home/HomeTabs.vue'
 
 defineOptions({ name: 'Home' })
 
@@ -123,10 +123,15 @@ function showMessage(theme: string, content = '这是一条普通通知信息', 
   }
 }
 const route = useRoute()
+const router = useRouter()
 const showSuccessMessage = () => showMessage('success', '发布成功')
 onMounted(() => {
   if (route.query.success === '1') {
     showSuccessMessage()
+    router.replace({
+      path: route.path,
+      query: { ...route.query, success: undefined },
+    })
   }
 })
 </script>

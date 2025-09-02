@@ -1,15 +1,15 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
 
-import PublishButtons from '@/components/PublishButtons.vue'
+import PublishButtons from '@/components/publish/PublishButtons.vue'
 
-import PublishCell from '@/components/PublishCell.vue'
+import PublishCell from '@/components/publish/PublishCell.vue'
 
-import PublishTag from '@/components/PublishTag.vue'
+import PublishTag from '@/components/publish/PublishTag.vue'
 
-import PublishText from '@/components/PublishText.vue'
+import PublishText from '@/components/publish/PublishText.vue'
 
-import PublishUpload from '@/components/PublishUpload.vue'
+import PublishUpload from '@/components/publish/PublishUpload.vue'
 
 defineOptions({
   name: 'Publish',

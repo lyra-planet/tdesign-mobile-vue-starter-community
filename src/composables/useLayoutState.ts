@@ -11,6 +11,7 @@ export function useLayoutState() {
       || path.includes('/login')
       || path.startsWith('/notice')
       || path.includes('/my')
+      || path.includes('search')
   })
 
   // 是否显示底部导航
