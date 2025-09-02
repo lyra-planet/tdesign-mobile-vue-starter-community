@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useEditHook } from './edit/hooks'
 
 defineOptions({
@@ -10,7 +10,6 @@ defineOptions({
 const {
   formRef,
   formData,
-  genderOptions,
   formVisible,
   addressLabel,
   addressColumns,
@@ -23,56 +22,10 @@ const {
   handleAddressPickerOpen,
   handlePicChange,
 } = useEditHook()
-
-// 实时时间
-const currentTime = ref('')
-let timeInterval: NodeJS.Timeout | null = null
-
-// 更新时间函数
-function updateTime() {
-  const now = new Date()
-  const hours = now.getHours().toString().padStart(2, '0')
-  const minutes = now.getMinutes().toString().padStart(2, '0')
-  currentTime.value = `${hours}:${minutes}`
-}
-
-// 组件挂载时开始更新时间
-onMounted(() => {
-  updateTime()
-  timeInterval = setInterval(updateTime, 1000)
-})
-
-// 组件卸载时清除定时器
-onUnmounted(() => {
-  if (timeInterval) {
-    clearInterval(timeInterval)
-    timeInterval = null
-  }
-})
 </script>
 
 <template>
   <div class="edit-page">
-    <!-- 状态栏模拟 -->
-    <div class="status-bar">
-      <div class="status-left">
-        <span class="time">{{ currentTime }}</span>
-      </div>
-      <div class="status-right">
-        <div class="signal-icons">
-          <div class="signal-icon">
-            <img src="/my/ios-signal.svg" alt="信号" class="icon-svg">
-          </div>
-          <div class="wifi-icon">
-            <img src="/my/ios-wifi.svg" alt="WiFi" class="icon-svg">
-          </div>
-          <div class="battery-icon">
-            <img src="/my/ios-battery.svg" alt="电量" class="icon-svg">
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- 头部 -->
     <div class="header">
       <div class="header-left" @click="handleBack">

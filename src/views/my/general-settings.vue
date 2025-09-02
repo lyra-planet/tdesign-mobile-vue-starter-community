@@ -24,11 +24,6 @@ const currentLanguageText = computed(() => {
   return locale.value === 'zh-cn' ? '中文' : 'English'
 })
 
-// 处理返回
-function handleBack() {
-  router.back()
-}
-
 // 通用设置项
 const generalSettings = [
   {
