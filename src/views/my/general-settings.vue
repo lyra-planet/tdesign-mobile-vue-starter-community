@@ -75,19 +75,19 @@ const generalSettings = [
 <style lang='scss' scoped>
 .general-settings-page {
   min-height: 100vh;
-  background-color: var(--td-bg-color-container);
+  background-color: var(--td-bg-color-page);
   padding-bottom: 20px;
 }
 
 .menu-section {
-  background-color: var(--td-bg-color-page);
+  background-color: var(--td-bg-color-container);
   margin: 16px 16px 0;
   border-radius: 12px;
   overflow: hidden;
 
   .menu-item {
     height: 56px;
-    border-bottom: 0.5px solid #e7e7e7;
+    border-bottom: 0.5px solid var(--td-border-color);
     cursor: pointer;
     transition: background-color 0.2s ease;
 
@@ -96,7 +96,7 @@ const generalSettings = [
     }
 
     &:active {
-      background-color: #f5f5f5;
+      background-color: var(--td-bg-color-container-hover);
     }
 
     &.menu-item-no-click {
@@ -124,7 +124,7 @@ const generalSettings = [
 
         .menu-title {
           font-size: 16px;
-          color: #333;
+          color: var(--td-text-color-primary);
         }
       }
 
@@ -135,12 +135,12 @@ const generalSettings = [
 
         .setting-value {
           font-size: 14px;
-          color: rgba(0, 0, 0, 0.6);
+          color: var(--td-text-color-secondary);
         }
 
         .current-value {
           font-size: 14px;
-          color: rgba(0, 0, 0, 0.6);
+          color: var(--td-text-color-secondary);
           margin-right: 8px;
         }
       }
