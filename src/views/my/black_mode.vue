@@ -170,7 +170,7 @@ const generalSettings = [
 
         .current-value {
           font-size: 14px;
-          color: var(--td-text-color-primary);
+          color: var(--td-text-color-secondary);
           margin-right: 8px;
         }
       }

@@ -89,12 +89,14 @@ function truncateMessage(message, maxLength = 22) {
   border-top: 0.5px solid #e7e7e7;
 }
 .list-item {
-  width: calc(100% - 16px);
+  width: 100%;
   height: 82px;
   opacity: 1;
   padding: 17px 17px 16px 0px;
   border-bottom: 0.5px solid #e7e7e7;
-  margin-left: 16px;
+  .avatar {
+    margin-left: 16px;
+  }
 }
 .detail {
   width: calc(100%);
