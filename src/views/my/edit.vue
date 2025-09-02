@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 
-import PageHeader from './components/PageHeader.vue'
 import { useEditHook } from './edit/hooks'
 
 defineOptions({
@@ -15,7 +14,6 @@ const {
   addressLabel,
   addressColumns,
   birthdayValue,
-  handleBack,
   handleSave,
   handleAddressConfirm,
   onAddressColumnChange,
@@ -27,13 +25,6 @@ const {
 
 <template>
   <div class="edit-page">
-    <!-- 头部 -->
-    <PageHeader
-      title="个人信息"
-      :show-mini-program-buttons="true"
-      @back-click="handleBack"
-    />
-
     <!-- 表单内容 - 使用 t-form 布局 -->
     <div class="form-content">
       <t-form

@@ -59,6 +59,14 @@ const router = createRouter({
           component: () => import('@/views/my/black_mode.vue'),
         },
         {
+          path: 'my/edit',
+          name: 'MyEdit',
+          component: () => import('@/views/my/edit.vue'),
+          meta: {
+            title: '个人信息',
+          },
+        },
+        {
           path: 'login/phone',
           name: 'PhoneLogin',
           component: () => import('@/views/login/PhoneLoginPage.vue'),
@@ -85,14 +93,6 @@ const router = createRouter({
       ],
     },
     // 不需要布局的页面
-    {
-      path: '/my/edit',
-      name: 'MyEdit',
-      component: () => import('@/views/my/edit.vue'),
-      meta: {
-        title: '个人信息',
-      },
-    },
     // 登录页面重定向
     {
       path: '/login',

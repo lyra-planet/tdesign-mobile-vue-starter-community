@@ -17,6 +17,7 @@ export function useNavigation() {
     '/publish': () => t('pages.publish.title'),
     '/my/settings': () => t('pages.my.settings'),
     '/my/general-settings': () => t('pages.my.general_settings.title'),
+    '/my/edit': () => '个人信息',
   }
 
   // 侧边栏配置

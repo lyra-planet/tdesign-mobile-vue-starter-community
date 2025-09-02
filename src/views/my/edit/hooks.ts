@@ -60,8 +60,6 @@ export function useEditHook() {
   })
 
   // 事件处理函数
-  const handleBack = () => router.back()
-
   async function handleSave() {
     console.log('保存个人信息:', formData.value)
 
@@ -136,7 +134,6 @@ export function useEditHook() {
     addressColumns,
     addressLabel,
     birthdayValue,
-    handleBack,
     handleSave,
     handleAddressConfirm,
     onAddressColumnChange,
