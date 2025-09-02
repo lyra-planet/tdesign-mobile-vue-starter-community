@@ -22,5 +22,12 @@ export interface LoginResponse {
     name: string
     phone: string
     avatar: string
+    gender?: string
+    birthday?: string
+    address?: string
+    bio?: string
+    photos?: string[]
+    constellation?: string
+    location?: string
   }
 }

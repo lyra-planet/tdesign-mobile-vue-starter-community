@@ -40,6 +40,7 @@
     "axios": "^1.10.0",
     "countries-phone-masks": "^1.1.1",
     "dayjs": "^1.11.13",
+    "lcn": "^7.2.0",
     "phone": "^3.1.67",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",

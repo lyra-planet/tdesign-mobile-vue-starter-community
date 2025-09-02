@@ -88,9 +88,9 @@ async function handleNext() {
     errorMessage.value = ''
 
     const fullPhoneNumber = `${selectedCountryCode.value}${phoneNumber.value}`
-
+    const phoneForBackend = fullPhoneNumber.replace(/^\+/, '')
     const result = await sendVerifyCode({
-      phone: fullPhoneNumber,
+      phone: phoneForBackend,
     })
 
     if (result.success) {
@@ -144,7 +144,6 @@ async function handleNext() {
     </div>
 
     <AgreementCheckbox v-model="agreedToTerms" class="agreement-checkbox" />
-
     <t-button
       size="large"
       theme="primary"

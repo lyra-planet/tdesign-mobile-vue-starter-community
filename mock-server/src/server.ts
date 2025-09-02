@@ -17,8 +17,8 @@ app.listen(PORT, () => {
   console.warn('  PUT  /api/talklist/:id/read - 标记为已读')
 
   console.warn('\n📝 测试账号:')
-  console.warn('  手机号: 13812345678, 密码: 123456')
-  console.warn('  手机号: 13987654321, 密码: 123456')
+  console.warn('  手机号: 8613812345678, 密码: 123456')
+  console.warn('  手机号: 8613987654321, 密码: 123456')
 
   console.warn('\n💬 聊天列表测试数据:')
   console.warn('  共3个聊天记录: Pite(id:1), Bob(id:2), Alice(id:3)')

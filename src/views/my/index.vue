@@ -1,48 +1,68 @@
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/store/user'
+import MenuItem from './components/MenuItem.vue'
+import ServiceGrid from './components/ServiceGrid.vue'
+import StatsSection from './components/StatsSection.vue'
+import UserInfoCard from './components/UserInfoCard.vue'
 
 defineOptions({
   name: 'My',
 })
-const checked = ref(true)
 
-function onChange(val: any) {
-  checked.value = val
-  if (val) {
-    enableDarkMode()
-  }
-  else {
-    disableDarkMode()
-  }
-}
-function enableDarkMode() {
-  document.documentElement.setAttribute('theme-mode', 'dark')
-}
-function disableDarkMode() {
-  document.documentElement.setAttribute('theme-mode', 'light')
-}
 const router = useRouter()
 const { t } = useI18n()
-const isLoggedIn = ref(false)
+const userStore = useUserStore()
+const { isLoggedIn, userInfo } = userStore
 
-// 模拟用户信息
-const userInfo = computed(() => ({
-  avatar: '/my/Avatar.svg',
-  nickname: t('pages.my.nickname'),
-  tags: [
-    { label: t('pages.my.constellation'), icon: 'tag', type: 'constellation' },
-    { label: t('pages.my.location'), icon: 'location', type: 'location' },
-  ],
-}))
+function extractCityName(address: string): string {
+  if (!address)
+    return ''
 
-// 未登录状态的用户信息
+  // 处理格式如："北京市 朝阳区" 或 "广东省 深圳市 南山区"
+  const parts = address.split(' ').filter(Boolean)
+
+  if (parts.length >= 2) {
+    const cityPart = parts.find(part => part.includes('市'))
+    if (cityPart) {
+      return cityPart
+    }
+
+    const firstPart = parts[0]
+    if (firstPart.includes('北京') || firstPart.includes('天津')
+      || firstPart.includes('上海') || firstPart.includes('重庆')) {
+      return firstPart
+    }
+
+    return parts[1]
+  }
+
+  return parts[0] || address
+}
+
+const displayUserInfo = computed(() => {
+  if (isLoggedIn && userInfo) {
+    return {
+      avatar: userInfo.avatar || '/my/Avatar.svg',
+      nickname: userInfo.name,
+      tags: userInfo.constellation || userInfo.location
+        ? [
+            ...(userInfo.constellation ? [{ label: userInfo.constellation, icon: 'tag', type: 'constellation' }] : []),
+            ...(userInfo.location ? [{ label: extractCityName(userInfo.location), icon: 'location', type: 'location' }] : []),
+          ]
+        : [],
+    }
+  }
+  return null
+})
+
 const guestInfo = computed(() => ({
   nickname: t('pages.my.login_register'),
 }))
 
-// 统计数据 - 使用TDesign图标
+// 统计数据
 const stats = computed(() => [
   { label: t('pages.my.stats.all_posts'), icon: 'form', count: 0 },
   { label: t('pages.my.stats.under_review'), icon: 'search', count: 0 },
@@ -50,52 +70,67 @@ const stats = computed(() => [
   { label: t('pages.my.stats.drafts'), icon: 'file-copy', count: 0 },
 ])
 
-// 推荐服务 - 使用SVG图标
-const services = computed(() => [
-  { name: t('pages.my.services.wechat'), icon: '/my/wechat.svg' },
-  { name: t('pages.my.services.qq'), icon: '/my/qq.svg' },
-  { name: t('pages.my.services.tdoc'), icon: '/my/Tdoc.svg' },
-  { name: t('pages.my.services.tmap'), icon: '/my/Tmap.svg' },
+// 服务数据 - 分组显示
+const serviceGroups = computed(() => [
+  // 第一行：推荐服务
+  [
+    { name: t('pages.my.services.wechat'), icon: '/my/wechat.svg' },
+    { name: t('pages.my.services.qq'), icon: '/my/qq.svg' },
+    { name: t('pages.my.services.tdoc'), icon: '/my/Tdoc.svg' },
+    { name: t('pages.my.services.tmap'), icon: '/my/Tmap.svg' },
+  ],
+  // 第二行：数据中心服务
+  Array.from({ length: 4 }, () => ({
+    name: t('pages.my.services.data_center'),
+    icon: '/my/default.svg',
+  })),
 ])
 
-// 数据中心服务
-const dataServices = computed(() => [
-  { name: t('pages.my.services.data_center'), icon: '/my/default.svg' },
-  { name: t('pages.my.services.data_center'), icon: '/my/default.svg' },
-  { name: t('pages.my.services.data_center'), icon: '/my/default.svg' },
-  { name: t('pages.my.services.data_center'), icon: '/my/default.svg' },
+// 菜单项配置
+const menuItems = computed(() => [
+  {
+    name: t('pages.my.contact_service'),
+    icon: 'service',
+    action: handleContact,
+  },
+  {
+    name: t('pages.my.settings'),
+    icon: 'setting',
+    action: handleSettings,
+  },
 ])
 
-// 处理登录
 function handleLogin() {
-  if (!isLoggedIn.value) {
-    // 跳转到登录页面而不是自动登录
+  if (!isLoggedIn) {
     router.push('/login')
   }
   else {
-    // 已登录状态下可以跳转到个人信息编辑页面或其他操作
     router.push('/my/edit')
   }
 }
 
-// 处理编辑
 function handleEdit() {
   router.push('/my/edit')
 }
 
-// 处理联系客服
 function handleContact() {
-  console.log('联系客服')
+  console.warn('联系客服')
 }
 
-// 处理设置
 function handleSettings() {
   router.push('/my/settings')
 }
 
-// 处理服务点击
 function handleServiceClick(service: any) {
-  console.log('点击服务:', service.name)
+  console.warn('点击服务:', service.name)
+}
+
+function handleStatClick(stat: any, index: number) {
+  console.warn('点击统计:', stat, index)
+}
+
+function handleMenuClick(item: any) {
+  item.action()
 }
 </script>
 
@@ -104,120 +139,39 @@ function handleServiceClick(service: any) {
     <!-- 用户信息和统计数据合并卡片 -->
     <div class="user-stats-card">
       <!-- 用户信息区域 -->
-      <div class="user-section" @click="handleLogin">
-        <div class="user-avatar">
-          <div class="avatar-container">
-            <div class="avatar-bg">
-              <div class="avatar-inner">
-                <img v-if="isLoggedIn" :src="userInfo.avatar" :alt="userInfo.nickname" class="avatar-image">
-                <t-icon v-else name="user" size="32" color="#0052D9" />
-              </div>
-            </div>
-          </div>
-        </div>
+      <UserInfoCard
+        :is-logged-in="isLoggedIn"
+        :user-info="displayUserInfo"
+        :guest-text="guestInfo.nickname"
+        @user-click="handleLogin"
+        @edit-click="handleEdit"
+      />
 
-        <div class="user-info">
-          <div class="user-name" :class="{ 'guest-name': !isLoggedIn }">
-            {{ isLoggedIn ? userInfo.nickname : guestInfo.nickname }}
-          </div>
-
-          <!-- 登录状态下的标签和定位 -->
-          <div v-if="isLoggedIn" class="user-details">
-            <!-- 标签区域 -->
-            <div class="user-tags">
-              <t-tag v-for="(tag, index) in userInfo.tags" :key="index" size="small" variant="light" class="user-tag">
-                <template #icon>
-                  <t-icon :name="tag.icon" size="12" />
-                </template>
-                {{ tag.label }}
-              </t-tag>
-            </div>
-          </div>
-        </div>
-
-        <!-- 编辑按钮 -->
-        <div v-if="isLoggedIn" class="edit-button" @click.stop="handleEdit">
-          <t-icon name="edit" size="20" color="var(--td-text-color-primary)" />
-        </div>
-      </div>
-
-      <!-- 虚线分隔 -->
+      <!-- 分隔线 -->
       <div class="divider" />
 
       <!-- 统计数据 -->
-      <div class="stats-section">
-        <div v-for="(stat, index) in stats" :key="index" class="stat-item" :class="{ 'has-divider': index > 0 }">
-          <div class="stat-icon">
-            <t-icon :name="stat.icon" size="24" color="var(--td-text-color-primary)" />
-          </div>
-          <div class="stat-label">
-            {{ stat.label }}
-          </div>
-        </div>
-      </div>
+      <StatsSection
+        :stats="stats"
+        @stat-click="handleStatClick"
+      />
     </div>
 
     <!-- 推荐服务卡片 -->
-    <div class="service-card">
-      <div class="service-header">
-        <div class="service-title">
-          {{ t('pages.my.services.title') }}
-        </div>
-      </div>
-      <div class="service-content">
-        <!-- 第一行服务 -->
-        <div class="service-row">
-          <div
-            v-for="(service, index) in services" :key="index" class="service-item"
-            @click="handleServiceClick(service)"
-          >
-            <div class="service-icon-wrapper">
-              <img :src="service.icon" :alt="service.name" class="service-icon-wrapper">
-            </div>
-            <div class="service-name">
-              {{ service.name }}
-            </div>
-          </div>
-        </div>
-
-        <!-- 第二行服务 -->
-        <div class="service-row">
-          <div
-            v-for="(service, index) in dataServices" :key="index" class="service-item"
-            @click="handleServiceClick(service)"
-          >
-            <div class="service-icon-wrapper">
-              <img :src="service.icon" :alt="service.name" class="service-icon-wrapper">
-            </div>
-            <div class="service-name">
-              {{ service.name }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <ServiceGrid
+      :title="t('pages.my.services.title')"
+      :services="serviceGroups"
+      @service-click="handleServiceClick"
+    />
 
     <!-- 菜单项 -->
     <div class="menu-section">
-      <div class="menu-item" @click="handleContact">
-        <div class="menu-content">
-          <div class="menu-left">
-            <t-icon name="service" size="24" color="var(--td-text-color-primary)" class=" menu-icon" />
-            <span class="menu-title">{{ t('pages.my.contact_service') }}</span>
-          </div>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
-        </div>
-      </div>
-
-      <div class="menu-item" @click="handleSettings">
-        <div class="menu-content">
-          <div class="menu-left">
-            <t-icon name="setting" size="24" color="var(--td-text-color-primary)" class="menu-icon" />
-            <span class="menu-title">{{ t('pages.my.settings') }}</span>
-          </div>
-          <t-icon name="chevron-right" size="24" color="rgba(0, 0, 0, 0.4)" />
-        </div>
-      </div>
+      <MenuItem
+        v-for="(item, index) in menuItems"
+        :key="index"
+        :item="item"
+        @click="handleMenuClick"
+      />
     </div>
   </div>
 </template>
@@ -229,7 +183,7 @@ function handleServiceClick(service: any) {
   color: var(--td-text-color-primary);
 }
 
-// 合并的用户信息和统计数据卡片
+// 用户信息和统计数据合并卡片
 .user-stats-card {
   background-color: var(--td-bg-color-container);
   margin: 0px 16px 16px 16px;
@@ -237,394 +191,19 @@ function handleServiceClick(service: any) {
   overflow: hidden;
 }
 
-.user-section {
-  padding: 16px 16px;
-  display: flex;
-  align-items: flex-start;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  position: relative;
-
-  &:active {
-    background-color: var(--td-bg-color-container);
-  }
-
-  .user-avatar {
-    margin-right: 16px;
-    flex-shrink: 0;
-
-    .avatar-container {
-      width: 64px;
-      height: 64px;
-
-      .avatar-bg {
-        width: 100%;
-        height: 100%;
-        background-color: var(--td-bg-color);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .avatar-inner {
-          width: 64px;
-          height: 64px;
-          background-color: #dbe1fd;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-
-          .avatar-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-          }
-        }
-      }
-    }
-  }
-
-  .user-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-
-    .user-name {
-      font-size: 16px;
-      color: var(--td-text-color-primary);
-      font-weight: 600;
-      height: 24px;
-      line-height: 24px;
-      margin-top: 6px;
-      white-space: nowrap; // 防止文字换行
-
-      &.guest-name {
-        display: flex;
-        align-items: center;
-        height: 64px;
-        margin-top: 0;
-      }
-    }
-
-    .user-details {
-      display: flex;
-      flex-direction: row; // 改为水平排列
-      align-items: center; // 垂直居中对齐
-      gap: 12px; // 增加间距
-      margin-top: 8px;
-      flex-wrap: nowrap; // 防止换行
-
-      .user-tags {
-        display: flex;
-        gap: 8px;
-        flex-wrap: nowrap; // 防止标签换行
-        flex-shrink: 0; // 防止压缩
-
-        .user-tag {
-          height: 20px;
-          font-size: 10px;
-          border-radius: 3px; // 降低圆角值
-          padding: 0 6px;
-          display: flex;
-          align-items: center;
-          gap: 2px;
-          white-space: nowrap; // 防止文字换行
-        }
-      }
-
-      .user-location {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        height: 20px;
-        flex-shrink: 0; // 防止压缩
-
-        .location-text {
-          font-size: 12px;
-          color: #666;
-          line-height: 20px;
-          white-space: nowrap; // 防止文字换行
-        }
-      }
-    }
-  }
-
-  .edit-button {
-    position: absolute;
-    top: 50%; // 改为50%，相对于容器中心
-    transform: translateY(-50%); // 垂直居中
-    right: 16px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    transition: background-color 0.2s ease;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #f0f0f0;
-    }
-
-    &:active {
-      background-color: #e0e0e0;
-    }
-  }
-}
-
-// 实线分隔
+// 分隔线
 .divider {
   height: 1px;
   background: #f3f3f3;
   margin: 0;
 }
 
-.stats-section {
-  padding: 20px 16px;
-  display: flex;
-  justify-content: space-around;
-  position: relative;
-
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-    position: relative;
-
-    &:hover {
-      background-color: var(--td-bg-color-page);
-    }
-
-    // 只在第二个item前添加分割线
-    &:nth-child(2)::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 1px;
-      height: 68px;
-      background-color: #e7e7e7;
-    }
-
-    .stat-icon {
-      margin-bottom: 8px;
-      padding: 8px;
-      background-color: var(--td-bg-color-page);
-      border-radius: 6px;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: var(--td-text-color-primary);
-      font-weight: 400;
-    }
-  }
-}
-
-.service-card {
-  background: var(--td-mask-background);
-  border-radius: 12px;
-  margin: 16px 16px 18px 16px;
-  min-height: 200px;
-
-  .service-header {
-    height: 20px;
-    padding: 16px 20px 0;
-
-    .service-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--td-text-color-primary);
-    }
-  }
-
-  .service-content {
-    // padding: 16px 20px 20px;
-
-    .service-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      // gap: 16px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      .service-item {
-        padding: 16px 0 0 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        min-height: 80px;
-        justify-content: flex-start;
-
-        &:active {
-          background-color: #f5f5f5;
-          transform: scale(0.98);
-        }
-
-        .service-icon-wrapper {
-          width: 40px;
-          height: 40px;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .service-name {
-          font-size: 12px;
-          width: calc(100% - 16px); // 总宽度减去左右各8px
-          height: 20px;
-          color: var(--td-text-color-primary);
-          font-weight: 400;
-          text-align: center;
-          /* 使用flex布局实现文字垂直居中 */
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          /* 文字超出显示省略号 */
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          margin: 8px 8px; // 上下8px，左右8px
-        }
-      }
-    }
-  }
-}
-
+// 菜单项容器
 .menu-section {
   background-color: var(--td-mask-background);
   margin: 0 16px;
   border-radius: 12px;
   overflow: hidden;
-
-  .menu-item {
-    height: 56px;
-    border-bottom: 0.5px solid var(--td-mask-background);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &:active {
-      background-color: #f5f5f5;
-    }
-
-    .menu-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      height: 100%;
-
-      .menu-left {
-        display: flex;
-        align-items: center;
-
-        .menu-icon {
-          margin-right: 12px;
-        }
-
-        .menu-title {
-          font-size: 16px;
-          color: var(--td-text-color-primary);
-          font-weight: 400;
-        }
-      }
-
-      .menu-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        .language-text {
-          font-size: 14px;
-          color: rgba(0, 0, 0, 0.6);
-          font-weight: 400;
-        }
-      }
-    }
-  }
-}
-
-// 移动端适配
-@media (max-width: 414px) {
-  .service-card {
-    // margin: 0 8px 8px;
-
-    .service-header {
-      padding: 16px 16px 0;
-    }
-
-    .service-content {
-      // padding: 16px 16px 20px;
-
-      .service-row {
-        // gap: 12px;
-
-        .service-item {
-          min-height: 75px;
-
-          .service-icon-wrapper {
-            width: 36px;
-            height: 36px;
-
-            .service-icon {
-              width: 20px;
-              height: 20px;
-            }
-          }
-
-          .service-name {
-            font-size: 10px;
-          }
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 375px) {
-  .service-card {
-    .service-content {
-      .service-row {
-        // gap: 8px;
-
-        .service-item {
-          min-height: 80px;
-          .service-icon-wrapper {
-            width: 40px;
-            height: 40px;
-
-            .service-icon {
-              width: 18px;
-              height: 18px;
-            }
-          }
-          .service-name {
-            font-size: 12px;
-          }
-        }
-      }
-    }
-  }
 }
 
 // 适配安全区域

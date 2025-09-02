@@ -1,4 +1,5 @@
-import type { AuthToken, LoginResponse, User } from '../models'
+import type { AuthToken, User } from '../models'
+import type { LoginResponse } from '../models/Auth'
 import { users } from '../data'
 import { UserCreateData } from '../models'
 import { generateToken, generateVerifyCode, storeVerifyCode, validateVerifyCode, verifyToken } from '../utils'
@@ -42,7 +43,14 @@ export class AuthService {
         phone,
         email: '',
         password: '',
-        avatar: 'https://tdesign.gtimg.com/mobile/demos/avatar_default.png',
+        avatar: '',
+        gender: '',
+        birthday: '',
+        address: '',
+        bio: '',
+        photos: [],
+        constellation: '',
+        location: '',
       }
       users.push(newUser)
       user = newUser
@@ -60,6 +68,13 @@ export class AuthService {
           name: user.name,
           phone: user.phone,
           avatar: user.avatar,
+          gender: user.gender,
+          birthday: user.birthday,
+          address: user.address,
+          bio: user.bio,
+          photos: user.photos,
+          constellation: user.constellation,
+          location: user.location,
         },
       },
     }
@@ -93,6 +108,13 @@ export class AuthService {
           name: user.name,
           phone: user.phone,
           avatar: user.avatar,
+          gender: user.gender,
+          birthday: user.birthday,
+          address: user.address,
+          bio: user.bio,
+          photos: user.photos,
+          constellation: user.constellation,
+          location: user.location,
         },
       },
     }
@@ -123,5 +145,48 @@ export class AuthService {
   // 验证Token
   static validateToken(token: string): AuthToken | null {
     return verifyToken(token)
+  }
+
+  // 更新用户信息
+  static updateUserInfo(token: string, updateData: Partial<User>): { success: boolean, message: string, data?: any } {
+    const decoded = verifyToken(token)
+
+    if (!decoded) {
+      return { success: false, message: 'Token无效' }
+    }
+
+    const userIndex = users.findIndex(u => u.id === decoded.id)
+    if (userIndex === -1) {
+      return { success: false, message: '用户不存在' }
+    }
+
+    // 更新用户信息
+    const user = users[userIndex]
+    users[userIndex] = {
+      ...user,
+      ...updateData,
+      id: user.id, // 保持ID不变
+      phone: user.phone, // 保持手机号不变
+      email: user.email, // 保持邮箱不变
+      password: user.password, // 保持密码不变
+    }
+
+    return {
+      success: true,
+      message: '用户信息更新成功',
+      data: {
+        id: users[userIndex].id,
+        name: users[userIndex].name,
+        phone: users[userIndex].phone,
+        avatar: users[userIndex].avatar,
+        gender: users[userIndex].gender,
+        birthday: users[userIndex].birthday,
+        address: users[userIndex].address,
+        bio: users[userIndex].bio,
+        photos: users[userIndex].photos,
+        constellation: users[userIndex].constellation,
+        location: users[userIndex].location,
+      },
+    }
   }
 }

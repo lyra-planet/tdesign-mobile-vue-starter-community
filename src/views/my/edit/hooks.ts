@@ -1,13 +1,22 @@
 import type { FormInstanceFunctions } from 'tdesign-mobile-vue'
-import type { FormData, FormVisible, GenderOption, UploadFile } from './types'
+import type { FormData, FormVisible, UploadFile } from './types'
 import dayjs from 'dayjs'
-import { computed, reactive, ref } from 'vue'
+import { Toast } from 'tdesign-mobile-vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { areaList } from './data'
+import { updateUserInfo } from '@/api/auth'
+import { useUserStore } from '@/store/user'
+import { useAddressPicker } from '../composables/useAddressPicker'
 
 export function useEditHook() {
   const router = useRouter()
   const formRef = ref<FormInstanceFunctions>()
+  const userStore = useUserStore()
+
+  const {
+    addressColumns,
+    onAddressColumnChange,
+  } = useAddressPicker()
 
   // 表单数据
   const formData = ref<FormData>({
@@ -19,44 +28,27 @@ export function useEditHook() {
     photos: [],
   })
 
-  // 性别选项
-  const genderOptions: GenderOption[] = [
-    { label: '男', value: '男' },
-    { label: '女', value: '女' },
-    { label: '保密', value: '保密' },
-  ]
+  const addressLabel = ref('')
+
+  watch(() => userStore.userInfo, (newUserInfo) => {
+    if (newUserInfo) {
+      formData.value = {
+        username: newUserInfo.name || '',
+        gender: newUserInfo.gender || '',
+        birthday: newUserInfo.birthday || '',
+        address: newUserInfo.address || '',
+        bio: newUserInfo.bio || '',
+        photos: newUserInfo.photos?.map(url => ({ url })) || [],
+      }
+      addressLabel.value = newUserInfo.address || ''
+    }
+  }, { immediate: true })
 
   // 选择器状态
   const formVisible = reactive<FormVisible>({
     birthday: false,
     address: false,
   })
-
-  // 地址相关状态
-  const provinces = reactive(areaList.map(province => ({
-    label: province.label,
-    value: province.value,
-  })))
-
-  const cities = reactive(areaList[0]?.children?.map(city => ({
-    label: city.label,
-    value: city.value,
-  })) || [])
-
-  const addressColumns = computed(() => [provinces, cities])
-  const addressLabel = ref('')
-
-  // 地址级联变化处理
-  function onAddressColumnChange(value: any, context: any) {
-    const { column, index } = context
-    if (column === 0) {
-      const selectedProvince = areaList[index]
-      cities.splice(0, cities.length, ...(selectedProvince?.children?.map(city => ({
-        label: city.label,
-        value: city.value,
-      })) || []))
-    }
-  }
 
   // 日期相关状态
   const defaultBirthday = ref(dayjs().subtract(20, 'year').format('YYYY-MM-DD'))
@@ -70,16 +62,55 @@ export function useEditHook() {
   // 事件处理函数
   const handleBack = () => router.back()
 
-  function handleSave() {
+  async function handleSave() {
     console.log('保存个人信息:', formData.value)
-    router.back()
+
+    if (!userStore.userInfo) {
+      Toast.error('用户信息不存在')
+      return
+    }
+
+    try {
+      const updateData = {
+        name: formData.value.username,
+        gender: formData.value.gender,
+        birthday: formData.value.birthday,
+        address: formData.value.address,
+        location: formData.value.address,
+        bio: formData.value.bio,
+        photos: formData.value.photos?.map(photo => photo.url || '').filter(Boolean) || [],
+      }
+
+      const response = await updateUserInfo(updateData)
+
+      if (response.success) {
+        // 同步更新Pinia store中的用户信息
+        const updatedUserInfo = {
+          ...userStore.userInfo,
+          ...updateData,
+        }
+        userStore.setUserInfo(updatedUserInfo)
+
+        Toast.success('保存成功')
+        router.back()
+      }
+      else {
+        Toast.error(response.message || '保存失败')
+      }
+    }
+    catch (error) {
+      console.error('保存用户信息失败:', error)
+      Toast.error('保存失败，请稍后重试')
+    }
   }
 
   // 地址选择器确认
   function handleAddressConfirm(val: any, context: any) {
     const { label } = context
-    addressLabel.value = label.join(' ')
-    formData.value.address = label.join(' ')
+    const filteredLabels = label.filter(Boolean) // 过滤空值
+
+    addressLabel.value = filteredLabels.join(' ')
+    formData.value.address = filteredLabels.join(' ')
     formVisible.address = false
   }
 
@@ -92,18 +123,6 @@ export function useEditHook() {
     formVisible.address = true
   }
 
-  // 自定义上传方法 - 模拟上传成功
-  function customRequestMethod(file: File): Promise<{ url: string }> {
-    return new Promise((resolve) => {
-      // 创建本地预览URL
-      const url = URL.createObjectURL(file)
-      // 模拟上传延迟
-      setTimeout(() => {
-        resolve({ url })
-      }, 500)
-    })
-  }
-
   // 相片上传处理
   function handlePicChange(files: UploadFile[]) {
     console.log('上传文件变化:', files)
@@ -113,10 +132,7 @@ export function useEditHook() {
   return {
     formRef,
     formData,
-    genderOptions,
     formVisible,
-    provinces,
-    cities,
     addressColumns,
     addressLabel,
     birthdayValue,
@@ -127,6 +143,5 @@ export function useEditHook() {
     handleDatePickerOpen,
     handleAddressPickerOpen,
     handlePicChange,
-    customRequestMethod,
   }
 }

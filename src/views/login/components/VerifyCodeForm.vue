@@ -27,7 +27,7 @@ const errorMessage = ref('')
 const displayPhone = computed(() => {
   const phone = phoneNumber.value
   if (phone.startsWith('+')) {
-    const purePhone = phone.replace(/^\+\d{1,4}/, '')
+    const purePhone = phone.replace(/^\+\d{1,2}/, '')
     if (purePhone.length >= 7) {
       return `${purePhone.slice(0, 3)}****${purePhone.slice(-4)}`
     }
@@ -70,9 +70,9 @@ async function handleVerify() {
   try {
     isLoading.value = true
     errorMessage.value = ''
-
+    const phoneForBackend = phoneNumber.value.replace(/^\+/, '')
     const result = await verifyCodeLogin({
-      phone: phoneNumber.value,
+      phone: phoneForBackend,
       code: verifyCode.value,
       countryCode: countryCode.value,
     })
@@ -102,8 +102,10 @@ async function handleResend() {
   }
 
   try {
+    // 去掉手机号前面的加号发送给后端
+    const phoneForBackend = phoneNumber.value.replace(/^\+/, '')
     const result = await sendVerifyCode({
-      phone: phoneNumber.value,
+      phone: phoneForBackend,
     })
 
     if (result.success) {

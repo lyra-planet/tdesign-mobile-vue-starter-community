@@ -1,4 +1,5 @@
-import { post } from './request'
+import type { UserInfo } from './types'
+import { post, put } from './request'
 
 // 发送验证码
 export async function sendVerifyCode(params: { phone: string }) {
@@ -23,4 +24,9 @@ export async function logout() {
 // 刷新token
 export async function refreshToken() {
   return post('/auth/refresh-token')
+}
+
+// 更新用户信息
+export async function updateUserInfo(params: Partial<UserInfo>) {
+  return put('/auth/update-user-info', params)
 }

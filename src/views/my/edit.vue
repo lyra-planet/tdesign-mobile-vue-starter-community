@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { ref } from 'vue'
+
+import PageHeader from './components/PageHeader.vue'
 import { useEditHook } from './edit/hooks'
 
 defineOptions({
@@ -27,21 +28,11 @@ const {
 <template>
   <div class="edit-page">
     <!-- 头部 -->
-    <div class="header">
-      <div class="header-left" @click="handleBack">
-        <t-icon name="chevron-left" size="24" color="var(--td-text-color-primary)" />
-      </div>
-      <div class="header-title">
-        个人信息
-      </div>
-      <div class="header-right">
-        <div class="mini-program-buttons">
-          <img src="/my/MiniProgramMoreOutlined.svg" class="mini-program-icon">
-          <div class="divider-line" />
-          <img src="/my/MiniProgramCloseOutlined.svg" class="mini-program-icon">
-        </div>
-      </div>
-    </div>
+    <PageHeader
+      title="个人信息"
+      :show-mini-program-buttons="true"
+      @back-click="handleBack"
+    />
 
     <!-- 表单内容 - 使用 t-form 布局 -->
     <div class="form-content">
@@ -131,11 +122,6 @@ const {
       </button>
     </div>
 
-    <!-- 苹果Home指示器 -->
-    <div class="home-indicator">
-      <div class="indicator-bar" />
-    </div>
-
     <!-- 日期选择器弹窗 -->
     <t-popup v-model="formVisible.birthday" placement="bottom">
       <t-date-time-picker
@@ -220,7 +206,15 @@ const {
 
 // 选择器输入框样式
 .picker-input {
-  --td-input-default-text-color: rgba(0, 0, 0, 0.4);
+  --td-input-default-text-color: #00000066;
+
+  :deep(.t-input__inner) {
+    color: #00000066 !important;
+  }
+
+  :deep(input) {
+    color: #00000066 !important;
+  }
 }
 
 // 相片墙样式

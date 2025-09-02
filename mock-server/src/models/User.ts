@@ -5,6 +5,13 @@ export interface User {
   email: string
   password: string
   avatar: string
+  gender?: string
+  birthday?: string
+  address?: string
+  bio?: string
+  photos?: string[]
+  constellation?: string
+  location?: string
 }
 
 export interface UserCreateData {
@@ -20,4 +27,11 @@ export interface UserLoginData {
   name: string
   phone: string
   avatar: string
+  gender?: string
+  birthday?: string
+  address?: string
+  bio?: string
+  photos?: string[]
+  constellation?: string
+  location?: string
 }

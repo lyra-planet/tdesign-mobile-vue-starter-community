@@ -13,11 +13,6 @@ export interface FormData {
   photos: any[]
 }
 
-export interface GenderOption {
-  label: string
-  value: string
-}
-
 export interface FormVisible {
   birthday: boolean
   address: boolean

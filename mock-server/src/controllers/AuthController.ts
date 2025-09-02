@@ -64,4 +64,23 @@ export class AuthController {
       sendResponse(res, 401, result.message)
     }
   }
+
+  // 更新用户信息
+  static updateUserInfo(req: Request, res: Response): void {
+    const authHeader = req.headers.authorization
+    if (!authHeader) {
+      return sendResponse(res, 401, '未提供认证信息')
+    }
+
+    const token = authHeader.split(' ')[1]
+    const updateData = req.body
+    const result = AuthService.updateUserInfo(token, updateData)
+
+    if (result.success) {
+      sendResponse(res, 200, result.message, result.data)
+    }
+    else {
+      sendResponse(res, 400, result.message)
+    }
+  }
 }

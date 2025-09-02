@@ -20,6 +20,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      lcn:
+        specifier: ^7.2.0
+        version: 7.2.0
       phone:
         specifier: ^3.1.67
         version: 3.1.67
@@ -2932,6 +2935,9 @@ packages:
 
   launch-ide@1.0.8:
     resolution: {integrity: sha512-DD0bSMGCx3R94zHR//ZynWpjkcimnAhbAae8frLJQJ5gK37wX/ZpLOU9Hw4cF6VklQVA7ZplcHKzJSDzq3YmIw==}
+
+  lcn@7.2.0:
+    resolution: {integrity: sha512-ZMnWMiKHjbOEaO5NXp66xx1CXb77zVTjoESM8FtglZ7lwMH3IN3mETaOd9dFOR3okiRztIO9ZnO5GIF/rTyqYg==}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -7538,6 +7544,10 @@ snapshots:
     dependencies:
       chalk: 4.1.1
       dotenv: 16.6.1
+
+  lcn@7.2.0:
+    dependencies:
+      tslib: 2.8.1
 
   levn@0.4.1:
     dependencies:
