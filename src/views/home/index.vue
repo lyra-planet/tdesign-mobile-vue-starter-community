@@ -113,7 +113,7 @@ function handleScrolltolower() {
 function showMessage(theme: string, content = '这是一条普通通知信息', duration = 2000) {
   if (Message[theme]) {
     Message[theme]({
-      offset: [154, 16],
+      offset: [108, 16],
       content,
       duration,
       icon: true,
