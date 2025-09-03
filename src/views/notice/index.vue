@@ -83,7 +83,7 @@ function handleSendMessage() {
     <div class="input-area">
       <div class="input-wrapper flex items-center ">
         <input v-model="message" :placeholder="t('pages.notice.input_placeholder')" class="msg-input w-full" :borderless="false">
-        <t-button size="medium" theme="primary" shape="round" class="send-btn" @click="handleSendMessage()">
+        <t-button size="medium" theme="primary" shape="round" class="send-btn" :disabled="message.trim() === ''" @click="handleSendMessage()">
           {{ t('pages.notice.send') }}
         </t-button>
       </div>
@@ -205,7 +205,7 @@ function handleSendMessage() {
   background: var(--td-bg-color-container);
   border-top: 1px solid var(--td-border-level-2-color);
   position: fixed;
-  bottom: 24px;
+  bottom: 0;
   left: 0;
   right: 0;
   padding-top: 5px;
@@ -219,6 +219,11 @@ function handleSendMessage() {
 .msg-input {
   background-color: var(--td-bg-color-component);
   margin: 12px;
+  width: 100%;
+  height: 40px;
+  border-radius: 99px;
+  border: 1px solid #dcdcdc;
+  background: #f3f3f3;
   font-size: 14px;
   color: var(--td-text-color-primary);
   padding: 8px 16px;
@@ -231,7 +236,10 @@ function handleSendMessage() {
   }
 }
 .send-btn {
+  width: 64px;
   height: 40px;
+  margin: 12px 12px 12px 0;
+  border-radius: 100px;
 }
 
 .current-chat-info {
