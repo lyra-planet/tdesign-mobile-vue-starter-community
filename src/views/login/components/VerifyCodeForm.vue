@@ -92,7 +92,7 @@ async function handleVerify() {
   }
   catch (error) {
     console.error(error)
-    errorMessage.value = t('pages.login.network_error')
+    errorMessage.value = t('pages.login.login')
   }
   finally {
     isLoading.value = false

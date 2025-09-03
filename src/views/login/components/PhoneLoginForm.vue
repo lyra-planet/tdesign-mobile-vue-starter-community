@@ -156,7 +156,7 @@ async function handleNext() {
       class="login-button auth-primary-button"
       @click="handleNext"
     >
-      {{ t('pages.login.verify_login') }}
+      {{ t('pages.login.verify_and_login') }}
     </t-button>
   </FormContainer>
 </template>

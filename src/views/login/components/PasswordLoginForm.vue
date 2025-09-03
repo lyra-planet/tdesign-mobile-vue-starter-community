@@ -105,7 +105,7 @@ async function handleLogin() {
     <div class="forgot-password auth-flex-center">
       <span class="forgot-text">{{ t('pages.login.forgot_password') }}</span>
       <span class="recovery-button">
-        {{ t('pages.login.recover_password') }}
+        {{ t('pages.login.login') }}
       </span>
     </div>
   </FormContainer>

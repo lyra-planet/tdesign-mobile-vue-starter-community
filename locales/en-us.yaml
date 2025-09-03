@@ -1,7 +1,3 @@
-global:
-  title: Hello, Tencent Open Source!
-  app_name: TDesign Mobile Vue
-
 # Page translations
 pages:
   home:
@@ -28,21 +24,10 @@ pages:
       travel_with_kids: Essential items for summer travel with children
       chinese_cars: Why are Chinese cars selling better overseas?
       hr_question: How to answer when HR asks about your reason for leaving
-    content:
-      card_title_1: Youth, Starry Sky and Dreams
-      card_title_2: Girl Looking up at the Stars
-      new_card_prefix: New Card
-      tags:
-        ai_art: AI
-        copyright_material: Licensed
-        new_content: New
-      refresh:
-        pull_down: Pull to refresh
-        release: Release to refresh
-        refreshing: Refreshing
-        completed: Refresh completed
   login:
     title: User Login
+    login: Login
+    verify_and_login: Verify and log in
     phone_placeholder: Enter phone number
     password_placeholder: Enter password
     welcome: Welcome to TDesign
@@ -56,7 +41,6 @@ pages:
     password: Password
     account_placeholder: Phone number/Email
     forgot_password: Forgot password?
-    recover_password: Recover
     enter_code: Enter verification code
     code_sent: Code sent to {phone}
     code_placeholder: Enter code
