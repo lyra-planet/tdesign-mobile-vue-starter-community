@@ -41,6 +41,11 @@ const router = createRouter({
           name: 'MySettings',
           component: () => import('@/views/my/settings.vue'),
         },
+        {
+          path: 'datacenter',
+          name: 'DataCenter',
+          component: () => import('@/views/datacenter/index.vue'),
+        },
       ],
     },
     // 不需要布局的页面

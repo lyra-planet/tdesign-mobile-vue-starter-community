@@ -139,6 +139,9 @@ function getPageTitle() {
   if (path === '/my/settings') {
     return '设置'
   }
+  if (path === '/datacenter') {
+    return '数据中心'
+  }
   return '首页'
 }
 
@@ -171,7 +174,7 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
     <div class="page-header">
       <div class="header-left">
         <!-- 发布页面、对话页面和设置页面显示返回按钮，其他页面显示view-list图标 -->
-        <TIcon v-if="route.path === '/publish' || route.path.startsWith('/notice') || route.path === '/my/settings'" name="chevron-left" size="24" color="#000000e6" @click="router.back()" />
+        <TIcon v-if="route.path === '/publish' || route.path.startsWith('/notice') || route.path === '/my/settings' || route.path === '/datacenter'" name="chevron-left" size="24" color="#000000e6" @click="router.back()" />
         <TIcon v-else name="view-list" size="24" color="#000000e6" />
         <!-- 首页显示搜索框，其他页面显示标题 -->
         <t-search v-if="route.path === '/home'" class="navbar-search h-[32px] ml-[10px]" placeholder="请搜索你想要的内容" shape="round">
@@ -198,7 +201,7 @@ const { locale, layoutStore, localeState, localeOptions, t, add, onConfirm } = u
     </div>
 
     <!-- 底部导航栏 -->
-    <div v-if="!route.path.includes('/my/settings') && !route.path.startsWith('/notice')" class="bottom-navigation">
+    <div v-if="!route.path.includes('/my/settings') && !route.path.startsWith('/notice') && route.path !== '/datacenter'" class="bottom-navigation">
       <div class="tab-bar">
         <div
           v-for="tab in tabList" :key="tab.value" class="tab-item" :class="{ active: activeTab === tab.value }"

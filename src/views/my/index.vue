@@ -42,10 +42,10 @@ const services = ref([
 
 // 数据中心服务
 const dataServices = ref([
-  { name: '数据中心', icon: '/my/default.svg' },
-  { name: '数据中心', icon: '/my/default.svg' },
-  { name: '数据中心', icon: '/my/default.svg' },
-  { name: '数据中心', icon: '/my/default.svg' },
+  { name: '数据中心', icon: '/my/default.svg', path: '/datacenter' },
+  { name: '数据中心', icon: '/my/default.svg', path: '/datacenter' },
+  { name: '数据中心', icon: '/my/default.svg', path: '/datacenter' },
+  { name: '数据中心', icon: '/my/default.svg', path: '/datacenter' },
 ])
 
 // 处理登录
@@ -77,6 +77,11 @@ function handleSettings() {
 // 处理服务点击
 function handleServiceClick(service: any) {
   console.log('点击服务:', service.name)
+
+  // 如果是数据中心服务，跳转到数据中心页面
+  if (service.name === '数据中心' && service.path) {
+    router.push(service.path)
+  }
 }
 </script>
 
