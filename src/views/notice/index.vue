@@ -69,7 +69,7 @@ function handleSendMessage() {
           <t-avatar size="40px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
         </div>
         <div v-if="item.tag === 'other'" class="msg-row left">
-          <t-avatar size="32px" :image="current.picture" />
+          <t-avatar size="40px" :image="current.picture" />
           <div class="msg-bubble other">
             {{ item.value }}
           </div>
