@@ -2,11 +2,13 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { talklist } from '../store/talklist'
+import { useUserStore } from '../store/user'
 
 export function useNavigation() {
   const { t } = useI18n()
   const router = useRouter()
   const route = useRoute()
+  const userStore = useUserStore()
   const activeTab = ref('home')
 
   // 页面标题映射
@@ -53,7 +55,7 @@ export function useNavigation() {
     },
     {
       title: '个人中心页（未登录）',
-      path: '/login/phone',
+      path: '/my',
     },
     {
       title: '个人信息表单页',
@@ -149,7 +151,6 @@ export function useNavigation() {
     }
   }
 
-  // 跳转到搜索页面
   function changeToSearch() {
     router.push('/home/search')
   }
@@ -158,9 +159,51 @@ export function useNavigation() {
   function handleSidebarItemClick(index: number, item: any, context: { e: MouseEvent }) {
     console.log('itemclick: ', index, item, context)
     if (item.path) {
-      console.log('路由跳转到: ', item.path)
+      if (item.title === '个人中心页（已登录）') {
+        simulateLogin()
+      }
+      else if (item.title === '个人中心页（未登录）') {
+        simulateLogout()
+      }
+
       router.push(item.path)
     }
+  }
+
+  // 模拟登录状态（用于UI预览）
+  function simulateLogin() {
+    // 设置一个模拟的token和用户信息
+    userStore.setToken('mock-token-for-preview')
+    userStore.setUserInfo({
+      id: '1',
+      name: '小小轩',
+      phone: '13800138000',
+      avatar: '',
+      gender: 'male',
+      birthday: '1990-01-01',
+      address: '北京市朝阳区',
+      bio: '这是一个用于UI预览的模拟用户',
+      photos: [],
+      constellation: '天秤座',
+      location: '深圳',
+    })
+  }
+
+  // 模拟退出登录状态（用于UI预览）
+  function simulateLogout() {
+    userStore.clearUser()
+  }
+
+  // 快速切换到已登录状态并跳转到个人中心
+  function switchToLoggedInView() {
+    simulateLogin()
+    router.push('/my')
+  }
+
+  // 快速切换到未登录状态并跳转到个人中心页查看未登录UI
+  function switchToLoggedOutView() {
+    simulateLogout()
+    router.push('/my')
   }
 
   // 监听路由变化更新激活状态
@@ -173,10 +216,16 @@ export function useNavigation() {
     tabList,
     baseSidebar,
     messageSum,
+    isLoggedIn: userStore.isLoggedIn,
+    userInfo: userStore.userInfo,
     getPageTitle,
     getActiveTabByPath,
     handleTabChange,
     changeToSearch,
     handleSidebarItemClick,
+    simulateLogin,
+    simulateLogout,
+    switchToLoggedInView,
+    switchToLoggedOutView,
   }
 }

@@ -85,7 +85,6 @@ function handleSettingClick(setting: any) {
 
 <style lang='scss' scoped>
 .settings-page {
-  min-height: 100vh;
   background-color: var(--td-bg-color-page);
   padding-bottom: 20px;
 }

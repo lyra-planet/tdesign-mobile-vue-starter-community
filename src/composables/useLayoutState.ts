@@ -18,9 +18,9 @@ export function useLayoutState() {
   // 是否显示底部导航
   const showBottomNav = computed(() => {
     const path = route.path
-    return !path.includes('/my/settings')
-      && !path.startsWith('/notice')
-      && !path.startsWith('/login')
+    return path.includes('/home')
+      || path.startsWith('/my')
+      || path.startsWith('/talklist')
   })
 
   // 是否显示标题

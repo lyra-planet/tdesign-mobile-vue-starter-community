@@ -184,7 +184,6 @@ function handleMenuClick(item: any) {
 
 <style lang='scss' scoped>
 .my-page {
-  min-height: 100vh;
   padding-bottom: 62px;
   color: var(--td-text-color-primary);
 }

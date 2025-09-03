@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { Icon as TIcon } from 'tdesign-icons-vue-next'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
 defineOptions({
   name: 'DataCenter',
 })
-
-const router = useRouter()
 
 // 按区域统计数据
 const regionData = ref([
@@ -35,15 +31,15 @@ const regionColumns = [
 
 // 表格事件处理
 function handleRowClick(e: any) {
-  console.log('[row-click]', e)
+  console.warn('[row-click]', e)
 }
 
 function handleCellClick(e: any) {
-  console.log('[cell-click]', e)
+  console.warn('[cell-click]', e)
 }
 
 function handleScroll(e: any) {
-  console.log('[scroll]', e)
+  console.warn('[scroll]', e)
 }
 </script>
 
@@ -222,7 +218,6 @@ function handleScroll(e: any) {
 <style lang="scss" scoped>
 .datacenter-container {
   background-color: #f5f5f5;
-  min-height: 100vh;
 }
 
 .overview-section {

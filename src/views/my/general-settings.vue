@@ -51,7 +51,6 @@ function handleLanguageChange(value: boolean) {
 
 <style lang='scss' scoped>
 .general-settings-page {
-  min-height: 100vh;
   background-color: var(--td-bg-color-page);
   padding-bottom: 20px;
 }

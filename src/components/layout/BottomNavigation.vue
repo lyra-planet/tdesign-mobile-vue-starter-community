@@ -73,6 +73,8 @@ defineEmits<{
       background-color: transparent;
       padding: 0 47.17px;
       min-width: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
 
       &.active {
         background-color: var(--td-brand-color-1);
