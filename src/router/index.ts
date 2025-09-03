@@ -90,6 +90,11 @@ const router = createRouter({
             title: '验证码登录',
           },
         },
+        {
+          path: 'datacenter',
+          name: 'DataCenter',
+          component: () => import('@/views/datacenter/index.vue'),
+        },
       ],
     },
     // 不需要布局的页面

@@ -100,6 +100,7 @@ const menuItems = computed(() => [
   },
 ])
 
+// 处理登录
 function handleLogin() {
   if (!isLoggedIn) {
     router.push('/login')
@@ -123,6 +124,11 @@ function handleSettings() {
 
 function handleServiceClick(service: any) {
   console.warn('点击服务:', service.name)
+
+  // 如果是数据中心服务，跳转到数据中心页面
+  if (service.name === t('pages.my.services.data_center')) {
+    router.push('/datacenter')
+  }
 }
 
 function handleStatClick(stat: any, index: number) {
