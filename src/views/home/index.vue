@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { HomeItem } from '@/api/home'
 import { Message } from 'tdesign-mobile-vue'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import HomeSwiperImageSrc from '@/assets/images/HomeSwiper.png'
+import { getHomeContent, refreshHomeContent } from '@/api/home'
 import HomeCard from '@/components/home/HomeCard.vue'
 import HomeFab from '@/components/home/HomeFab.vue'
 import HomeSwiper from '@/components/home/HomeSwiper.vue'
@@ -14,100 +15,84 @@ defineOptions({ name: 'Home' })
 const { t } = useI18n()
 
 const refreshing = ref(false)
+const loading = ref(false)
+const homeItems = ref<HomeItem[]>([])
+const currentPage = ref(1)
+const hasMore = ref(true)
 
-// 数据类型
-interface HomeItem {
-  type: 'card' | 'swiper'
-  id: number
-  title?: string
-  image?: string
-  images?: string[]
-  tags?: { label: string, theme: 'primary' | 'success' | 'default' | 'danger' | 'warning' }[]
+// 加载首页内容
+async function loadHomeContent(page = 1, isRefresh = false) {
+  try {
+    if (!isRefresh)
+      loading.value = true
+
+    const response = await getHomeContent({ page, limit: 10 })
+
+    if (response.success) {
+      if (isRefresh || page === 1) {
+        homeItems.value = response.data.items
+      }
+      else {
+        homeItems.value.push(...response.data.items)
+      }
+
+      if (response.data.pagination) {
+        hasMore.value = response.data.pagination.hasMore
+        currentPage.value = response.data.pagination.page
+      }
+    }
+    else {
+      Message.error(response.message || '获取内容失败')
+    }
+  }
+  catch (error) {
+    console.error('加载首页内容失败:', error)
+    Message.error('加载内容失败，请重试')
+  }
+  finally {
+    loading.value = false
+    if (isRefresh)
+      refreshing.value = false
+  }
 }
 
-// 示例数据
-const homeItems = ref<HomeItem[]>([
-  {
-    type: 'card',
-    id: 1,
-    title: t('pages.home.content.card_title_1'),
-    image: '/src/assets/images/HomeCard.png',
-    tags: [
-      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
-      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
-    ],
-  },
-  {
-    type: 'swiper',
-    id: 2,
-    images: [
-      HomeSwiperImageSrc,
-      HomeSwiperImageSrc,
-      HomeSwiperImageSrc,
-      HomeSwiperImageSrc,
-      HomeSwiperImageSrc,
-    ],
-  },
-  {
-    type: 'card',
-    id: 3,
-    title: t('pages.home.content.card_title_2'),
-    image: '/src/assets/images/HomeCard.png',
-    tags: [
-      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
-      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
-    ],
-  },
-  {
-    type: 'card',
-    id: 4,
-    title: t('pages.home.content.card_title_1'),
-    image: '/src/assets/images/HomeCard.png',
-    tags: [
-      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
-      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
-    ],
-  },
-  {
-    type: 'card',
-    id: 5,
-    title: t('pages.home.content.card_title_1'),
-    image: '/src/assets/images/HomeCard.png',
-    tags: [
-      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
-      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
-    ],
-  },
-  {
-    type: 'card',
-    id: 6,
-    title: t('pages.home.content.card_title_1'),
-    image: '/src/assets/images/HomeCard.png',
-    tags: [
-      { label: t('pages.home.content.tags.ai_art'), theme: 'primary' },
-      { label: t('pages.home.content.tags.copyright_material'), theme: 'success' },
-    ],
-  },
-])
+// 刷新首页内容
+async function handleRefreshContent() {
+  try {
+    refreshing.value = true
+    const response = await refreshHomeContent()
+
+    if (response.success) {
+      homeItems.value = response.data.items
+      Message.success('刷新成功')
+    }
+    else {
+      Message.error(response.message || '刷新失败')
+    }
+  }
+  catch (error) {
+    console.error('刷新首页内容失败:', error)
+    Message.error('刷新失败，请重试')
+  }
+  finally {
+    refreshing.value = false
+  }
+}
+
+// 组件挂载时加载数据
+onMounted(() => {
+  loadHomeContent()
+})
 
 function handleRefresh() {
-  refreshing.value = true
-  // 模拟刷新完成并新增数据
-  setTimeout(() => {
-    const nextId = homeItems.value.length + 1
-    homeItems.value.push({
-      type: 'card',
-      id: nextId,
-      title: `${t('pages.home.content.new_card_prefix')} ${nextId}`,
-      image: '/src/assets/images/HomeCard.png',
-      tags: [{ label: t('pages.home.content.tags.new_content'), theme: 'success' }],
-    })
-    refreshing.value = false
-  }, 1200)
+  handleRefreshContent()
 }
 
 function handleScrolltolower() {
-  console.log('触底，可以加载更多数据')
+  // 加载更多数据
+  if (hasMore.value && !loading.value) {
+    loadHomeContent(currentPage.value + 1)
+  }
 }
 
 function showMessage(theme: string, content = '这是一条普通通知信息', duration = 2000) {

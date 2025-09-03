@@ -244,6 +244,257 @@ npm start
 - 手机号: `8613812345678`, 密码: `123456`, 用户名: `企鹅一号`
 - 手机号: `8613987654321`, 密码: `123456`, 用户名: `企鹅二号`
 
+### 首页相关
+
+#### 1. 获取首页内容
+
+- **URL**: `GET /api/home/content`
+- **参数**:
+  - `page` (可选): 页码，默认为1
+  - `limit` (可选): 每页条数，默认为10
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "获取首页内容成功",
+    "data": {
+      "items": [
+        {
+          "type": "card",
+          "id": 1,
+          "title": "人工智能艺术作品展示",
+          "image": "https://example.com/image.png",
+          "tags": [
+            { "label": "AI艺术", "theme": "primary" },
+            { "label": "版权素材", "theme": "success" }
+          ]
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 10,
+        "total": 6,
+        "totalPages": 1,
+        "hasMore": false
+      }
+    },
+    "success": true
+  }
+  ```
+
+#### 2. 获取内容详情
+
+- **URL**: `GET /api/home/content/:id`
+- **参数**: URL 参数 `id` - 内容ID
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "获取内容详情成功",
+    "data": {
+      "type": "card",
+      "id": 1,
+      "title": "人工智能艺术作品展示",
+      "image": "https://example.com/image.png",
+      "tags": [
+        { "label": "AI艺术", "theme": "primary" }
+      ]
+    },
+    "success": true
+  }
+  ```
+
+#### 3. 刷新首页内容
+
+- **URL**: `POST /api/home/refresh`
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "刷新成功",
+    "data": {
+      "items": [
+        {
+          "type": "card",
+          "id": 1,
+          "title": "人工智能艺术作品展示",
+          "image": "https://example.com/image.png",
+          "tags": [
+            { "label": "AI艺术", "theme": "primary" }
+          ]
+        }
+      ],
+      "refreshTime": "2024-01-01T00:00:00.000Z"
+    },
+    "success": true
+  }
+  ```
+
+### 数据中心相关
+
+#### 1. 获取数据中心统计数据
+
+- **URL**: `GET /api/datacenter/stats`
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "获取数据中心统计数据成功",
+    "data": {
+      "regionData": [
+        {
+          "index": 1,
+          "title": "视频A",
+          "global": "156",
+          "northChina": "89",
+          "eastChina": "134",
+          "westChina": "67",
+          "southChina": "123"
+        }
+      ],
+      "regionColumns": [
+        {
+          "colKey": "title",
+          "title": "视频",
+          "fixed": "left",
+          "width": "80px"
+        }
+      ]
+    },
+    "success": true
+  }
+  ```
+
+#### 2. 获取视频详情
+
+- **URL**: `GET /api/datacenter/video/:id`
+- **参数**: URL 参数 `id` - 视频索引
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "获取视频详情成功",
+    "data": {
+      "index": 1,
+      "title": "视频A",
+      "global": "156",
+      "northChina": "89",
+      "eastChina": "134",
+      "westChina": "67",
+      "southChina": "123"
+    },
+    "success": true
+  }
+  ```
+
+### 个人页面相关
+
+#### 1. 获取个人服务数据
+
+- **URL**: `GET /api/profile/services`
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "获取个人服务数据成功",
+    "data": {
+      "serviceGroups": [
+        [
+          {
+            "name": "微信",
+            "icon": "/my/wechat.svg",
+            "type": "external",
+            "url": "weixin://"
+          }
+        ]
+      ],
+      "menuItems": [
+        {
+          "name": "联系客服",
+          "icon": "service",
+          "type": "internal"
+        }
+      ]
+    },
+    "success": true
+  }
+  ```
+
+#### 2. 获取用户统计数据
+
+- **URL**: `GET /api/profile/stats`
+- **参数**:
+  - `userId` (可选): 用户ID
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "获取用户统计数据成功",
+    "data": {
+      "stats": [
+        {
+          "label": "全部",
+          "icon": "form",
+          "count": 12,
+          "key": "all_posts"
+        }
+      ]
+    },
+    "success": true
+  }
+  ```
+
+#### 3. 更新用户统计数据
+
+- **URL**: `POST /api/profile/stats`
+- **参数**:
+  ```json
+  {
+    "statKey": "all_posts",
+    "increment": 1
+  }
+  ```
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "更新统计数据成功",
+    "data": {
+      "stat": {
+        "label": "全部",
+        "icon": "form",
+        "count": 13,
+        "key": "all_posts"
+      }
+    },
+    "success": true
+  }
+  ```
+
+#### 4. 记录服务点击
+
+- **URL**: `POST /api/profile/service-click`
+- **参数**:
+  ```json
+  {
+    "serviceName": "微信",
+    "serviceType": "external"
+  }
+  ```
+- **响应**:
+  ```json
+  {
+    "code": 200,
+    "message": "服务点击记录成功",
+    "data": {
+      "serviceName": "微信",
+      "serviceType": "external",
+      "timestamp": "2024-01-01T00:00:00.000Z"
+    },
+    "success": true
+  }
+  ```
+
 ## 测试数据
 
 ### 聊天列表
@@ -251,3 +502,19 @@ npm start
 - Pite (id: 1) - 4条未读消息
 - Bob (id: 2) - 2条未读消息
 - Alice (id: 3) - 6条未读消息
+
+### 数据中心
+
+- 10个视频统计记录（视频A-J）
+- 支持按区域查看（全球、华北、华东、华西、华南）
+
+### 首页内容
+
+- 6个内容项（卡片和轮播图）
+- 支持分页和刷新功能
+
+### 个人页面
+
+- 4个统计项（全部、待审核、已发布、草稿箱）
+- 8个服务项（微信、QQ、TDoc、TMap、数据中心等）
+- 2个菜单项（联系客服、设置）

@@ -1,2 +1,5 @@
 export * from './chats'
+export * from './datacenter'
+export * from './home'
+export * from './profile'
 export * from './users'

@@ -1,3 +1,6 @@
 export * from './Auth'
 export * from './Chat'
+export * from './DataCenter'
+export * from './Home'
+export * from './Profile'
 export * from './User'

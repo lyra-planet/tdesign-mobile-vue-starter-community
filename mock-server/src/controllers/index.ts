@@ -1,2 +1,5 @@
 export * from './AuthController'
 export * from './ChatController'
+export * from './DataCenterController'
+export * from './HomeController'
+export * from './ProfileController'
