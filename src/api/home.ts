@@ -1,5 +1,5 @@
 import type { ApiResponse } from './types'
-import { request } from './request'
+import { get, post } from '@/api/request'
 
 // 首页相关的API接口
 
@@ -38,15 +38,15 @@ export function getHomeContent(params?: {
   page?: number
   limit?: number
 }): Promise<ApiResponse<HomeContentResponse>> {
-  return request.get('/api/home/content', { params })
+  return get('/home/content', params)
 }
 
 // 获取指定内容详情
 export function getContentDetail(id: number): Promise<ApiResponse<HomeItem>> {
-  return request.get(`/api/home/content/${id}`)
+  return get(`/home/content/${id}`)
 }
 
 // 刷新首页内容
 export function refreshHomeContent(): Promise<ApiResponse<HomeRefreshResponse>> {
-  return request.post('/api/home/refresh')
+  return post('/home/refresh')
 }

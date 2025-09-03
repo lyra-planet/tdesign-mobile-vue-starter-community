@@ -1,5 +1,5 @@
 import type { ApiResponse } from './types'
-import { request } from './request'
+import { get, post } from '@/api/request'
 
 // 个人页面相关的API接口
 
@@ -35,14 +35,13 @@ export interface UserStatsResponse {
 
 // 获取个人页面服务数据
 export function getProfileServices(): Promise<ApiResponse<ProfileServiceResponse>> {
-  return request.get('/api/profile/services')
+  return get('/profile/services')
 }
 
 // 获取用户统计数据
 export function getUserStats(userId?: string): Promise<ApiResponse<UserStatsResponse>> {
-  return request.get('/api/profile/stats', {
-    params: userId ? { userId } : undefined,
-  })
+  const params = userId ? { userId } : undefined
+  return get('/profile/stats', params)
 }
 
 // 更新用户统计数据
@@ -50,7 +49,7 @@ export function updateUserStats(data: {
   statKey: string
   increment?: number
 }): Promise<ApiResponse<{ stat: StatItem }>> {
-  return request.post('/api/profile/stats', data)
+  return post('/profile/stats', data)
 }
 
 // 记录服务点击
@@ -62,5 +61,5 @@ export function trackServiceClick(data: {
   serviceType: string
   timestamp: string
 }>> {
-  return request.post('/api/profile/service-click', data)
+  return post('/profile/service-click', data)
 }

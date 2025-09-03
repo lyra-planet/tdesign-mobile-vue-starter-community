@@ -1,58 +1,82 @@
 import type { UserInfo } from '@/api/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { httpClient } from '@/api/request'
+import { STORAGE_KEYS } from '@/config/constants'
+import { getPersistConfig } from './index'
 
 export const useUserStore = defineStore('user', () => {
-  const token = ref<string | null>(null)
+  // 状态
+  const token = ref<string>('')
   const userInfo = ref<UserInfo | null>(null)
-  const isLoggedIn = computed(() => !!token.value)
 
-  // 设置token
+  // 计算属性
+  const isLoggedIn = computed(() => !!token.value)
+  const userName = computed(() => userInfo.value?.name || '')
+  const userAvatar = computed(() => userInfo.value?.avatar || '')
+  const userId = computed(() => userInfo.value?.id || '')
+
+  // Actions
   const setToken = (newToken: string) => {
     token.value = newToken
-    httpClient.setAuthToken(newToken)
   }
 
-  // 设置用户信息
   const setUserInfo = (info: UserInfo) => {
     userInfo.value = info
   }
 
-  // 清除用户数据
-  const clearUser = () => {
-    token.value = null
-    userInfo.value = null
-    httpClient.clearAuthToken()
-  }
-
-  // 初始化用户数据
-  const initUser = () => {
-    if (token.value) {
-      httpClient.setAuthToken(token.value)
+  const fetchUserInfo = async () => {
+    try {
+      // 假设token有效，直接返回成功
+      return true
+    }
+    catch (error) {
+      console.error('获取用户信息失败:', error)
+      return false
     }
   }
 
-  // 登录成功后的处理
-  const handleLoginSuccess = (loginToken: string, user: UserInfo) => {
-    setToken(loginToken)
+  const resetUserState = () => {
+    token.value = ''
+    userInfo.value = null
+  }
+
+  const initUserData = async () => {
+    if (token.value) {
+      const success = await fetchUserInfo()
+      if (!success) {
+        resetUserState()
+      }
+    }
+  }
+
+  const handleLoginSuccess = (newToken: string, user: UserInfo) => {
+    setToken(newToken)
     setUserInfo(user)
+    return { success: true }
   }
 
   return {
+    // 状态
     token,
     userInfo,
+
+    // 计算属性
     isLoggedIn,
+    userName,
+    userAvatar,
+    userId,
+
+    // Actions
     setToken,
     setUserInfo,
-    clearUser,
-    initUser,
+    fetchUserInfo,
+    resetUserState,
+    initUserData,
     handleLoginSuccess,
   }
 }, {
   persist: {
-    key: 'user-store',
-    storage: localStorage,
+    ...getPersistConfig(STORAGE_KEYS.USER_INFO),
     pick: ['token', 'userInfo'],
   },
 })

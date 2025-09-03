@@ -53,7 +53,7 @@ function openDrawer() {
 <template>
   <t-drawer
     v-model:visible="visible" style="--td-drawer-title-font-size:24px;--td-drawer-sidebar-height:90vh;"
-    class="drawer-c" placement="left" title="页面目录" :items="baseSidebar" @item-click="itemClick"
+    class="drawer-c" placement="left" :title="t('common.navigation.page_directory')" :items="baseSidebar" @item-click="itemClick"
   />
   <div class="layout-container" :class="{ 'login-layout': isLoginPage, 'show-background': isMyPage }">
     <!-- 页面标题栏 -->

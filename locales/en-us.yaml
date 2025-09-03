@@ -7,9 +7,27 @@ pages:
   home:
     title: Home
     welcome: Welcome back
+    search: Search
     tabs:
       recommended: Recommended
       following: Following
+  search:
+    cancel: Cancel
+    history: History
+    tags:
+      ai_art: AI Art
+      stable_diffusion: Stable Diffusion
+      copyright_material: Licensed Material
+      starry_sky: Starry Sky
+      illustration: Illustration
+    discoveries:
+      title: Discoveries
+      exam_advice: How to choose between graduate school and civil service exams?
+      protein_choice: How to choose quality protein in your daily diet
+      online_shopping: Have you successfully defended your rights when shopping online?
+      travel_with_kids: Essential items for summer travel with children
+      chinese_cars: Why are Chinese cars selling better overseas?
+      hr_question: How to answer when HR asks about your reason for leaving
     content:
       card_title_1: Youth, Starry Sky and Dreams
       card_title_2: Girl Looking up at the Stars
@@ -28,11 +46,25 @@ pages:
     phone_placeholder: Enter phone number
     password_placeholder: Enter password
     welcome: Welcome to TDesign
-    verify_login: Verify and Login
-    register_hint: Unregistered phone numbers will be automatically registered after verification
+    verify_login: Login Page (Verification)
+    password_login: Login Page (Password)
+    register_hint: New numbers register on verify
     phone_format_error: Please enter a valid phone number format
     send_code_failed: Failed to send verification code, please try again later
     network_error: Network connection error, please check your network and try again
+    account: Account
+    password: Password
+    account_placeholder: Phone number/Email
+    forgot_password: Forgot password?
+    recover_password: Recover
+    enter_code: Enter verification code
+    code_sent: Code sent to {phone}
+    code_placeholder: Enter code
+    resend_countdown: "Resend in {seconds}s"
+    agreement_text: Agree to Terms & Conditions
+    other_methods: Other Options
+    verify_code_login: Verification Code
+    password_code_login: Password Login
   my:
     title: My Profile
     settings: Settings
@@ -42,6 +74,9 @@ pages:
     general_settings:
       title: General Settings
       language: Language
+    profile_info: Profile Form Page
+    logged_in_page: Profile Page (Logged In)
+    logged_out_page: Profile Page (Logged Out)
     settings_page:
       notifications: Notifications
       dark_mode: Dark Mode
@@ -70,7 +105,7 @@ pages:
       tmap: Tencent Map
       data_center: Data Center
   publish:
-    title: Create Post
+    title: Publish Page
     save_draft: Save Draft
     publish_action: Publish
     location: Location
@@ -83,12 +118,13 @@ pages:
       original: "#Orig"
       style_inspiration: "#Insp"
   notice:
-    title: Message Details
+    title: Chat Page
     today_time: Today 10:00
     input_placeholder: Type a message...
     send: Send
+    notification: Notification
   talklist:
-    title: All Messages
+    title: Message List Page
     user_nickname: Username
     message_content: This is a message
   datacenter:
@@ -117,6 +153,7 @@ pages:
         east_china: East
         west_china: West
         south_china: South
+    chart: Data Chart Page
 
 # Common translations
 common:
@@ -140,6 +177,7 @@ common:
     warning: This is a warning that requires user attention
   navigation:
     message: Messages
+    page_directory: Page Directory
   search:
     placeholder: Search for content
   error:

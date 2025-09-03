@@ -1,19 +1,25 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: false,
+  text: '',
+})
+
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean]
+}>()
+
+const { t } = useI18n()
 
 interface Props {
   modelValue?: boolean
   text?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: false,
-  text: '同意《协议条款》',
-})
-
-const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
-}>()
+// 如果没有提供文本，则使用默认的国际化文本
+const agreementText = computed(() => props.text || t('pages.login.agreement_text'))
 
 const agreed = computed({
   get: () => props.modelValue,
@@ -24,7 +30,7 @@ const agreed = computed({
 <template>
   <div class="agreement-section auth-flex-center">
     <t-checkbox v-model="agreed" borderless />
-    <span class="agreement-text">{{ text }}</span>
+    <span class="agreement-text">{{ agreementText }}</span>
   </div>
 </template>
 

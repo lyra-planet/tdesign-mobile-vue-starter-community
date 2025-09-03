@@ -12,69 +12,69 @@ export function useNavigation() {
   const activeTab = ref('home')
 
   // 页面标题映射
-  const PAGE_TITLES: Record<string, () => string> = {
+  const PAGE_TITLES = computed((): Record<string, () => string> => ({
     '/home': () => t('pages.home.title'),
     '/talklist': () => t('pages.talklist.title'),
     '/my': () => t('pages.my.title'),
     '/publish': () => t('pages.publish.title'),
     '/my/settings': () => t('pages.my.settings'),
     '/my/general-settings': () => t('pages.my.general_settings.title'),
-    '/my/edit': () => '个人信息',
-    '/datacenter': () => '数据中心',
-  }
+    '/my/edit': () => t('pages.my.profile_info'),
+    '/datacenter': () => t('pages.datacenter.title'),
+  }))
 
   // 侧边栏配置
-  const baseSidebar = ref([
+  const baseSidebar = computed(() => [
     {
-      title: '首页',
+      title: t('pages.home.title'),
       path: '/home',
     },
     {
-      title: '搜索页',
+      title: t('pages.home.search'),
       path: '/home/search',
     },
     {
-      title: '发布页',
+      title: t('pages.publish.title'),
       path: '/publish',
     },
     {
-      title: '消息列表页',
+      title: t('pages.notice.title'),
       path: '/notice/1',
     },
     {
-      title: '对话页',
+      title: t('pages.talklist.title'),
       path: '/talklist',
     },
     {
-      title: '数据中心',
+      title: t('pages.datacenter.title'),
       path: '/datacenter',
     },
     {
-      title: '个人中心页（已登录）',
+      title: t('pages.my.logged_in_page'),
       path: '/my',
     },
     {
-      title: '个人中心页（未登录）',
+      title: t('pages.my.logged_out_page'),
       path: '/my',
     },
     {
-      title: '个人信息表单页',
+      title: t('pages.my.profile_info'),
       path: '/my/edit',
     },
     {
-      title: '设置页',
+      title: t('pages.my.settings'),
       path: '/my/settings',
     },
     {
-      title: '数据图表页',
+      title: t('pages.datacenter.chart'),
       path: '/chart',
     },
     {
-      title: '登录注册页（验证登录）',
+      title: t('pages.login.verify_login'),
       path: '/login/verify',
     },
     {
-      title: '登录注册页（密码登录）',
+      title: t('pages.login.password_login'),
       path: '/login/password',
     },
   ])
@@ -114,8 +114,8 @@ export function useNavigation() {
     const path = route.path
 
     // 直接匹配
-    if (PAGE_TITLES[path]) {
-      return PAGE_TITLES[path]()
+    if (PAGE_TITLES.value[path]) {
+      return PAGE_TITLES.value[path]()
     }
 
     // 特殊处理 notice 页面
@@ -124,12 +124,12 @@ export function useNavigation() {
       const noticeId = params.id
       if (noticeId) {
         const currentChat = talklist.find(item => item.id === noticeId)
-        return currentChat?.name || '通知'
+        return currentChat?.name || t('pages.notice.notification')
       }
-      return '通知'
+      return t('pages.notice.notification')
     }
 
-    return '首页'
+    return t('pages.home.title')
   }
 
   // 根据路径获取对应的tab
@@ -157,12 +157,11 @@ export function useNavigation() {
 
   // 侧边栏项目点击处理
   function handleSidebarItemClick(index: number, item: any, context: { e: MouseEvent }) {
-    console.log('itemclick: ', index, item, context)
     if (item.path) {
-      if (item.title === '个人中心页（已登录）') {
+      if (item.title === t('pages.my.logged_in_page')) {
         simulateLogin()
       }
-      else if (item.title === '个人中心页（未登录）') {
+      else if (item.title === t('pages.my.logged_out_page')) {
         simulateLogout()
       }
 
@@ -172,7 +171,6 @@ export function useNavigation() {
 
   // 模拟登录状态（用于UI预览）
   function simulateLogin() {
-    // 设置一个模拟的token和用户信息
     userStore.setToken('mock-token-for-preview')
     userStore.setUserInfo({
       id: '1',
@@ -191,7 +189,7 @@ export function useNavigation() {
 
   // 模拟退出登录状态（用于UI预览）
   function simulateLogout() {
-    userStore.clearUser()
+    userStore.resetUserState()
   }
 
   // 快速切换到已登录状态并跳转到个人中心

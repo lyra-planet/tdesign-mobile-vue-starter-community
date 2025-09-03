@@ -37,7 +37,6 @@ initGlobalConfig(app).then(async () => {
 
   // 初始化用户数据
   const userStore = useUserStore()
-  userStore.initUser()
-
+  userStore.initUserData()
   app.mount('#app')
 })

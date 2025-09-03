@@ -24,19 +24,6 @@ function truncateMessage(message, maxLength = 22) {
 </script>
 
 <template>
-  <!-- <div>Ciallo~(∠・ω&lt; )⌒★!</div>
-  <t-row>
-    <t-col span="8" class="dark">
-      first
-    </t-col>
-    <t-col span="8" class="light">
-      second
-    </t-col>
-    <t-col span="8" class="dark">
-      third
-    </t-col>
-  </t-row> -->
-
   <div class="messege h-full" style="background-color: var(--td-bg-color-page);">
     <div class="list-container">
       <t-cell
@@ -55,25 +42,6 @@ function truncateMessage(message, maxLength = 22) {
         </t-badge>
       </t-cell>
     </div>
-
-    <!-- <div class="w-full h-20 bg-white  flex items-center mb-1">
-      <t-avatar size="64px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
-      <t-badge count="8" :offset="[20, 30]" class="flex-auto">
-        <div class="w-full bg-white h-16 flex flex-col justify-center p-0">
-          <span class="text-sm text-gray-600">用户昵称</span>
-          <span class="text-base " style="color:#bababa">这是一条消息内容</span>
-        </div>
-      </t-badge>
-    </div>
-    <div class="w-full h-20 bg-white  flex items-center mb-1">
-      <t-avatar size="64px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
-      <t-badge count="8" :offset="[20, 30]" class="flex-auto">
-        <div class="w-full bg-white h-16 flex flex-col justify-center p-0">
-          <span class="text-sm text-gray-600">用户昵称</span>
-          <span class="text-base " style="color:#bababa">这是一条消息内容</span>
-        </div>
-      </t-badge>
-    </div> -->
   </div>
 </template>
 

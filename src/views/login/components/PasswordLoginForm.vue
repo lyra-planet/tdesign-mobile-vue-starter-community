@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { passwordLogin } from '@/api/auth'
 import { useUserStore } from '@/store/user'
@@ -8,6 +9,7 @@ import FormContainer from './shared/FormContainer.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
+const { t } = useI18n()
 
 const account = ref('')
 const password = ref('')
@@ -51,7 +53,7 @@ async function handleLogin() {
     }
   }
   catch (error) {
-    errorMessage.value = '网络错误，请稍后重试'
+    errorMessage.value = t('pages.login.network_error')
   }
   finally {
     isLoading.value = false
@@ -60,14 +62,14 @@ async function handleLogin() {
 </script>
 
 <template>
-  <FormContainer title="欢迎登录 TDesign" footer-type="verify-login">
+  <FormContainer :title="t('pages.login.welcome')" footer-type="verify-login">
     <!-- 账号输入 -->
     <div class="input-section">
       <div class="input-wrapper auth-input-container">
         <t-input
           v-model="account"
-          label="账号"
-          placeholder="请输入手机号/邮箱"
+          :label="t('pages.login.account')"
+          :placeholder="t('pages.login.account_placeholder')"
           class="account-input"
           borderless
         />
@@ -77,8 +79,8 @@ async function handleLogin() {
         <t-input
           v-model="password"
           type="password"
-          label="密码"
-          placeholder="请输入密码"
+          :label="t('pages.login.password')"
+          :placeholder="t('pages.login.password_placeholder')"
           class="password-input"
           borderless
         />
@@ -93,7 +95,7 @@ async function handleLogin() {
       :loading="isLoading"
       @click="handleLogin"
     >
-      登录
+      {{ t('common.buttons.login') }}
     </t-button>
 
     <!-- 错误信息显示 -->
@@ -101,9 +103,9 @@ async function handleLogin() {
       {{ errorMessage }}
     </div>
     <div class="forgot-password auth-flex-center">
-      <span class="forgot-text">忘记密码？</span>
+      <span class="forgot-text">{{ t('pages.login.forgot_password') }}</span>
       <span class="recovery-button">
-        找回密码
+        {{ t('pages.login.recover_password') }}
       </span>
     </div>
   </FormContainer>

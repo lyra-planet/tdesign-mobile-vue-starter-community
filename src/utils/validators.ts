@@ -1,16 +1,23 @@
-// 验证手机号
+import { REGEXP } from '@/config/constants'
+
+/**
+ * 验证手机号
+ */
 export function validatePhone(phone: string): boolean {
-  const phoneRegex = /^1[3-9]\d{9}$/
-  return phoneRegex.test(phone)
+  return REGEXP.PHONE.test(phone)
 }
 
-// 验证验证码
-export function validateCode(code: string): boolean {
-  const codeRegex = /^\d{6}$/
+/**
+ * 验证验证码
+ */
+export function validateCode(code: string, length: number = 6): boolean {
+  const codeRegex = new RegExp(`^\\d{${length}}$`)
   return codeRegex.test(code)
 }
 
-// 清理手机号输入
+/**
+ * 清理手机号输入（只保留数字）
+ */
 export function cleanPhoneNumber(value: string): string {
   return value.replace(/\D/g, '')
 }

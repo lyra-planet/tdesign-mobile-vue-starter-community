@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 interface Props {
@@ -8,8 +9,13 @@ interface Props {
 
 const props = defineProps<Props>()
 const router = useRouter()
+const { t } = useI18n()
 
-const buttonText = computed(() => props.type === 'phone' ? '密码登录' : '验证码登录')
+const buttonText = computed(() =>
+  props.type === 'phone'
+    ? t('pages.login.password_code_login')
+    : t('pages.login.verify_code_login'),
+)
 const targetRoute = computed(() => props.type === 'phone' ? '/login/password' : '/login/phone')
 
 function handleSwitchLogin() {
@@ -19,7 +25,7 @@ function handleSwitchLogin() {
 
 <template>
   <div class="login-buttons">
-    <span class="other-method">其他方式</span>
+    <span class="other-method">{{ t('pages.login.other_methods') }}</span>
     <t-button
       variant="outline"
       theme="default"

@@ -1,5 +1,5 @@
 import type { ApiResponse, Chat, MarkAsReadResponse, SendMessageRequest, SendMessageResponse } from './types'
-import { get, post, put } from './request'
+import { get, post, put } from '@/api/request'
 
 // 获取聊天列表
 export async function getTalkList(): Promise<ApiResponse<Chat[]>> {

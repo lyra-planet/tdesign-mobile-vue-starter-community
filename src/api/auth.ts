@@ -1,5 +1,5 @@
 import type { UserInfo } from './types'
-import { post, put } from './request'
+import { post, put } from '@/api/request'
 
 // 发送验证码
 export async function sendVerifyCode(params: { phone: string }) {

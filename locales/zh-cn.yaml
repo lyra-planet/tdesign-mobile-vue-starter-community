@@ -7,9 +7,27 @@ pages:
   home:
     title: 首页
     welcome: 欢迎回来
+    search: 搜索页
     tabs:
       recommended: 推荐
       following: 我的关注
+  search:
+    cancel: 取消
+    history: 历史记录
+    tags:
+      ai_art: AI绘画
+      stable_diffusion: Stable Diffusion
+      copyright_material: 版权素材
+      starry_sky: 星空
+      illustration: illustration
+    discoveries:
+      title: 搜索发现
+      exam_advice: 考研考编同时上岸应该怎么选？有哪些参考建议
+      protein_choice: 日常饮食中，如何选择优质蛋白
+      online_shopping: 你有没有网购维权成功的经历？求分享经验
+      travel_with_kids: 夏季带孩子旅游，你的必备物品有哪些
+      chinese_cars: 在海外越卖越贵，中国汽车做对了什么
+      hr_question: 当HR问你离职原因，怎么回答最能被接受
     content:
       card_title_1: 少年,星空与梦想
       card_title_2: 仰望星空的少女
@@ -28,11 +46,25 @@ pages:
     phone_placeholder: 请输入手机号
     password_placeholder: 请输入密码
     welcome: 欢迎登录 TDesign
-    verify_login: 验证并登录
+    verify_login: 登录注册页（验证登录）
+    password_login: 登录注册页（密码登录）
     register_hint: 未注册的手机号验证通过后将自动注册
     phone_format_error: 请输入正确的手机号格式
     send_code_failed: 发送验证码失败，请稍后重试
     network_error: 网络连接异常，请检查网络后重试
+    account: 账号
+    password: 密码
+    account_placeholder: 请输入手机号/邮箱
+    forgot_password: 忘记密码？
+    recover_password: 找回密码
+    enter_code: 请输入验证码
+    code_sent: 验证码已通过短信发送至 {phone}
+    code_placeholder: 请输入验证码
+    resend_countdown: "{seconds}秒后重发"
+    agreement_text: 同意《协议条款》
+    other_methods: 其他方式
+    verify_code_login: 验证码登录
+    password_code_login: 密码登录
   my:
     title: 我的
     settings: 设置
@@ -42,6 +74,9 @@ pages:
     general_settings:
       title: 通用设置
       language: 语言设置
+    profile_info: 个人信息表单页
+    logged_in_page: 个人中心页（已登录）
+    logged_out_page: 个人中心页（未登录）
     settings_page:
       notifications: 通知设置
       dark_mode: 深色模式
@@ -70,7 +105,7 @@ pages:
       tmap: 腾讯地图
       data_center: 数据中心
   publish:
-    title: 发布动态
+    title: 发布页
     save_draft: 存草稿
     publish_action: 发布
     location: 所在位置
@@ -83,12 +118,13 @@ pages:
       original: "#原创"
       style_inspiration: "#风格灵感"
   notice:
-    title: 消息详情
+    title: 对话页
     today_time: 今天 10:00
     input_placeholder: 输入消息...
     send: 发送
+    notification: 通知
   talklist:
-    title: 全部消息
+    title: 消息列表页
     user_nickname: 用户昵称
     message_content: 这是一条消息内容
   datacenter:
@@ -117,6 +153,7 @@ pages:
         east_china: 华东
         west_china: 华西
         south_china: 华南
+    chart: 数据图表页
 
 # 通用翻译
 common:
@@ -140,6 +177,7 @@ common:
     warning: 这是一条需要用户关注到的警示通知
   navigation:
     message: 消息
+    page_directory: 页面目录
   search:
     placeholder: 请搜索你想要的内容
   error:

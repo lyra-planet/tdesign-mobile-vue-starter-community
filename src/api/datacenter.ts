@@ -1,5 +1,5 @@
 import type { ApiResponse } from './types'
-import { request } from './request'
+import { get } from '@/api/request'
 
 // 数据中心相关的API接口
 
@@ -28,10 +28,10 @@ export interface DataCenterResponse {
 
 // 获取数据中心统计数据
 export function getDataCenterStats(): Promise<ApiResponse<DataCenterResponse>> {
-  return request.get('/api/datacenter/stats')
+  return get('/datacenter/stats')
 }
 
 // 获取指定视频详情
 export function getVideoDetail(id: number): Promise<ApiResponse<VideoStatistics>> {
-  return request.get(`/api/datacenter/video/${id}`)
+  return get(`/datacenter/video/${id}`)
 }

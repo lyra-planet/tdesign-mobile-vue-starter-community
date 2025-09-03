@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { sendVerifyCode, verifyCodeLogin } from '@/api/auth'
 import { useUserStore } from '@/store/user'
 import { cleanPhoneNumber, validateCode } from '@/utils/validators'
 import FormContainer from './shared/FormContainer.vue'
+
+const { t } = useI18n()
 
 const router = useRouter()
 const route = useRoute()
@@ -89,7 +92,7 @@ async function handleVerify() {
   }
   catch (error) {
     console.error(error)
-    errorMessage.value = '网络错误，请稍后重试'
+    errorMessage.value = t('pages.login.network_error')
   }
   finally {
     isLoading.value = false
@@ -113,12 +116,12 @@ async function handleResend() {
       startCountdown()
     }
     else {
-      errorMessage.value = result.message || '重发验证码失败，请稍后重试'
+      errorMessage.value = result.message || t('pages.login.send_code_failed')
     }
   }
   catch (error) {
-    console.error('重发验证码失败:', error)
-    errorMessage.value = '网络连接异常，请检查网络后重试'
+    console.error('Failed to resend code:', error)
+    errorMessage.value = t('pages.login.network_error')
   }
 }
 
@@ -145,13 +148,13 @@ onUnmounted(() => {
 
 <template>
   <FormContainer
-    title="请输入验证码"
-    :subtitle="`验证码已通过短信发送至 ${displayPhone}`"
+    :title="t('pages.login.enter_code')"
+    :subtitle="t('pages.login.code_sent', { phone: displayPhone })"
   >
     <div class="verify-section">
       <t-input
         v-model="verifyCode"
-        placeholder="请输入验证码"
+        :placeholder="t('pages.login.code_placeholder')"
         class="auth-input-container"
         maxlength="6"
         :tips="errorMessage"
@@ -168,8 +171,8 @@ onUnmounted(() => {
             >
               {{
                 countdown > 0 && countdown < 60
-                  ? `${countdown}秒后重发`
-                  : "发送验证码"
+                  ? t('pages.login.resend_countdown', { seconds: countdown })
+                  : t('common.buttons.send_code')
               }}
             </div>
           </div>
@@ -185,7 +188,7 @@ onUnmounted(() => {
       :loading="isLoading"
       @click="handleVerify"
     >
-      登录
+      {{ t('common.buttons.login') }}
     </t-button>
   </FormContainer>
 </template>
