@@ -27,6 +27,12 @@ pages:
     title: 用户登录
     phone_placeholder: 请输入手机号
     password_placeholder: 请输入密码
+    welcome: 欢迎登录 TDesign
+    verify_login: 验证并登录
+    register_hint: 未注册的手机号验证通过后将自动注册
+    phone_format_error: 请输入正确的手机号格式
+    send_code_failed: 发送验证码失败，请稍后重试
+    network_error: 网络连接异常，请检查网络后重试
   my:
     title: 我的
     settings: 设置
@@ -43,6 +49,10 @@ pages:
       playback_settings: 播放设置
       account_security: 账号安全
       privacy: 隐私
+    theme:
+      title: 深色模式
+      light: 浅色
+      dark: 深色
     login_register: 请先登录/注册
     nickname: 张三
     constellation: 双子座
@@ -81,6 +91,32 @@ pages:
     title: 全部消息
     user_nickname: 用户昵称
     message_content: 这是一条消息内容
+  datacenter:
+    title: 数据中心
+    overview:
+      title: 整体情况
+      note: 截止12-00累计数值
+      views: 浏览量
+      pv: PV
+      uv: UV
+    interaction:
+      title: 互动情况
+      views: 浏览量
+      likes: 点赞量
+      shares: 分享量
+      favorites: 收藏
+      unit: 次
+    completion:
+      title: 完播率
+    region:
+      title: 按区域统计
+      columns:
+        title: 标题
+        global: 全球
+        north_china: 华北
+        east_china: 华东
+        west_china: 华西
+        south_china: 华南
 
 # 通用翻译
 common:

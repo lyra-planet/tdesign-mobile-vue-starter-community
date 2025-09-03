@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import countries from 'countries-phone-masks'
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { sendVerifyCode } from '@/api/auth'
 import { cleanPhoneNumber, validatePhone } from '@/utils/validators'
@@ -8,6 +9,7 @@ import AgreementCheckbox from './shared/AgreementCheckbox.vue'
 import FormContainer from './shared/FormContainer.vue'
 
 const router = useRouter()
+const { t } = useI18n()
 
 // 手机号相关状态
 const selectedCountry = ref('CN')
@@ -53,7 +55,7 @@ const phoneValidationTips = computed(() => {
   if (!phoneInputTouched.value || phoneNumber.value === '') {
     return ''
   }
-  return phoneValid.value ? '' : '请输入正确的手机号格式'
+  return phoneValid.value ? '' : t('pages.login.phone_format_error')
 })
 
 // 监听手机号变化并验证
@@ -103,12 +105,12 @@ async function handleNext() {
       })
     }
     else {
-      errorMessage.value = result.message || '发送验证码失败，请稍后重试'
+      errorMessage.value = result.message || t('pages.login.send_code_failed')
     }
   }
   catch (error) {
     console.error('发送验证码失败:', error)
-    errorMessage.value = '网络连接异常，请检查网络后重试'
+    errorMessage.value = t('pages.login.network_error')
   }
   finally {
     isLoading.value = false
@@ -117,7 +119,7 @@ async function handleNext() {
 </script>
 
 <template>
-  <FormContainer title="欢迎登录 TDesign" footer-type="login-bottom">
+  <FormContainer :title="t('pages.login.welcome')" footer-type="login-bottom">
     <div class="phone-input auth-input-container">
       <t-dropdown-menu class="country-selector">
         <t-dropdown-item
@@ -130,7 +132,7 @@ async function handleNext() {
       <div class="auth-divider auth-divider--24" />
       <t-input
         v-model="phoneNumber"
-        placeholder="请输入手机号"
+        :placeholder="t('pages.login.phone_placeholder')"
         class="phone-number-input"
         borderless
         maxlength="11"
@@ -140,7 +142,7 @@ async function handleNext() {
     </div>
 
     <div class="register-hint">
-      未注册的手机号验证通过后将自动注册
+      {{ t('pages.login.register_hint') }}
     </div>
 
     <AgreementCheckbox v-model="agreedToTerms" class="agreement-checkbox" />
@@ -154,7 +156,7 @@ async function handleNext() {
       class="login-button auth-primary-button"
       @click="handleNext"
     >
-      验证并登录
+      {{ t('pages.login.verify_login') }}
     </t-button>
   </FormContainer>
 </template>

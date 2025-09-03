@@ -103,7 +103,6 @@ defineEmits<{
         }
 
         .tab-label {
-          width: 20px;
           height: 16px;
           font-size: 10px;
           font-weight: 600;

@@ -15,9 +15,9 @@ pages:
       card_title_2: Girl Looking up at the Stars
       new_card_prefix: New Card
       tags:
-        ai_art: AI Art
-        copyright_material: Licensed Material
-        new_content: New Content
+        ai_art: AI
+        copyright_material: Licensed
+        new_content: New
       refresh:
         pull_down: Pull to refresh
         release: Release to refresh
@@ -27,6 +27,12 @@ pages:
     title: User Login
     phone_placeholder: Enter phone number
     password_placeholder: Enter password
+    welcome: Welcome to TDesign
+    verify_login: Verify and Login
+    register_hint: Unregistered phone numbers will be automatically registered after verification
+    phone_format_error: Please enter a valid phone number format
+    send_code_failed: Failed to send verification code, please try again later
+    network_error: Network connection error, please check your network and try again
   my:
     title: My Profile
     settings: Settings
@@ -43,15 +49,19 @@ pages:
       playback_settings: Playback Settings
       account_security: Account Security
       privacy: Privacy
+    theme:
+      title: Dark Mode
+      light: Light
+      dark: Dark
     login_register: Please Login/Register
     nickname: John Doe
     constellation: Gemini
     location: Shenzhen
     stats:
-      all_posts: All Posts
-      under_review: Reviewing
-      published: Published
-      drafts: Drafts
+      all_posts: All
+      under_review: Review
+      published: Pub
+      drafts: Draft
     services:
       title: Recommended Services
       wechat: WeChat
@@ -68,10 +78,10 @@ pages:
     share_thoughts: Share your thoughts
     add_tags: Add Tags
     tags:
-      ai_art: "#AI Art"
-      copyright_material: "#Licensed"
-      original: "#Original"
-      style_inspiration: "#Inspiration"
+      ai_art: "#AI"
+      copyright_material: "#Lic"
+      original: "#Orig"
+      style_inspiration: "#Insp"
   notice:
     title: Message Details
     today_time: Today 10:00
@@ -81,21 +91,47 @@ pages:
     title: All Messages
     user_nickname: Username
     message_content: This is a message
+  datacenter:
+    title: Data Center
+    overview:
+      title: Overview
+      note: Cumulative value as of 12-00
+      views: Views
+      pv: PV
+      uv: UV
+    interaction:
+      title: Interactions
+      views: Views
+      likes: Likes
+      shares: Share
+      favorites: Fav
+      unit: times
+    completion:
+      title: Completion Rate
+    region:
+      title: By Region
+      columns:
+        title: Title
+        global: Global
+        north_china: North
+        east_china: East
+        west_china: West
+        south_china: South
 
 # Common translations
 common:
   buttons:
     submit: Submit
     cancel: Cancel
-    confirm: Confirm
+    confirm: OK
     save: Save
     login: Login
-    register: Register
-    send_code: Send Code
-    info_notification: Info Notification
-    success_notification: Success Notification
-    warning_notification: Warning Notification
-    error_notification: Error Notification
+    register: Reg
+    send_code: Send
+    info_notification: Info
+    success_notification: Success
+    warning_notification: Warning
+    error_notification: Error
   messages:
     success: Operation successful
     error: Operation failed

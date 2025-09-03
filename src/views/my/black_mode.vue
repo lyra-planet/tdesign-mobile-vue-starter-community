@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useTheme } from '@/composables/useTheme'
 import MenuItem from './components/MenuItem.vue'
 
@@ -8,16 +9,17 @@ defineOptions({
 })
 
 const { isDarkMode, toggleTheme } = useTheme()
+const { t } = useI18n()
 
 // 当前主题显示文本
 const currentThemeText = computed(() => {
-  return isDarkMode.value ? '深色' : '浅色'
+  return isDarkMode.value ? t('pages.my.theme.dark') : t('pages.my.theme.light')
 })
 
 // 主题设置项
 const themeSettings = computed(() => [
   {
-    name: '深色模式',
+    name: t('pages.my.theme.title'),
     icon: 'image',
     type: 'switch' as const,
     switchValue: isDarkMode.value,

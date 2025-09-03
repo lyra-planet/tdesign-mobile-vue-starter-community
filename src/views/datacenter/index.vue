@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 defineOptions({
   name: 'DataCenter',
 })
+
+const { t } = useI18n()
 
 // 按区域统计数据
 const regionData = ref([
@@ -21,12 +24,12 @@ const regionData = ref([
 
 // 表格列配置
 const regionColumns = [
-  { colKey: 'title', title: '标题', fixed: 'left' as const, width: 80 },
-  { colKey: 'global', title: '全球', width: 80 },
-  { colKey: 'northChina', title: '华北', width: 80 },
-  { colKey: 'eastChina', title: '华东', width: 80 },
-  { colKey: 'westChina', title: '华西', width: 80 },
-  { colKey: 'southChina', title: '华南', width: 80 },
+  { colKey: 'title', title: t('pages.datacenter.region.columns.title'), fixed: 'left' as const, width: 80 },
+  { colKey: 'global', title: t('pages.datacenter.region.columns.global'), width: 80 },
+  { colKey: 'northChina', title: t('pages.datacenter.region.columns.north_china'), width: 80 },
+  { colKey: 'eastChina', title: t('pages.datacenter.region.columns.east_china'), width: 80 },
+  { colKey: 'westChina', title: t('pages.datacenter.region.columns.west_china'), width: 80 },
+  { colKey: 'southChina', title: t('pages.datacenter.region.columns.south_china'), width: 80 },
 ]
 
 // 表格事件处理
@@ -49,16 +52,16 @@ function handleScroll(e: any) {
     <div class="overview-section">
       <div class="overview-header">
         <div class="overview-title">
-          整体情况
+          {{ t('pages.datacenter.overview.title') }}
         </div>
         <div class="overview-note">
-          截止12-00累计数值
+          {{ t('pages.datacenter.overview.note') }}
         </div>
       </div>
       <div class="overview-content">
         <div class="overview-item">
           <div class="overview-label">
-            浏览量
+            {{ t('pages.datacenter.overview.views') }}
           </div>
           <div class="overview-number views-number">
             202W
@@ -66,7 +69,7 @@ function handleScroll(e: any) {
         </div>
         <div class="overview-item">
           <div class="overview-label">
-            PV
+            {{ t('pages.datacenter.overview.pv') }}
           </div>
           <div class="overview-number">
             233W
@@ -74,7 +77,7 @@ function handleScroll(e: any) {
         </div>
         <div class="overview-item">
           <div class="overview-label">
-            UV
+            {{ t('pages.datacenter.overview.uv') }}
           </div>
           <div class="overview-number">
             102W
@@ -87,44 +90,44 @@ function handleScroll(e: any) {
     <div class="interaction-section">
       <div class="interaction-header">
         <div class="interaction-title">
-          互动情况
+          {{ t('pages.datacenter.interaction.title') }}
         </div>
       </div>
       <div class="interaction-content">
         <div class="interaction-item">
           <div class="interaction-label">
-            浏览量
+            {{ t('pages.datacenter.interaction.views') }}
           </div>
           <div class="interaction-number">
             <span class="number">919</span>
-            <span class="unit">次</span>
+            <span class="unit">{{ t('pages.datacenter.interaction.unit') }}</span>
           </div>
         </div>
         <div class="interaction-item">
           <div class="interaction-label">
-            点赞量
+            {{ t('pages.datacenter.interaction.likes') }}
           </div>
           <div class="interaction-number">
             <span class="number">887</span>
-            <span class="unit">次</span>
+            <span class="unit">{{ t('pages.datacenter.interaction.unit') }}</span>
           </div>
         </div>
         <div class="interaction-item">
           <div class="interaction-label">
-            分享量
+            {{ t('pages.datacenter.interaction.shares') }}
           </div>
           <div class="interaction-number">
             <span class="number">104</span>
-            <span class="unit">次</span>
+            <span class="unit">{{ t('pages.datacenter.interaction.unit') }}</span>
           </div>
         </div>
         <div class="interaction-item">
           <div class="interaction-label">
-            收藏
+            {{ t('pages.datacenter.interaction.favorites') }}
           </div>
           <div class="interaction-number">
             <span class="number">47</span>
-            <span class="unit">次</span>
+            <span class="unit">{{ t('pages.datacenter.interaction.unit') }}</span>
           </div>
         </div>
       </div>
@@ -134,7 +137,7 @@ function handleScroll(e: any) {
     <div class="completion-section">
       <div class="completion-header">
         <div class="completion-title">
-          完播率
+          {{ t('pages.datacenter.completion.title') }}
         </div>
       </div>
       <div class="completion-content">
@@ -193,7 +196,7 @@ function handleScroll(e: any) {
     <div class="region-section">
       <div class="region-header">
         <div class="region-title">
-          按区域统计
+          {{ t('pages.datacenter.region.title') }}
         </div>
       </div>
       <div class="region-content">

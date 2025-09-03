@@ -14,13 +14,13 @@ const props = defineProps<{
       <t-image class="image-container" fit="fill" :src="props.imageSrc" />
     </div>
     <div class="h-[74px] w-[170px] box-border bg-[var(--td-bg-color-container)] py-[12px] px-[16px]">
-      <div class="text-[14px] font-[400] mb-[8px] text-[var(--td-text-color-primary)]">
+      <div class="text-[14px] font-[400] mb-[8px] text-[var(--td-text-color-primary)] whitespace-nowrap overflow-hidden text-ellipsis">
         {{ props.title }}
       </div>
       <div>
         <t-tag
           v-for="(tag, index) in props.tags" :key="index" variant="light" size="small" :theme="tag.theme"
-          class="mr-[8px]"
+          class="mr-[8px] max-w-[80px] whitespace-nowrap overflow-hidden text-ellipsis"
         >
           {{ tag.label }}
         </t-tag>
