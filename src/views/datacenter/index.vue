@@ -24,14 +24,14 @@ const regionData = ref([
 ])
 
 // 表格列配置
-const regionColumns = ref([
+const regionColumns = [
   { colKey: 'title', title: '标题', fixed: 'left' as const, width: 80 },
   { colKey: 'global', title: '全球', width: 80 },
   { colKey: 'northChina', title: '华北', width: 80 },
   { colKey: 'eastChina', title: '华东', width: 80 },
   { colKey: 'westChina', title: '华西', width: 80 },
   { colKey: 'southChina', title: '华南', width: 80 },
-])
+]
 
 // 表格事件处理
 function handleRowClick(e: any) {
@@ -61,27 +61,27 @@ function handleScroll(e: any) {
       </div>
       <div class="overview-content">
         <div class="overview-item">
-          <div class="overview-number views-number">
-            202W
-          </div>
           <div class="overview-label">
             浏览量
           </div>
+          <div class="overview-number views-number">
+            202W
+          </div>
         </div>
         <div class="overview-item">
-          <div class="overview-number">
-            233W
-          </div>
           <div class="overview-label">
             PV
           </div>
+          <div class="overview-number">
+            233W
+          </div>
         </div>
         <div class="overview-item">
-          <div class="overview-number">
-            102W
-          </div>
           <div class="overview-label">
             UV
+          </div>
+          <div class="overview-number">
+            102W
           </div>
         </div>
       </div>
@@ -96,39 +96,39 @@ function handleScroll(e: any) {
       </div>
       <div class="interaction-content">
         <div class="interaction-item">
+          <div class="interaction-label">
+            浏览量
+          </div>
           <div class="interaction-number">
             <span class="number">919</span>
             <span class="unit">次</span>
           </div>
-          <div class="interaction-label">
-            浏览量
-          </div>
         </div>
         <div class="interaction-item">
+          <div class="interaction-label">
+            点赞量
+          </div>
           <div class="interaction-number">
             <span class="number">887</span>
             <span class="unit">次</span>
           </div>
-          <div class="interaction-label">
-            点赞量
-          </div>
         </div>
         <div class="interaction-item">
+          <div class="interaction-label">
+            分享量
+          </div>
           <div class="interaction-number">
             <span class="number">104</span>
             <span class="unit">次</span>
           </div>
-          <div class="interaction-label">
-            分享量
-          </div>
         </div>
         <div class="interaction-item">
+          <div class="interaction-label">
+            收藏
+          </div>
           <div class="interaction-number">
             <span class="number">47</span>
             <span class="unit">次</span>
-          </div>
-          <div class="interaction-label">
-            收藏
           </div>
         </div>
       </div>
@@ -221,7 +221,6 @@ function handleScroll(e: any) {
 
 <style lang="scss" scoped>
 .datacenter-container {
-  padding: 16px;
   background-color: #f5f5f5;
   min-height: 100vh;
 }
@@ -256,20 +255,20 @@ function handleScroll(e: any) {
     flex: 1 1 0;
     min-width: 0;
 
+    .overview-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 4px;
+    }
+
     .overview-number {
       font-size: 24px;
       font-weight: 700;
       color: #000000e6;
-      margin-bottom: 4px;
     }
 
     .overview-number.views-number {
       color: #0052d9;
-    }
-
-    .overview-label {
-      font-size: 12px;
-      color: #999;
     }
   }
 
@@ -308,9 +307,13 @@ function handleScroll(e: any) {
     flex: 1 1 0;
     min-width: 0;
 
-    .interaction-number {
+    .interaction-label {
+      font-size: 12px;
+      color: #999;
       margin-bottom: 4px;
+    }
 
+    .interaction-number {
       .number {
         font-size: 24px;
         font-weight: 700;
@@ -322,11 +325,6 @@ function handleScroll(e: any) {
         color: #999;
         margin-left: 2px;
       }
-    }
-
-    .interaction-label {
-      font-size: 12px;
-      color: #999;
     }
   }
 }

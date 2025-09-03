@@ -18,6 +18,7 @@ export function useNavigation() {
     '/my/settings': () => t('pages.my.settings'),
     '/my/general-settings': () => t('pages.my.general_settings.title'),
     '/my/edit': () => '个人信息',
+    '/datacenter': () => '数据中心',
   }
 
   // 侧边栏配置
@@ -41,6 +42,10 @@ export function useNavigation() {
     {
       title: '对话页',
       path: '/talklist',
+    },
+    {
+      title: '数据中心',
+      path: '/datacenter',
     },
     {
       title: '个人中心页（已登录）',
