@@ -1,5 +1,5 @@
 import { useI18n } from 'vue-i18n'
-import { stroagePrefix } from '@/config'
+import { storagePrefix } from '@/config'
 import { setLanguage } from '@/plugins/i18n'
 import { useLayoutStoreHook } from '@/store/layout'
 import { useGlobal, useStorage } from '@/utils/global'
@@ -29,7 +29,7 @@ export function useLayoutHook() {
 
     // 更新存储
     $storage.locale = newLocale
-    useStorage().setItem(`${stroagePrefix()}config`, $storage)
+    useStorage().setItem(`${storagePrefix()}config`, $storage)
   }
 
   return {

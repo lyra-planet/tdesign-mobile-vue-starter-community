@@ -108,7 +108,7 @@ pages:
     send: Send
     notification: Notification
   talklist:
-    title: Message List Page
+    title: All Messages
     user_nickname: Username
     message_content: This is a message
   datacenter:

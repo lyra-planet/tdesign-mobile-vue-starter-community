@@ -108,7 +108,7 @@ pages:
     send: 发送
     notification: 通知
   talklist:
-    title: 消息列表页
+    title: 全部消息
     user_nickname: 用户昵称
     message_content: 这是一条消息内容
   datacenter:
