@@ -3,10 +3,9 @@ import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getProfileServices, getUserStats, trackServiceClick } from '@/api/profile'
+import { MenuItem, ServiceGrid, StatsSection } from '@/components'
+
 import { useUserStore } from '@/store/user'
-import MenuItem from './components/MenuItem.vue'
-import ServiceGrid from './components/ServiceGrid.vue'
-import StatsSection from './components/StatsSection.vue'
 import UserInfoCard from './components/UserInfoCard.vue'
 
 defineOptions({

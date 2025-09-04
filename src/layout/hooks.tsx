@@ -1,17 +1,11 @@
 import { useI18n } from 'vue-i18n'
 import { storagePrefix } from '@/config'
 import { setLanguage } from '@/plugins/i18n'
-import { useLayoutStoreHook } from '@/store/layout'
 import { useGlobal, useStorage } from '@/utils/global'
 
 export function useLayoutHook() {
   const { t, locale } = useI18n()
   const { $storage } = useGlobal()
-
-  const layoutStore = useLayoutStoreHook()
-  function add() {
-    layoutStore.ADD_COUNT()
-  }
 
   const localeState = reactive({
     show: false,
@@ -34,11 +28,9 @@ export function useLayoutHook() {
 
   return {
     locale,
-    layoutStore,
     localeState,
     localeOptions,
     t,
-    add,
     onConfirm,
   }
 }

@@ -3,9 +3,9 @@ import { computed, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { sendVerifyCode, verifyCodeLogin } from '@/api/auth'
+import { FormContainer } from '@/components'
 import { useUserStore } from '@/store/user'
 import { cleanPhoneNumber, validateCode } from '@/utils/validators'
-import FormContainer from './shared/FormContainer.vue'
 
 const { t } = useI18n()
 

@@ -9,12 +9,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BottomNavigation: typeof import('./../src/components/layout/BottomNavigation.vue')['default']
+    FormContainer: typeof import('./../src/components/FormContainer.vue')['default']
     HomeCard: typeof import('./../src/components/home/HomeCard.vue')['default']
     HomeFab: typeof import('./../src/components/home/HomeFab.vue')['default']
     HomeMessage: typeof import('./../src/components/home/HomeMessage.vue')['default']
     HomeSwiper: typeof import('./../src/components/home/HomeSwiper.vue')['default']
     HomeTabBar: typeof import('./../src/components/home/HomeTabBar.vue')['default']
     HomeTabs: typeof import('./../src/components/home/HomeTabs.vue')['default']
+    MenuItem: typeof import('./../src/components/MenuItem.vue')['default']
     NavBarWithSearch: typeof import('./../src/components/home/NavBarWithSearch.vue')['default']
     PageHeader: typeof import('./../src/components/layout/PageHeader.vue')['default']
     PublishButtons: typeof import('./../src/components/publish/PublishButtons.vue')['default']
@@ -25,6 +27,8 @@ declare module 'vue' {
     PublishUpload: typeof import('./../src/components/publish/PublishUpload.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ServiceGrid: typeof import('./../src/components/ServiceGrid.vue')['default']
+    StatsSection: typeof import('./../src/components/StatsSection.vue')['default']
     TAvatar: typeof import('tdesign-mobile-vue')['Avatar']
     TBadge: typeof import('tdesign-mobile-vue')['Badge']
     TButton: typeof import('tdesign-mobile-vue')['Button']

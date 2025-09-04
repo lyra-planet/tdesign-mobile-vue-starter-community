@@ -5,10 +5,10 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { getHomeContent, refreshHomeContent } from '@/api/home'
-import HomeCard from '@/components/home/HomeCard.vue'
-import HomeFab from '@/components/home/HomeFab.vue'
-import HomeSwiper from '@/components/home/HomeSwiper.vue'
-import HomeTabs from '@/components/home/HomeTabs.vue'
+import HomeCard from './components/HomeCard.vue'
+import HomeFab from './components/HomeFab.vue'
+import HomeSwiper from './components/HomeSwiper.vue'
+import HomeTabs from './components/HomeTabs.vue'
 
 defineOptions({ name: 'Home' })
 

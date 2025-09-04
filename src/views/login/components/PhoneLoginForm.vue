@@ -4,9 +4,10 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { sendVerifyCode } from '@/api/auth'
+import { FormContainer } from '@/components'
 import { cleanPhoneNumber, validatePhone } from '@/utils/validators'
 import AgreementCheckbox from './shared/AgreementCheckbox.vue'
-import FormContainer from './shared/FormContainer.vue'
+import LoginButtons from './shared/LoginButtons.vue'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -119,7 +120,7 @@ async function handleNext() {
 </script>
 
 <template>
-  <FormContainer :title="t('pages.login.welcome')" footer-type="login-bottom">
+  <FormContainer :title="t('pages.login.welcome')">
     <div class="phone-input auth-input-container">
       <t-dropdown-menu class="country-selector">
         <t-dropdown-item
@@ -158,6 +159,10 @@ async function handleNext() {
     >
       {{ t('pages.login.verify_and_login') }}
     </t-button>
+
+    <template #footer>
+      <LoginButtons type="phone" />
+    </template>
   </FormContainer>
 </template>
 

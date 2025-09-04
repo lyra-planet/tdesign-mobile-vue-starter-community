@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import BottomNavigation from '../components/layout/BottomNavigation.vue'
-import PageHeader from '../components/layout/PageHeader.vue'
 import { useLayoutState } from '../composables/useLayoutState'
 import { useNavigation } from '../composables/useNavigation'
 import { useTheme } from '../composables/useTheme'
 import { useTime } from '../composables/useTime'
+import BottomNavigation from './components/BottomNavigation.vue'
+import PageHeader from './components/PageHeader.vue'
 
 defineOptions({
   name: 'Layout',

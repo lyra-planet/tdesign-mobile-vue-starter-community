@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import MenuItem from './components/MenuItem.vue'
+import { MenuItem } from '@/components'
 
 defineOptions({
   name: 'Settings',

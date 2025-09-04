@@ -3,9 +3,10 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { passwordLogin } from '@/api/auth'
+import { FormContainer } from '@/components'
 import { useUserStore } from '@/store/user'
 import AgreementCheckbox from './shared/AgreementCheckbox.vue'
-import FormContainer from './shared/FormContainer.vue'
+import LoginButtons from './shared/LoginButtons.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -62,7 +63,7 @@ async function handleLogin() {
 </script>
 
 <template>
-  <FormContainer :title="t('pages.login.welcome')" footer-type="verify-login">
+  <FormContainer :title="t('pages.login.welcome')">
     <!-- 账号输入 -->
     <div class="input-section">
       <div class="input-wrapper auth-input-container">
@@ -108,6 +109,10 @@ async function handleLogin() {
         {{ t('pages.login.login') }}
       </span>
     </div>
+
+    <template #footer>
+      <LoginButtons type="password" />
+    </template>
   </FormContainer>
 </template>
 

@@ -1,6 +1,4 @@
 <script setup lang='ts'>
-import { categories } from '@vueuse/core/metadata.mjs'
-import { Input } from 'tdesign-mobile-vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { talklist } from '../../store/talklist'
@@ -8,25 +6,13 @@ import { talklist } from '../../store/talklist'
 defineOptions({
   name: 'Notice',
 })
-const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
-// const talklist = [
-//   { id: '1', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Pite', newmessge: 'hello' },
-//   { id: '2', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Bob', newmessge: 'hello' },
-//   { id: '3', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Alice', newmessge: 'hello' },
-// ]
-// const current = talklist.find(item => item.id === route.params.id)
-// console.log(current)
 const message = ref('')
 const currentId = (route.params as { id: string }).id
 const current = ref(talklist.find(item => item.id === currentId))
 const foundItem = talklist.find(item => item.id === currentId)
 const talk_content = ref(foundItem ? foundItem.message : [])
-console.log(talk_content.value)
-function handleClick() {
-  router.push('/talklist')
-}
 function handleSendMessage() {
   if (message.value.trim() === '') {
     return
@@ -39,7 +25,7 @@ function handleSendMessage() {
       value: message.value,
     })
   }
-  // 若以后扩展可以在这里修改为对数据库的操作
+
   message.value = ''
   // 模拟对方回复
   setTimeout(() => {
@@ -51,7 +37,6 @@ function handleSendMessage() {
   }, 1000)
   console.log(talklist)
 }
-// 后续可以通过添加一个时间的属性然后比较两个时间之间的间隔来优化时间的显示，实现自动添加时间标签
 </script>
 
 <template>

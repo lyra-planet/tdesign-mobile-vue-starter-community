@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import LoginButtons from './LoginButtons.vue'
-
 interface Props {
   title: string
   subtitle?: string
-  footerType?: 'empty' | 'login-bottom' | 'verify-login'
 }
 
 defineProps<Props>()
@@ -26,17 +23,7 @@ defineProps<Props>()
     </div>
 
     <div class="auth-footer">
-      <!-- 使用登录按钮组件 -->
-      <LoginButtons
-        v-if="footerType === 'login-bottom'"
-        type="phone"
-      />
-
-      <!-- 使用登录按钮组件 -->
-      <LoginButtons
-        v-else-if="footerType === 'verify-login'"
-        type="password"
-      />
+      <slot name="footer" />
     </div>
   </div>
 </template>
