@@ -134,44 +134,4 @@ export class ChatService {
       data: recentMessages as Array<{ chatId: string, chatName: string, lastMessage: ChatMessage }>,
     }
   }
-
-  // 添加新的方法：删除消息
-  static deleteMessage(chatId: string, messageId: string): { success: boolean, message: string } {
-    const chat = talklist.find(item => item.id === chatId)
-
-    if (!chat) {
-      return { success: false, message: '聊天记录不存在' }
-    }
-
-    const messageIndex = chat.message.findIndex(msg => msg.id === messageId)
-
-    if (messageIndex === -1) {
-      return { success: false, message: '消息不存在' }
-    }
-
-    chat.message.splice(messageIndex, 1)
-
-    return {
-      success: true,
-      message: '消息删除成功',
-    }
-  }
-
-  // 添加新的方法：清空聊天记录
-  static clearChatHistory(chatId: string): { success: boolean, message: string } {
-    const chat = talklist.find(item => item.id === chatId)
-
-    if (!chat) {
-      return { success: false, message: '聊天记录不存在' }
-    }
-
-    const messageCount = chat.message.length
-    chat.message = []
-    chat.count = 0
-
-    return {
-      success: true,
-      message: `聊天记录清空成功，删除了 ${messageCount} 条消息`,
-    }
-  }
 }
