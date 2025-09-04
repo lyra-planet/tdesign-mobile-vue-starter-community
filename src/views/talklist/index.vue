@@ -1,9 +1,8 @@
 <script setup lang='ts'>
 import { onActivated, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getTalkList } from '@/api/talklist'
 import { useUserStore } from '@/store/user'
-import { talklist } from '../../store/talklist'
+import { loadTalkList, talklist } from '../../store/talklist'
 
 defineOptions({
   name: 'Talklist',
@@ -22,15 +21,15 @@ async function fetchTalkList() {
 
   try {
     loading.value = true
-    const result = await getTalkList()
-    if (result.success && result.data) {
-      mytalklist.value = result.data.sort((a, b) => b.count - a.count)
-    }
+    // 使用store的loadTalkList函数
+    await loadTalkList()
+    // 数据会自动更新到talklist中，然后更新到mytalklist
+    mytalklist.value = [...talklist].sort((a, b) => b.count - a.count)
   }
   catch (error) {
     console.error('获取聊天列表失败:', error)
-    // 如果API失败，使用本地数据
-    mytalklist.value = talklist.sort((a, b) => b.count - a.count)
+    // 如果加载失败，使用当前talklist数据
+    mytalklist.value = [...talklist].sort((a, b) => b.count - a.count)
   }
   finally {
     loading.value = false

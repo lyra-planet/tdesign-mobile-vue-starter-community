@@ -1,7 +1,8 @@
+import type { TalkItem } from '@/api/talklist'
 import { reactive } from 'vue'
 
-// 原始数据
-const initialTalklist = [
+// 原始数据（作为备用数据）
+const initialTalklist: TalkItem[] = [
   {
     id: '1',
     picture: 'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
@@ -136,6 +137,50 @@ export function shouldShowTimeDivider(currentTime: number, previousTime?: number
 
 // 创建响应式的数据
 export const talklist = reactive(initialTalklist)
+
+// 从API加载聊天列表数据的函数
+export async function loadTalkList() {
+  try {
+    const { getTalkList } = await import('@/api/talklist')
+    const response = await getTalkList()
+
+    if (response.success && response.data) {
+      // 清空当前数据并替换为API数据
+      talklist.splice(0, talklist.length, ...response.data)
+    }
+    else {
+      console.warn('API返回失败，使用本地数据:', response.message)
+    }
+  }
+  catch (error) {
+    console.warn('加载聊天数据失败，使用本地数据:', error)
+  }
+}
+
+// 根据ID获取聊天详情的函数
+export async function loadChatDetail(id: string) {
+  try {
+    const { getTalkDetail } = await import('@/api/talklist')
+    const response = await getTalkDetail(id)
+
+    if (response.success && response.data) {
+      // 更新对应的聊天记录
+      const index = talklist.findIndex(item => item.id === id)
+      if (index !== -1) {
+        talklist[index] = response.data
+      }
+      return response.data
+    }
+    else {
+      console.warn('获取聊天详情失败:', response.message)
+      return talklist.find(item => item.id === id) || null
+    }
+  }
+  catch (error) {
+    console.warn('获取聊天详情出错:', error)
+    return talklist.find(item => item.id === id) || null
+  }
+}
 
 // 导出默认值（保持兼容性）
 export default talklist

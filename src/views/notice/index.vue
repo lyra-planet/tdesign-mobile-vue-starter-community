@@ -4,7 +4,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { markAsRead, sendMessage as sendMessageApi } from '@/api/talklist'
-import { formatMessageTime, shouldShowTimeDivider, talklist } from '../../store/talklist'
+import { formatMessageTime, loadChatDetail, shouldShowTimeDivider, talklist } from '../../store/talklist'
 
 defineOptions({
   name: 'Notice',
@@ -31,18 +31,28 @@ const messagesWithTimeInfo = computed(() => {
   })
 })
 
-// 页面挂载时标记为已读
+// 页面挂载时标记为已读并加载最新聊天数据
 onMounted(async () => {
   if (currentId) {
     try {
+      // 先加载最新的聊天详情
+      await loadChatDetail(currentId)
+
+      // 更新本地引用
+      const updatedItem = talklist.find(item => item.id === currentId)
+      if (updatedItem) {
+        current.value = updatedItem
+        talk_content.value = updatedItem.message
+      }
+
+      // 标记为已读
       await markAsRead(currentId)
-      // 同时更新本地数据
       if (current.value) {
         current.value.count = 0
       }
     }
     catch (error) {
-      console.error('标记已读失败:', error)
+      console.error('加载聊天数据或标记已读失败:', error)
     }
   }
 })
@@ -61,6 +71,8 @@ async function handleSendMessage() {
       const targetItem = talklist.find(item => item.id === currentId)
       if (targetItem) {
         targetItem.message.push(result.data)
+        // 同步更新本地引用
+        talk_content.value = targetItem.message
       }
     }
     else {
@@ -75,6 +87,7 @@ async function handleSendMessage() {
       const targetItem = talklist.find(item => item.id === currentId)
       if (targetItem) {
         targetItem.message.push(newMessage)
+        talk_content.value = targetItem.message
       }
     }
   }
@@ -91,6 +104,7 @@ async function handleSendMessage() {
     const targetItem = talklist.find(item => item.id === currentId)
     if (targetItem) {
       targetItem.message.push(newMessage)
+      talk_content.value = targetItem.message
     }
   }
 
