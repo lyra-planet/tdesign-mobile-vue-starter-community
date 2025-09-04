@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import { Loading } from 'tdesign-mobile-vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { error, isLoading, loadTalkList, markChatAsRead, talklist } from '../../store/talklist'
@@ -52,7 +53,7 @@ onMounted(async () => {
   <div class="messege h-full" style="background-color: var(--td-bg-color-page);">
     <!-- 加载状态 -->
     <div v-if="isLoading" class="loading-container">
-      <t-loading text="加载中..." />
+      <t-loading text="加载中..." size="32px" />
     </div>
 
     <!-- 错误状态 -->
@@ -102,6 +103,17 @@ onMounted(async () => {
 </template>
 
 <style lang='scss' scoped>
+.loading-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
 .custom-divider {
   margin: 0px 0;
   --td-divider-color: #ff0000;
@@ -152,6 +164,6 @@ onMounted(async () => {
   font-family: 'PingFang SC';
   text-align: left;
   line-height: 22px;
-  margin-top: 4p;
+  margin-top: 4px;
 }
 </style>
