@@ -1,5 +1,20 @@
 import { get, post, put } from '@/api/request'
 
+export interface Message {
+  id: string
+  tag: 'me' | 'other'
+  value: string
+  time: number
+}
+
+export interface TalkItem {
+  id: string
+  picture: string
+  count: number
+  name: string
+  message: Message[]
+}
+
 // 获取聊天列表
 export async function getTalkList() {
   return get('/talklist')

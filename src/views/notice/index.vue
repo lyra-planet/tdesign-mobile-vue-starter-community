@@ -1,84 +1,131 @@
 <script setup lang='ts'>
-import { categories } from '@vueuse/core/metadata.mjs'
-import { Input } from 'tdesign-mobile-vue'
+import type { Message } from '@/api/talklist'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { talklist } from '../../store/talklist'
+import { useRoute } from 'vue-router'
+import { markAsRead, sendMessage as sendMessageApi } from '@/api/talklist'
+import { formatMessageTime, shouldShowTimeDivider, talklist } from '../../store/talklist'
 
 defineOptions({
   name: 'Notice',
 })
-const router = useRouter()
+
 const route = useRoute()
 const { t } = useI18n()
-// const talklist = [
-//   { id: '1', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Pite', newmessge: 'hello' },
-//   { id: '2', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Bob', newmessge: 'hello' },
-//   { id: '3', picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png', name: 'Alice', newmessge: 'hello' },
-// ]
-// const current = talklist.find(item => item.id === route.params.id)
-// console.log(current)
+
 const message = ref('')
 const currentId = (route.params as { id: string }).id
 const current = ref(talklist.find(item => item.id === currentId))
 const foundItem = talklist.find(item => item.id === currentId)
 const talk_content = ref(foundItem ? foundItem.message : [])
-console.log(talk_content.value)
-function handleClick() {
-  router.push('/talklist')
-}
-function handleSendMessage() {
+
+// 计算需要显示的消息列表（包含时间分隔符的信息）
+const messagesWithTimeInfo = computed(() => {
+  return talk_content.value.map((msg, index) => {
+    const previousMsg = index > 0 ? talk_content.value[index - 1] : undefined
+    return {
+      ...msg,
+      showTimeDivider: shouldShowTimeDivider(msg.time, previousMsg?.time),
+      timeText: formatMessageTime(msg.time),
+    }
+  })
+})
+
+// 页面挂载时标记为已读
+onMounted(async () => {
+  if (currentId) {
+    try {
+      await markAsRead(currentId)
+      // 同时更新本地数据
+      if (current.value) {
+        current.value.count = 0
+      }
+    }
+    catch (error) {
+      console.error('标记已读失败:', error)
+    }
+  }
+})
+
+async function handleSendMessage() {
   if (message.value.trim() === '') {
     return
   }
-  const targetItem = talklist.find(item => item.id === currentId)
-  if (targetItem) {
-    targetItem.message.push({
+
+  try {
+    // 调用API发送消息
+    const result = await sendMessageApi(currentId, message.value)
+
+    if (result.success && result.data) {
+      // API成功，使用返回的消息数据
+      const targetItem = talklist.find(item => item.id === currentId)
+      if (targetItem) {
+        targetItem.message.push(result.data)
+      }
+    }
+    else {
+      // API失败，使用本地逻辑
+      const newMessage: Message = {
+        id: Date.now().toString(),
+        tag: 'me',
+        value: message.value,
+        time: Date.now(),
+      }
+
+      const targetItem = talklist.find(item => item.id === currentId)
+      if (targetItem) {
+        targetItem.message.push(newMessage)
+      }
+    }
+  }
+  catch (error) {
+    console.error('发送消息失败:', error)
+    // 发送失败时使用本地逻辑作为备用
+    const newMessage: Message = {
       id: Date.now().toString(),
       tag: 'me',
       value: message.value,
-    })
+      time: Date.now(),
+    }
+
+    const targetItem = talklist.find(item => item.id === currentId)
+    if (targetItem) {
+      targetItem.message.push(newMessage)
+    }
   }
-  // 若以后扩展可以在这里修改为对数据库的操作
+
   message.value = ''
-  // 模拟对方回复
-  setTimeout(() => {
-    talk_content.value.push({
-      id: (Date.now() + 1).toString(),
-      tag: 'other',
-      value: '这是自动回复的消息',
-    })
-  }, 1000)
-  console.log(talklist)
 }
-// 后续可以通过添加一个时间的属性然后比较两个时间之间的间隔来优化时间的显示，实现自动添加时间标签
 </script>
 
 <template>
   <div class="chat-container">
     <!-- 消息列表区域 -->
     <div class="messages-area">
-      <div class="time-badge">
-        {{ t('pages.notice.today_time') }}
-      </div>
-      <div v-for="item in talk_content" :key="item.id">
+      <div v-for="item in messagesWithTimeInfo" :key="item.id">
+        <!-- 时间分隔符 -->
+        <div v-if="item.showTimeDivider" class="time-badge">
+          {{ item.timeText }}
+        </div>
+
+        <!-- 自己发送的消息 -->
         <div v-if="item.tag === 'me'" class="msg-row right">
           <div class="msg-bubble self">
             {{ item.value }}
           </div>
           <t-avatar size="40px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
         </div>
+
+        <!-- 对方发送的消息 -->
         <div v-if="item.tag === 'other'" class="msg-row left">
-          <t-avatar size="40px" :image="current.picture" />
+          <t-avatar size="40px" :image="current?.picture" />
           <div class="msg-bubble other">
             {{ item.value }}
           </div>
         </div>
-        <div v-if="item.tag === 'time'" class="time-badge">
-          {{ item.value }}
-        </div>
       </div>
     </div>
+
     <!-- 底部输入框 -->
     <div class="input-area">
       <div class="input-wrapper flex items-center ">

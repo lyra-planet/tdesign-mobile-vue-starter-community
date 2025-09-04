@@ -1,7 +1,8 @@
 export interface ChatMessage {
   id: string
-  tag: 'me' | 'other' | 'time'
+  tag: 'me' | 'other'
   value: string
+  time: number
 }
 
 export interface Chat {

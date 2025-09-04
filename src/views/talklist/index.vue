@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue'
+import { onActivated, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getTalkList } from '@/api/talklist'
 import { useUserStore } from '@/store/user'
@@ -46,11 +46,13 @@ onMounted(() => {
   fetchTalkList()
 })
 
+// 当组件重新激活时（从其他页面返回）也刷新数据
+onActivated(() => {
+  fetchTalkList()
+})
+
 function goToDetail(id) {
-  const item = mytalklist.value.find(item => item.id === id)
-  if (item) {
-    item.count = 0
-  }
+  // 不在这里修改 count，让 notice 页面的 onMounted 来处理标记已读
   router.push(`/notice/${id}`)
 }
 function truncateMessage(message, maxLength = 22) {

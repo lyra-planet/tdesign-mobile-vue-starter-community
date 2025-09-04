@@ -26,6 +26,10 @@ export class ChatController {
     const { id } = req.params
     const { message } = req.body
 
+    if (!message) {
+      return sendResponse(res, 400, '消息内容不能为空')
+    }
+
     const result = ChatService.sendMessage(id, message)
 
     if (result.success) {
@@ -54,5 +58,39 @@ export class ChatController {
   static getUnreadCount(req: Request, res: Response): void {
     const result = ChatService.getUnreadCount()
     sendResponse(res, 200, result.message, result.data)
+  }
+
+  // 获取最近消息
+  static getRecentMessages(req: Request, res: Response): void {
+    const limit = Number.parseInt(req.query.limit as string) || 10
+    const result = ChatService.getRecentMessages(limit)
+    sendResponse(res, 200, result.message, result.data)
+  }
+
+  // 删除消息
+  static deleteMessage(req: Request, res: Response): void {
+    const { id, messageId } = req.params
+    const result = ChatService.deleteMessage(id, messageId)
+
+    if (result.success) {
+      sendResponse(res, 200, result.message)
+    }
+    else {
+      const statusCode = result.message === '聊天记录不存在' ? 404 : 400
+      sendResponse(res, statusCode, result.message)
+    }
+  }
+
+  // 清空聊天记录
+  static clearChatHistory(req: Request, res: Response): void {
+    const { id } = req.params
+    const result = ChatService.clearChatHistory(id)
+
+    if (result.success) {
+      sendResponse(res, 200, result.message)
+    }
+    else {
+      sendResponse(res, 404, result.message)
+    }
   }
 }
