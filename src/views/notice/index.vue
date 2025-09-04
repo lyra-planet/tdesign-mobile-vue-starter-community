@@ -1,8 +1,10 @@
 <script setup lang='ts'>
+import type { ChatMessage } from '@/api/types'
+import { Message } from 'tdesign-mobile-vue'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { loadTalkList, sendMessage, talklist } from '../../store/talklist'
+import { formatMessageTime, loadChatDetail, loadTalkList, markChatAsRead, sendMessage, shouldShowTimeDivider, talklist } from '../../store/talklist'
 
 defineOptions({
   name: 'Notice',
@@ -21,6 +23,18 @@ const current = computed(() => talklist.find(item => item.id === currentId))
 // 聊天内容
 const talk_content = computed(() => current.value?.message || [])
 
+// 计算需要显示的消息列表
+const messagesWithTimeInfo = computed(() => {
+  return talk_content.value.map((msg, index) => {
+    const previousMsg = index > 0 ? talk_content.value[index - 1] : undefined
+    return {
+      ...msg,
+      showTimeDivider: shouldShowTimeDivider(msg.time, previousMsg?.time),
+      timeText: formatMessageTime(msg.time),
+    }
+  })
+})
+
 // 发送消息
 async function handleSendMessage() {
   if (message.value.trim() === '' || sending.value) {
@@ -30,31 +44,26 @@ async function handleSendMessage() {
   try {
     sending.value = true
     const messageContent = message.value.trim()
-    message.value = ''
 
     // 调用API发送消息
-    const success = await sendMessage(currentId, messageContent)
+    const result = await sendMessage(currentId, messageContent)
 
-    if (success) {
+    if (result.success && result.data) {
+      message.value = '' // 清空输入框
+
       // 滚动到底部
       await nextTick()
       scrollToBottom()
-
-      // 模拟对方回复（可选）
-      setTimeout(async () => {
-        // 这里可以添加自动回复逻辑
-        console.log('消息发送成功')
-      }, 1000)
     }
     else {
-      // 发送失败，恢复消息内容
       message.value = messageContent
-      // 这里可以添加错误提示
-      console.error('消息发送失败')
+      console.error('发送消息失败')
+      Message.error(t('pages.notice.errors.send_failed'))
     }
   }
   catch (error) {
-    console.error('发送消息出错:', error)
+    console.error('发送消息失败:', error)
+    Message.error(t('pages.notice.errors.network_error'))
   }
   finally {
     sending.value = false
@@ -69,22 +78,38 @@ function scrollToBottom() {
   }
 }
 
-// 页面加载时确保有聊天数据
+// 页面挂载时标记为已读并加载最新聊天数据
 onMounted(async () => {
-  // 如果没有找到当前聊天，尝试重新加载
-  if (!current.value) {
-    await loadTalkList()
+  if (currentId) {
+    try {
+      // 先加载最新的聊天详情
+      await loadChatDetail(currentId)
 
-    // 重新加载后仍然没有找到，返回列表页
-    if (!current.value) {
-      router.replace('/talklist')
-      return
+      // 如果还是没有找到当前聊天，尝试重新加载列表
+      if (!current.value) {
+        await loadTalkList()
+
+        // 重新加载后仍然没有找到，返回列表页
+        if (!current.value) {
+          router.replace('/talklist')
+          return
+        }
+      }
+
+      // 标记为已读
+      await markChatAsRead(currentId)
+      if (current.value) {
+        current.value.count = 0
+      }
+
+      // 滚动到底部
+      await nextTick()
+      scrollToBottom()
+    }
+    catch (error) {
+      console.error('加载聊天数据或标记已读失败:', error)
     }
   }
-
-  // 滚动到底部
-  await nextTick()
-  scrollToBottom()
 })
 </script>
 
@@ -92,24 +117,26 @@ onMounted(async () => {
   <div class="chat-container">
     <!-- 消息列表区域 -->
     <div class="messages-area">
-      <div class="time-badge">
-        {{ t('pages.notice.today_time') }}
-      </div>
-      <div v-for="item in talk_content" :key="item.id">
+      <div v-for="item in messagesWithTimeInfo" :key="item.id">
+        <!-- 时间分隔符 -->
+        <div v-if="item.showTimeDivider" class="time-badge">
+          {{ item.timeText }}
+        </div>
+
+        <!-- 自己发送的消息 -->
         <div v-if="item.tag === 'me'" class="msg-row right">
           <div class="msg-bubble self">
             {{ item.value }}
           </div>
           <t-avatar size="40px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
         </div>
+
+        <!-- 对方发送的消息 -->
         <div v-if="item.tag === 'other'" class="msg-row left">
           <t-avatar size="40px" :image="current?.picture" />
           <div class="msg-bubble other">
             {{ item.value }}
           </div>
-        </div>
-        <div v-if="item.tag === 'time'" class="time-badge">
-          {{ item.value }}
         </div>
       </div>
     </div>
@@ -117,21 +144,12 @@ onMounted(async () => {
     <div class="input-area">
       <div class="input-wrapper flex items-center ">
         <input
-          v-model="message"
-          :placeholder="t('pages.notice.input_placeholder')"
-          class="msg-input w-full"
-          :borderless="false"
-          :disabled="sending"
-          @keypress.enter="handleSendMessage"
+          v-model="message" :placeholder="t('pages.notice.input_placeholder')" class="msg-input w-full"
+          :borderless="false" :disabled="sending" @keypress.enter="handleSendMessage"
         >
         <t-button
-          size="medium"
-          theme="primary"
-          shape="round"
-          class="send-btn"
-          :disabled="message.trim() === '' || sending"
-          :loading="sending"
-          @click="handleSendMessage"
+          size="medium" theme="primary" shape="round" class="send-btn"
+          :disabled="message.trim() === '' || sending" :loading="sending" @click="handleSendMessage"
         >
           {{ sending ? '发送中...' : t('pages.notice.send') }}
         </t-button>
@@ -175,6 +193,7 @@ onMounted(async () => {
   color: #666;
   cursor: pointer;
 }
+
 .messages-area {
   flex: 1;
   border-top: 0.5px solid #e7e7e7;
@@ -280,10 +299,12 @@ onMounted(async () => {
   border-radius: 99px;
   opacity: 1;
   border: 1px solid #dcdcdc;
+
   &:focus {
     border-color: var(--td-brand-color);
   }
 }
+
 .send-btn {
   width: 64px;
   height: 40px;

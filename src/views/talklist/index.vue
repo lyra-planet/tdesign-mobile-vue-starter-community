@@ -1,6 +1,5 @@
 <script setup lang='ts'>
-import { Loading } from 'tdesign-mobile-vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { error, isLoading, loadTalkList, markChatAsRead, talklist } from '../../store/talklist'
 

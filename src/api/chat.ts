@@ -8,11 +8,6 @@ export const chatApi = {
     return get('/chat')
   },
 
-  // 根据ID获取聊天详情
-  getChatById(id: string): Promise<ApiResponse<Chat>> {
-    return get(`/chat/${id}`)
-  },
-
   // 发送消息到指定聊天
   sendMessage(chatId: string, message: string): Promise<ApiResponse<SendMessageResponse>> {
     return post(`/chat/${chatId}/message`, { message })
@@ -31,7 +26,6 @@ export const chatApi = {
 
 export const {
   getTalkList,
-  getChatById,
   sendMessage,
   markAsRead,
   getUnreadCount,

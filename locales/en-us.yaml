@@ -107,6 +107,9 @@ pages:
     input_placeholder: Type a message...
     send: Send
     notification: Notification
+    errors:
+      send_failed: Failed to send message, please try again
+      network_error: Network connection failed, please check your network and try again
   talklist:
     title: All Messages
     user_nickname: Username
