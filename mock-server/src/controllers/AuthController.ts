@@ -47,24 +47,6 @@ export class AuthController {
     sendResponse(res, 200, '退出成功')
   }
 
-  // 刷新Token
-  static refreshToken(req: Request, res: Response): void {
-    const authHeader = req.headers.authorization
-    if (!authHeader) {
-      return sendResponse(res, 401, '未提供认证信息')
-    }
-
-    const token = authHeader.split(' ')[1]
-    const result = AuthService.refreshToken(token)
-
-    if (result.success) {
-      sendResponse(res, 200, result.message, result.data)
-    }
-    else {
-      sendResponse(res, 401, result.message)
-    }
-  }
-
   // 更新用户信息
   static updateUserInfo(req: Request, res: Response): void {
     const authHeader = req.headers.authorization

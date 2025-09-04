@@ -120,28 +120,6 @@ export class AuthService {
     }
   }
 
-  // 刷新Token
-  static refreshToken(token: string): { success: boolean, message: string, data?: { token: string } } {
-    const decoded = verifyToken(token)
-
-    if (!decoded) {
-      return { success: false, message: 'Token无效' }
-    }
-
-    const user = users.find(u => u.id === decoded.id)
-    if (!user) {
-      return { success: false, message: '用户不存在' }
-    }
-
-    const newToken = generateToken(user)
-
-    return {
-      success: true,
-      message: 'Token刷新成功',
-      data: { token: newToken },
-    }
-  }
-
   // 验证Token
   static validateToken(token: string): AuthToken | null {
     return verifyToken(token)

@@ -12,28 +12,23 @@ app.listen(PORT, () => {
   console.warn('  POST /api/auth/verify-login - 验证码登录')
   console.warn('  POST /api/auth/password-login - 密码登录')
   console.warn('  POST /api/auth/logout - 退出登录')
-  console.warn('  POST /api/auth/refresh-token - 刷新Token')
 
   console.warn('\n💬 聊天相关:')
   console.warn('  GET  /api/chat - 获取聊天列表')
-  console.warn('  GET  /api/chat/:id - 获取聊天详情')
   console.warn('  POST /api/chat/:id/message - 发送消息')
   console.warn('  PUT  /api/chat/:id/read - 标记为已读')
   console.warn('  GET  /api/chat/unread-count - 获取未读消息总数')
 
   console.warn('\n🏠 首页相关:')
   console.warn('  GET  /api/home/content - 获取首页内容')
-  console.warn('  GET  /api/home/content/:id - 获取内容详情')
   console.warn('  POST /api/home/refresh - 刷新首页内容')
 
   console.warn('\n📊 数据中心:')
   console.warn('  GET  /api/datacenter/stats - 获取统计数据')
-  console.warn('  GET  /api/datacenter/video/:id - 获取视频详情')
 
   console.warn('\n👤 个人页面:')
   console.warn('  GET  /api/profile/services - 获取服务数据')
   console.warn('  GET  /api/profile/stats - 获取统计数据')
-  console.warn('  POST /api/profile/stats - 更新统计数据')
   console.warn('  POST /api/profile/service-click - 记录服务点击')
 
   console.warn('\n📝 测试账号:')

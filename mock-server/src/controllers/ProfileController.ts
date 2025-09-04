@@ -43,32 +43,6 @@ export class ProfileController {
     }
   }
 
-  // 更新用户统计数据
-  static async updateUserStats(req: Request, res: Response): Promise<void> {
-    try {
-      const { statKey, increment = 1 } = req.body
-
-      // 查找对应的统计项
-      const statIndex = userStats.findIndex(stat => stat.key === statKey)
-
-      if (statIndex === -1) {
-        sendResponse(res, 404, '统计项不存在')
-        return
-      }
-
-      // 更新统计数据
-      userStats[statIndex].count += increment
-
-      sendResponse(res, 200, '更新统计数据成功', {
-        stat: userStats[statIndex],
-      })
-    }
-    catch (error) {
-      console.error('更新统计数据失败:', error)
-      sendResponse(res, 500, '更新统计数据失败')
-    }
-  }
-
   // 点击服务项统计
   static async trackServiceClick(req: Request, res: Response): Promise<void> {
     try {

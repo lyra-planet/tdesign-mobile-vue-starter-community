@@ -34,27 +34,6 @@ export class HomeController {
     }
   }
 
-  // 获取指定内容详情
-  static async getContentDetail(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params
-      const contentId = Number.parseInt(id, 10)
-
-      const content = homeItems.find(item => item.id === contentId)
-
-      if (!content) {
-        sendResponse(res, 404, '内容不存在')
-        return
-      }
-
-      sendResponse(res, 200, '获取内容详情成功', content)
-    }
-    catch (error) {
-      console.error('获取内容详情失败:', error)
-      sendResponse(res, 500, '获取内容详情失败')
-    }
-  }
-
   // 刷新首页内容（模拟下拉刷新）
   static async refreshHomeContent(req: Request, res: Response): Promise<void> {
     try {

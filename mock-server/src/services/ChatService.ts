@@ -7,11 +7,6 @@ export class ChatService {
     return talklist
   }
 
-  // 根据ID获取聊天详情
-  static getChatById(id: string): Chat | null {
-    return talklist.find(item => item.id === id) || null
-  }
-
   // 发送消息到指定聊天
   static sendMessage(chatId: string, message: string): { success: boolean, message: string, data?: ChatMessage } {
     if (!message || !message.trim()) {

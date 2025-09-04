@@ -9,18 +9,6 @@ export class ChatController {
     sendResponse(res, 200, '获取聊天列表成功', talklist)
   }
 
-  // 根据ID获取聊天详情
-  static getChatById(req: Request, res: Response): void {
-    const { id } = req.params
-    const chat = ChatService.getChatById(id)
-
-    if (!chat) {
-      return sendResponse(res, 404, '聊天记录不存在')
-    }
-
-    sendResponse(res, 200, '获取聊天详情成功', chat)
-  }
-
   // 发送消息到指定聊天
   static sendMessage(req: Request, res: Response): void {
     const { id } = req.params
