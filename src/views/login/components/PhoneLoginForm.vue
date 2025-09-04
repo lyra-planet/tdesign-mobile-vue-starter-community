@@ -101,6 +101,7 @@ async function handleNext() {
         query: {
           phone: fullPhoneNumber,
           countryCode: selectedCountryCode.value,
+          redirect: router.currentRoute.value.query.redirect, // 传递重定向参数
         },
       })
     }

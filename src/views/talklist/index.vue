@@ -1,19 +1,57 @@
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getTalkList } from '@/api/talklist'
+import { useUserStore } from '@/store/user'
 import { talklist } from '../../store/talklist'
 
 defineOptions({
   name: 'Talklist',
 })
 
+const userStore = useUserStore()
 const mytalklist = ref(talklist.sort((a, b) => b.count - a.count))
-// 按消息数量排序，未读多的在前
+const loading = ref(false)
 const router = useRouter()
+
+// 获取聊天列表数据
+async function fetchTalkList() {
+  if (!userStore.isLoggedIn) {
+    return
+  }
+
+  try {
+    loading.value = true
+    const result = await getTalkList()
+    if (result.success && result.data) {
+      mytalklist.value = result.data.sort((a, b) => b.count - a.count)
+    }
+  }
+  catch (error) {
+    console.error('获取聊天列表失败:', error)
+    // 如果API失败，使用本地数据
+    mytalklist.value = talklist.sort((a, b) => b.count - a.count)
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+// 检查登录状态
+onMounted(() => {
+  if (!userStore.isLoggedIn) {
+    // 如果未登录，路由守卫会自动重定向到登录页
+  }
+  // 获取聊天列表数据
+  fetchTalkList()
+})
+
 function goToDetail(id) {
-  talklist.find(item => item.id === id).count = 0
-  console.log(talklist)
-  router.push({ name: 'Notice', params: { id } })
+  const item = mytalklist.value.find(item => item.id === id)
+  if (item) {
+    item.count = 0
+  }
+  router.push(`/notice/${id}`)
 }
 function truncateMessage(message, maxLength = 22) {
   if (message.length > maxLength) {
@@ -25,7 +63,13 @@ function truncateMessage(message, maxLength = 22) {
 
 <template>
   <div class="messege h-full" style="background-color: var(--td-bg-color-page);">
-    <div class="list-container">
+    <!-- 加载状态 -->
+    <div v-if="loading" class="loading-container">
+      <t-loading size="32px" text="加载中..." />
+    </div>
+
+    <!-- 聊天列表 -->
+    <div v-else class="list-container">
       <t-cell
         v-for="item in mytalklist" :key="item.name" class="list-item"
         style="background-color: var(--td-bg-color-container);"
@@ -46,6 +90,14 @@ function truncateMessage(message, maxLength = 22) {
 </template>
 
 <style lang='scss' scoped>
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background-color: var(--td-bg-color-container);
+}
+
 .custom-divider {
   margin: 0px 0;
   --td-divider-color: #ff0000;

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { passwordLogin } from '@/api/auth'
 import { useUserStore } from '@/store/user'
 import AgreementCheckbox from './shared/AgreementCheckbox.vue'
 import FormContainer from './shared/FormContainer.vue'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 const { t } = useI18n()
 
@@ -45,8 +46,15 @@ async function handleLogin() {
     if (result.success && result.data) {
       // 保存用户信息到store
       userStore.handleLoginSuccess(result.data.token, result.data.user)
-      // 跳转到首页
-      router.push('/home')
+
+      // 检查是否有重定向路径
+      const redirectPath = route.query.redirect as string
+      if (redirectPath) {
+        router.push(redirectPath)
+      }
+      else {
+        router.push('/home')
+      }
     }
     else {
       errorMessage.value = result.message

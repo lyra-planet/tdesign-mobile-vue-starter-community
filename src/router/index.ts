@@ -1,7 +1,7 @@
 import { createRouter } from 'vue-router'
 import { handleHotUpdate, routes } from 'vue-router/auto-routes'
 import Layout from '@/layout/index.vue'
-
+import { useUserStore } from '@/store/user'
 import { getRouterMode } from './utils'
 
 const router = createRouter({
@@ -27,6 +27,9 @@ const router = createRouter({
         {
           path: 'talklist',
           component: () => import('@/views/talklist/index.vue'),
+          meta: {
+            requiresAuth: true, // 需要登录权限
+          },
         },
         {
           name: 'Publish',
@@ -117,5 +120,24 @@ const router = createRouter({
 if (import.meta.hot) {
   handleHotUpdate(router)
 }
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+
+  // 检查路由是否需要登录权限
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!userStore.isLoggedIn) {
+      // 未登录，跳转到登录页
+      next({
+        path: '/login/phone',
+        query: { redirect: to.fullPath }, // 保存目标路径，登录后跳转回来
+      })
+      return
+    }
+  }
+
+  next()
+})
 
 export default router

@@ -1,6 +1,7 @@
 import type { UserInfo } from '@/api/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { httpClient } from '@/api/request'
 import { STORAGE_KEYS } from '@/config/constants'
 import { getPersistConfig } from './index'
 
@@ -18,6 +19,8 @@ export const useUserStore = defineStore('user', () => {
   // Actions
   const setToken = (newToken: string) => {
     token.value = newToken
+    // 设置HTTP客户端的认证token
+    httpClient.setAuthToken(newToken)
   }
 
   const setUserInfo = (info: UserInfo) => {
@@ -38,10 +41,14 @@ export const useUserStore = defineStore('user', () => {
   const resetUserState = () => {
     token.value = ''
     userInfo.value = null
+    // 清除HTTP客户端的认证token
+    httpClient.clearAuthToken()
   }
 
   const initUserData = async () => {
     if (token.value) {
+      // 恢复HTTP客户端的认证token
+      httpClient.setAuthToken(token.value)
       const success = await fetchUserInfo()
       if (!success) {
         resetUserState()

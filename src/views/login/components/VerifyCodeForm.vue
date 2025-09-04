@@ -83,8 +83,15 @@ async function handleVerify() {
     if (result.success && result.data) {
       // 保存用户信息到store
       userStore.handleLoginSuccess(result.data.token, result.data.user)
-      // 跳转到首页
-      router.push('/home')
+
+      // 检查是否有重定向路径
+      const redirectPath = route.query.redirect as string
+      if (redirectPath) {
+        router.push(redirectPath)
+      }
+      else {
+        router.push('/home')
+      }
     }
     else {
       errorMessage.value = result.message
