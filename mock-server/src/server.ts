@@ -15,10 +15,11 @@ app.listen(PORT, () => {
   console.warn('  POST /api/auth/refresh-token - 刷新Token')
 
   console.warn('\n💬 聊天相关:')
-  console.warn('  GET  /api/talklist - 获取聊天列表')
-  console.warn('  GET  /api/talklist/:id - 获取聊天详情')
-  console.warn('  POST /api/talklist/:id/message - 发送消息')
-  console.warn('  PUT  /api/talklist/:id/read - 标记为已读')
+  console.warn('  GET  /api/chat - 获取聊天列表')
+  console.warn('  GET  /api/chat/:id - 获取聊天详情')
+  console.warn('  POST /api/chat/:id/message - 发送消息')
+  console.warn('  PUT  /api/chat/:id/read - 标记为已读')
+  console.warn('  GET  /api/chat/unread-count - 获取未读消息总数')
 
   console.warn('\n🏠 首页相关:')
   console.warn('  GET  /api/home/content - 获取首页内容')

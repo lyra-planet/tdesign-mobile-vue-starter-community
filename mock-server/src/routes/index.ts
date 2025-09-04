@@ -9,7 +9,7 @@ const router = Router()
 
 // 挂载路由
 router.use('/auth', authRoutes)
-router.use('/talklist', chatRoutes)
+router.use('/chat', chatRoutes)
 router.use('/datacenter', datacenterRoutes)
 router.use('/home', homeRoutes)
 router.use('/profile', profileRoutes)

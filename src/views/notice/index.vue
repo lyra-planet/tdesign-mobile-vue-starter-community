@@ -1,42 +1,91 @@
 <script setup lang='ts'>
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { talklist } from '../../store/talklist'
+import { loadTalkList, sendMessage, talklist } from '../../store/talklist'
 
 defineOptions({
   name: 'Notice',
 })
+
 const route = useRoute()
+const router = useRouter()
 const { t } = useI18n()
 const message = ref('')
+const sending = ref(false)
 const currentId = (route.params as { id: string }).id
-const current = ref(talklist.find(item => item.id === currentId))
-const foundItem = talklist.find(item => item.id === currentId)
-const talk_content = ref(foundItem ? foundItem.message : [])
-function handleSendMessage() {
-  if (message.value.trim() === '') {
+
+// 当前聊天对象
+const current = computed(() => talklist.find(item => item.id === currentId))
+
+// 聊天内容
+const talk_content = computed(() => current.value?.message || [])
+
+// 发送消息
+async function handleSendMessage() {
+  if (message.value.trim() === '' || sending.value) {
     return
   }
-  const targetItem = talklist.find(item => item.id === currentId)
-  if (targetItem) {
-    targetItem.message.push({
-      id: Date.now().toString(),
-      tag: 'me',
-      value: message.value,
-    })
+
+  try {
+    sending.value = true
+    const messageContent = message.value.trim()
+    message.value = ''
+
+    // 调用API发送消息
+    const success = await sendMessage(currentId, messageContent)
+
+    if (success) {
+      // 滚动到底部
+      await nextTick()
+      scrollToBottom()
+
+      // 模拟对方回复（可选）
+      setTimeout(async () => {
+        // 这里可以添加自动回复逻辑
+        console.log('消息发送成功')
+      }, 1000)
+    }
+    else {
+      // 发送失败，恢复消息内容
+      message.value = messageContent
+      // 这里可以添加错误提示
+      console.error('消息发送失败')
+    }
+  }
+  catch (error) {
+    console.error('发送消息出错:', error)
+  }
+  finally {
+    sending.value = false
+  }
+}
+
+// 滚动到底部
+function scrollToBottom() {
+  const messagesArea = document.querySelector('.messages-area')
+  if (messagesArea) {
+    messagesArea.scrollTop = messagesArea.scrollHeight
+  }
+}
+
+// 页面加载时确保有聊天数据
+onMounted(async () => {
+  // 如果没有找到当前聊天，尝试重新加载
+  if (!current.value) {
+    await loadTalkList()
+
+    // 重新加载后仍然没有找到，返回列表页
+    if (!current.value) {
+      router.replace('/talklist')
+      return
+    }
   }
 
-  message.value = ''
-  // 模拟对方回复
-  setTimeout(() => {
-    talk_content.value.push({
-      id: (Date.now() + 1).toString(),
-      tag: 'other',
-      value: '这是自动回复的消息',
-    })
-  }, 1000)
-  console.log(talklist)
-}
+  // 滚动到底部
+  await nextTick()
+  scrollToBottom()
+})
 </script>
 
 <template>
@@ -54,7 +103,7 @@ function handleSendMessage() {
           <t-avatar size="40px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
         </div>
         <div v-if="item.tag === 'other'" class="msg-row left">
-          <t-avatar size="40px" :image="current.picture" />
+          <t-avatar size="40px" :image="current?.picture" />
           <div class="msg-bubble other">
             {{ item.value }}
           </div>
@@ -67,9 +116,24 @@ function handleSendMessage() {
     <!-- 底部输入框 -->
     <div class="input-area">
       <div class="input-wrapper flex items-center ">
-        <input v-model="message" :placeholder="t('pages.notice.input_placeholder')" class="msg-input w-full" :borderless="false">
-        <t-button size="medium" theme="primary" shape="round" class="send-btn" :disabled="message.trim() === ''" @click="handleSendMessage()">
-          {{ t('pages.notice.send') }}
+        <input
+          v-model="message"
+          :placeholder="t('pages.notice.input_placeholder')"
+          class="msg-input w-full"
+          :borderless="false"
+          :disabled="sending"
+          @keypress.enter="handleSendMessage"
+        >
+        <t-button
+          size="medium"
+          theme="primary"
+          shape="round"
+          class="send-btn"
+          :disabled="message.trim() === '' || sending"
+          :loading="sending"
+          @click="handleSendMessage"
+        >
+          {{ sending ? '发送中...' : t('pages.notice.send') }}
         </t-button>
       </div>
     </div>
