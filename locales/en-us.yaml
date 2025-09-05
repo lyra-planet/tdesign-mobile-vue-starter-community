@@ -111,7 +111,7 @@ pages:
       send_failed: Failed to send message, please try again
       network_error: Network connection failed, please check your network and try again
   talklist:
-    title: All Messages
+    title: Message List Page
     user_nickname: Username
     message_content: This is a message
   datacenter:

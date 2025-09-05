@@ -107,6 +107,16 @@ const router = createRouter({
     //   path: '/error/:code',
     //   component: () => import('@/views/error/index.vue'),
     // },
+    // 错误页
+    {
+      path: '/error/403',
+      component: () => import('@/views/error/403/index.vue'),
+    },
+    {
+      path: '/error/404',
+      component: () => import('@/views/error/404/index.vue'),
+    },
+    // 兜底重定向到 404
     {
       path: '/:pathMatch(.*)*',
       redirect: '/error/404',

@@ -38,16 +38,12 @@ export function useNavigation() {
       path: '/publish',
     },
     {
-      title: t('pages.notice.title'),
-      path: '/notice/1',
-    },
-    {
       title: t('pages.talklist.title'),
       path: '/talklist',
     },
     {
-      title: t('pages.datacenter.title'),
-      path: '/datacenter',
+      title: t('pages.notice.title'),
+      path: '/notice/1',
     },
     {
       title: t('pages.my.logged_in_page'),
@@ -67,7 +63,7 @@ export function useNavigation() {
     },
     {
       title: t('pages.datacenter.chart'),
-      path: '/chart',
+      path: '/datacenter',
     },
     {
       title: t('pages.login.verify_login'),
