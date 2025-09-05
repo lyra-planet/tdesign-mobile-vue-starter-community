@@ -22,6 +22,8 @@ declare module 'vue' {
     TConfigProvider: typeof import('tdesign-mobile-vue')['ConfigProvider']
     TDateTimePicker: typeof import('tdesign-mobile-vue')['DateTimePicker']
     TDrawer: typeof import('tdesign-mobile-vue')['Drawer']
+    TDropdownItem: typeof import('tdesign-mobile-vue')['DropdownItem']
+    TDropdownMenu: typeof import('tdesign-mobile-vue')['DropdownMenu']
     TFab: typeof import('tdesign-mobile-vue')['Fab']
     TForm: typeof import('tdesign-mobile-vue')['Form']
     TFormItem: typeof import('tdesign-mobile-vue')['FormItem']

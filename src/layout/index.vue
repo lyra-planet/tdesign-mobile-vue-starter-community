@@ -2,12 +2,11 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useLayoutState } from '../composables/useLayoutState'
-import { useNavigation } from '../composables/useNavigation'
 import { useTheme } from '../composables/useTheme'
-import { useTime } from '../composables/useTime'
 import BottomNavigation from './components/BottomNavigation.vue'
 import PageHeader from './components/PageHeader.vue'
+import { useLayoutState } from './composables/useLayoutState'
+import { useNavigation } from './composables/useNavigation'
 
 defineOptions({
   name: 'Layout',
@@ -18,8 +17,6 @@ const visible = ref(false)
 const { t } = useI18n()
 const router = useRouter()
 
-// 使用各种 composables
-const { currentTime } = useTime()
 useTheme()
 const {
   activeTab,
