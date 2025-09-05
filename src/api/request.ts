@@ -7,12 +7,14 @@ interface RequestConfig {
 class HttpClient {
   private baseURL: string
   private defaultHeaders: any
+  private showToastOnError: boolean
 
   constructor(baseURL: string = 'http://localhost:3001/api') {
     this.baseURL = baseURL
     this.defaultHeaders = {
       'Content-Type': 'application/json',
     }
+    this.showToastOnError = true
   }
 
   // 设置认证token
@@ -43,15 +45,26 @@ class HttpClient {
 
       const data = await response.json()
 
-      return {
+      const result = {
         code: response.status,
         message: data.message || (response.ok ? 'Success' : 'Error'),
         data: data.data || data,
         success: response.ok && data.code === 200,
       }
+      if (!result.success && this.showToastOnError) {
+        import('@/plugins/message').then(({ message }) => {
+          message.error(result.message || '请求失败')
+        }).catch(() => {})
+      }
+      return result
     }
-    catch (error) {
-      console.error('Request failed:', error)
+    catch (_error) {
+      if (this.showToastOnError) {
+        // 动态导入，避免循环依赖
+        import('@/plugins/message').then(({ message }) => {
+          message.error('网络请求失败')
+        }).catch(() => {})
+      }
       return {
         code: 500,
         message: '网络请求失败',

@@ -1,9 +1,9 @@
 <script setup lang='ts'>
 import type { ChatMessage } from '@/api/types'
-import { Message } from 'tdesign-mobile-vue'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { message as $message } from '@/plugins/message'
 import { formatMessageTime, loadChatDetail, loadTalkList, markChatAsRead, sendMessage, shouldShowTimeDivider, talklist } from '../../store/talklist'
 
 defineOptions({
@@ -58,12 +58,12 @@ async function handleSendMessage() {
     else {
       message.value = messageContent
       console.error('发送消息失败')
-      Message.error(t('pages.notice.errors.send_failed'))
+      $message.error(t('pages.notice.errors.send_failed'))
     }
   }
   catch (error) {
     console.error('发送消息失败:', error)
-    Message.error(t('pages.notice.errors.network_error'))
+    $message.error(t('pages.notice.errors.network_error'))
   }
   finally {
     sending.value = false

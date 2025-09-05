@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { HomeItem } from '@/api/home'
-import { Message } from 'tdesign-mobile-vue'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { getHomeContent, refreshHomeContent } from '@/api/home'
+import { message as $message } from '@/plugins/message'
 import HomeCard from './components/HomeCard.vue'
 import HomeFab from './components/HomeFab.vue'
 import HomeSwiper from './components/HomeSwiper.vue'
@@ -42,12 +42,12 @@ async function loadHomeContent(page = 1, isRefresh = false) {
       }
     }
     else {
-      Message.error(response.message || '获取内容失败')
+      $message.error(response.message || '获取内容失败')
     }
   }
   catch (error) {
     console.error('加载首页内容失败:', error)
-    Message.error('加载内容失败，请重试')
+    $message.error('加载内容失败，请重试')
   }
   finally {
     loading.value = false
@@ -64,15 +64,15 @@ async function handleRefreshContent() {
 
     if (response.success) {
       homeItems.value = response.data.items
-      Message.success('刷新成功')
+      $message.success('刷新成功')
     }
     else {
-      Message.error(response.message || '刷新失败')
+      $message.error(response.message || '刷新失败')
     }
   }
   catch (error) {
     console.error('刷新首页内容失败:', error)
-    Message.error('刷新失败，请重试')
+    $message.error('刷新失败，请重试')
   }
   finally {
     refreshing.value = false
@@ -96,16 +96,20 @@ function handleScrolltolower() {
 }
 
 function showMessage(theme: string, content = '这是一条普通通知信息', duration = 2000) {
-  if (Message[theme]) {
-    Message[theme]({
-      offset: [108, 16],
-      content,
-      duration,
-      icon: true,
-      zIndex: 20000,
-      context: document.querySelector('.content'),
-    })
+  const common = {
+    duration,
+    icon: true,
+    offset: [108, 16],
+    zIndex: 20000,
+    context: document.querySelector('.content'),
   }
+  if (theme === 'success')
+    $message.success(content, common)
+  else if (theme === 'error')
+    $message.error(content, common)
+  else if (theme === 'warning')
+    $message.warning(content, common)
+  else $message.info(content, common)
 }
 const route = useRoute()
 const router = useRouter()

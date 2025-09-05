@@ -1,8 +1,8 @@
 import type { RegionColumn, VideoStatistics } from '@/api/datacenter'
-import { Message } from 'tdesign-mobile-vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getDataCenterStats } from '@/api/datacenter'
+import { message as $message } from '@/plugins/message'
 
 export function useDataCenterStats() {
   const { t } = useI18n()
@@ -40,12 +40,12 @@ export function useDataCenterStats() {
         }))
       }
       else {
-        Message.error(response.message || '获取数据失败')
+        $message.error(response.message || '获取数据失败')
       }
     }
     catch (error) {
       console.error('加载数据中心统计失败:', error)
-      Message.error('加载数据失败，请重试')
+      $message.error('加载数据失败，请重试')
     }
     finally {
       loading.value = false

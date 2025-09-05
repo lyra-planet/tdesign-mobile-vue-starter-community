@@ -5,6 +5,7 @@ import { createApp } from 'vue'
 import { initGlobalConfig, injectStorageConfig } from '@/config'
 import * as directives from '@/directives'
 import { initializeI18n, useI18n } from '@/plugins/i18n'
+import { MessagePlugin } from '@/plugins/message'
 import { useUserStore } from '@/store/user'
 
 import App from './App.vue'
@@ -30,6 +31,7 @@ initGlobalConfig(app).then(async () => {
   useStore(app)
   injectStorageConfig(app)
   useI18n(app)
+  app.use(MessagePlugin)
   app.use(router)
 
   // 初始化 i18n
