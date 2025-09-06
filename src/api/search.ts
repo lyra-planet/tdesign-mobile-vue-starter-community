@@ -9,10 +9,19 @@ export interface SearchDiscoveriesResponse {
   items: string[]
 }
 
+export interface SearchResultsResponse {
+  items: string[]
+}
+
 export function getSearchHistoryTags(): Promise<ApiResponse<SearchHistoryTagsResponse>> {
   return get('/search/history-tags')
 }
 
 export function getSearchDiscoveries(): Promise<ApiResponse<SearchDiscoveriesResponse>> {
   return get('/search/discoveries')
+}
+
+export function search(query: string, signal?: AbortSignal): Promise<ApiResponse<SearchResultsResponse>> {
+  const q = encodeURIComponent(query)
+  return get(`/search?q=${q}`, undefined, signal)
 }

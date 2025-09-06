@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
-import { computed, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { getSearchDiscoveries, getSearchHistoryTags } from '@/api/search'
+import { getSearchDiscoveries, getSearchHistoryTags, search as searchApi } from '@/api/search'
 
 defineOptions({
   name: 'Searchpage',
@@ -14,6 +14,8 @@ const taglist = ref<string[]>([])
 const findlist = ref<string[]>([])
 
 const searchQuery = ref('')
+let searchTimer: number | null = null
+let currentSearchController: AbortController | null = null
 
 onMounted(async () => {
   const [tagsRes, discRes] = await Promise.all([
@@ -24,6 +26,35 @@ onMounted(async () => {
     taglist.value = tagsRes.data.tags || []
   if (discRes.success && discRes.data)
     findlist.value = discRes.data.items || []
+})
+
+// 输入搜索词时触发搜索，但不改动当前页面展示
+watch(searchQuery, (q) => {
+  if (searchTimer)
+    clearTimeout(searchTimer)
+  const text = q?.trim() || ''
+  if (!text) {
+    if (currentSearchController)
+      currentSearchController.abort()
+    currentSearchController = null
+    return
+  }
+  // 防抖 + 取消上一次请求，避免竞态
+  searchTimer = window.setTimeout(async () => {
+    if (currentSearchController)
+      currentSearchController.abort()
+    const controller = new AbortController()
+    currentSearchController = controller
+    await searchApi(text, controller.signal)
+    // 若需要使用搜索结果，可在此处理，但本次不改动 UI
+  }, 300)
+})
+
+onBeforeUnmount(() => {
+  if (searchTimer)
+    clearTimeout(searchTimer)
+  if (currentSearchController)
+    currentSearchController.abort()
 })
 </script>
 
@@ -54,6 +85,9 @@ onMounted(async () => {
     </div>
     <div class="find-detail">
       <t-tag v-for="(find, index) in findlist" :key="index" variant="light" class="find-content">
+        <template #icon>
+          <TIcon name="search" />
+        </template>
         {{ find }}
       </t-tag>
     </div>

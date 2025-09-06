@@ -207,6 +207,16 @@ export const handlers = [
   // Search
   http.get('*/api/search/history-tags', async () => ok({ tags: searchHistoryTags }, '获取搜索历史标签成功')),
   http.get('*/api/search/discoveries', async () => ok({ items: searchDiscoveries }, '获取搜索发现成功')),
+  http.get('*/api/search', async ({ request }) => {
+    await delay(300)
+    const url = new URL(request.url)
+    const q = (url.searchParams.get('q') || '').trim().toLowerCase()
+    if (!q)
+      return ok({ items: [] }, '搜索成功')
+    // 模拟搜索：用 discoveries 做简单包含匹配
+    const items = searchDiscoveries.filter(text => text.toLowerCase().includes(q)).slice(0, 10)
+    return ok({ items }, '搜索成功')
+  }),
 
   // Publish
   http.get('*/api/publish/tags', async () => ok({ tags: publishTags }, '获取发布页标签成功')),

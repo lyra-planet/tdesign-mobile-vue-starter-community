@@ -2,6 +2,7 @@ interface RequestConfig {
   method?: string
   headers?: any
   body?: any
+  signal?: AbortSignal
 }
 
 class HttpClient {
@@ -29,7 +30,7 @@ class HttpClient {
 
   async request(endpoint: string, config: RequestConfig = {}) {
     const url = `${this.baseURL}${endpoint}`
-    const { method = 'GET', headers = {}, body } = config
+    const { method = 'GET', headers = {}, body, signal } = config
 
     const requestHeaders = {
       ...this.defaultHeaders,
@@ -41,6 +42,7 @@ class HttpClient {
         method,
         headers: requestHeaders,
         body: body ? JSON.stringify(body) : undefined,
+        signal,
       })
 
       const data = await response.json()
@@ -59,6 +61,14 @@ class HttpClient {
       return result
     }
     catch (_error) {
+      // 若为主动取消请求，不提示错误
+      if ((_error as any)?.name === 'AbortError') {
+        return {
+          code: 499,
+          message: '请求已取消',
+          success: false,
+        }
+      }
       if (this.showToastOnError) {
         // 动态导入，避免循环依赖
         import('@/plugins/message').then(({ message }) => {
@@ -73,37 +83,37 @@ class HttpClient {
     }
   }
 
-  get(endpoint: string, headers?: any) {
-    return this.request(endpoint, { method: 'GET', headers })
+  get(endpoint: string, headers?: any, signal?: AbortSignal) {
+    return this.request(endpoint, { method: 'GET', headers, signal })
   }
 
-  post(endpoint: string, body?: any, headers?: any) {
-    return this.request(endpoint, { method: 'POST', body, headers })
+  post(endpoint: string, body?: any, headers?: any, signal?: AbortSignal) {
+    return this.request(endpoint, { method: 'POST', body, headers, signal })
   }
 
-  put(endpoint: string, body?: any, headers?: any) {
-    return this.request(endpoint, { method: 'PUT', body, headers })
+  put(endpoint: string, body?: any, headers?: any, signal?: AbortSignal) {
+    return this.request(endpoint, { method: 'PUT', body, headers, signal })
   }
 
-  delete(endpoint: string, headers?: any) {
-    return this.request(endpoint, { method: 'DELETE', headers })
+  delete(endpoint: string, headers?: any, signal?: AbortSignal) {
+    return this.request(endpoint, { method: 'DELETE', headers, signal })
   }
 }
 
 export const httpClient = new HttpClient()
 
-export function get(endpoint: string, headers?: any) {
-  return httpClient.get(endpoint, headers)
+export function get(endpoint: string, headers?: any, signal?: AbortSignal) {
+  return httpClient.get(endpoint, headers, signal)
 }
 
-export function post(endpoint: string, body?: any, headers?: any) {
-  return httpClient.post(endpoint, body, headers)
+export function post(endpoint: string, body?: any, headers?: any, signal?: AbortSignal) {
+  return httpClient.post(endpoint, body, headers, signal)
 }
 
-export function put(endpoint: string, body?: any, headers?: any) {
-  return httpClient.put(endpoint, body, headers)
+export function put(endpoint: string, body?: any, headers?: any, signal?: AbortSignal) {
+  return httpClient.put(endpoint, body, headers, signal)
 }
 
-export function del(endpoint: string, headers?: any) {
-  return httpClient.delete(endpoint, headers)
+export function del(endpoint: string, headers?: any, signal?: AbortSignal) {
+  return httpClient.delete(endpoint, headers, signal)
 }
