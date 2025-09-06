@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
+import { useI18n } from 'vue-i18n'
 
 import { useEditHook } from './edit/hooks'
 
 defineOptions({
   name: 'MyEdit',
 })
+
+const { t } = useI18n()
 
 const {
   formRef,
@@ -36,31 +39,31 @@ const {
         class="edit-form"
       >
         <!-- 用户名 -->
-        <t-form-item label="用户名" name="username">
+        <t-form-item :label="t('pages.my.edit.form.username')" name="username">
           <t-input
             v-model="formData.username"
             borderless
-            placeholder="请输入用户名"
+            :placeholder="t('pages.my.edit.placeholders.username')"
             :maxlength="30"
           />
         </t-form-item>
 
         <!-- 性别 -->
-        <t-form-item label="性别" name="gender">
+        <t-form-item :label="t('pages.my.edit.form.gender')" name="gender">
           <t-radio-group v-model="formData.gender" class="w-full flex justify-between" borderless>
-            <t-radio :block="false" name="gender" value="男" label="男" />
-            <t-radio :block="false" name="gender" value="女" label="女" />
-            <t-radio :block="false" name="gender" value="保密" label="保密" />
+            <t-radio :block="false" name="gender" :value="t('pages.my.edit.gender.male')" :label="t('pages.my.edit.gender.male')" />
+            <t-radio :block="false" name="gender" :value="t('pages.my.edit.gender.female')" :label="t('pages.my.edit.gender.female')" />
+            <t-radio :block="false" name="gender" :value="t('pages.my.edit.gender.secret')" :label="t('pages.my.edit.gender.secret')" />
           </t-radio-group>
         </t-form-item>
 
         <!-- 生日 -->
-        <t-form-item arrow label="生日" name="birthday" content-align="right">
+        <t-form-item arrow :label="t('pages.my.edit.form.birthday')" name="birthday" content-align="right">
           <t-input
             v-model="formData.birthday"
             borderless
             align="right"
-            placeholder="请选择生日"
+            :placeholder="t('pages.my.edit.placeholders.birthday')"
             readonly
             class="picker-input"
             @click="handleDatePickerOpen"
@@ -68,12 +71,12 @@ const {
         </t-form-item>
 
         <!-- 地址 -->
-        <t-form-item arrow label="地址" name="address" content-align="right">
+        <t-form-item arrow :label="t('pages.my.edit.form.address')" name="address" content-align="right">
           <t-input
             v-model="addressLabel"
             borderless
             align="right"
-            placeholder="请选择地址"
+            :placeholder="t('pages.my.edit.placeholders.address')"
             readonly
             class="picker-input"
             @click="handleAddressPickerOpen"
@@ -81,18 +84,18 @@ const {
         </t-form-item>
 
         <!-- 个人简介 -->
-        <t-form-item label="个人简介" name="bio">
+        <t-form-item :label="t('pages.my.edit.form.bio')" name="bio">
           <t-textarea
             v-model="formData.bio"
             class="w-full h-[100px]"
             indicator
             :maxlength="50"
-            placeholder="请输入个人简介"
+            :placeholder="t('pages.my.edit.placeholders.bio')"
           />
         </t-form-item>
 
         <!-- 相片墙 -->
-        <t-form-item label="相片墙" name="photo">
+        <t-form-item :label="t('pages.my.edit.form.photo')" name="photo">
           <t-upload
             v-model="formData.photos"
             class="upload-pic"
@@ -109,7 +112,7 @@ const {
     <!-- 保存按钮 -->
     <div class="save-button-container">
       <button class="save-button" @click="handleSave">
-        保存
+        {{ t('common.buttons.save') }}
       </button>
     </div>
 
@@ -118,7 +121,7 @@ const {
       <t-date-time-picker
         v-model="birthdayValue"
         :mode="['date']"
-        title="选择日期"
+        :title="t('pages.my.edit.pickers.date_title')"
         format="YYYY-MM-DD"
         :start="dayjs().subtract(100, 'year').format('YYYY-MM-DD')"
         :end="dayjs().format('YYYY-MM-DD')"
@@ -130,7 +133,7 @@ const {
     <!-- 地址选择器弹窗 -->
     <t-popup v-model="formVisible.address" placement="bottom">
       <t-picker
-        title="选择地址"
+        :title="t('pages.my.edit.pickers.address_title')"
         :columns="addressColumns"
         @confirm="handleAddressConfirm"
         @cancel="formVisible.address = false"

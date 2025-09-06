@@ -88,6 +88,26 @@ pages:
       tdoc: 腾讯文档
       tmap: 腾讯地图
       data_center: 数据中心
+    edit:
+      form:
+        username: 用户名
+        gender: 性别
+        birthday: 生日
+        address: 地址
+        bio: 个人简介
+        photo: 相片墙
+      placeholders:
+        username: 请输入用户名
+        birthday: 请选择生日
+        address: 请选择地址
+        bio: 请输入个人简介
+      gender:
+        male: 男
+        female: 女
+        secret: 保密
+      pickers:
+        date_title: 选择日期
+        address_title: 选择地址
   publish:
     title: 发布页
     save_draft: 存草稿

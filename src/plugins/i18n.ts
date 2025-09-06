@@ -1,6 +1,8 @@
 import type { App } from 'vue'
 import type { I18n } from 'vue-i18n'
 import { createI18n } from 'vue-i18n'
+import { storagePrefix } from '@/config'
+import { useStorage } from '@/utils/global'
 
 // 懒加载优化
 const localeFiles = import.meta.glob('../../locales/*.y(a)?ml', { eager: false })
@@ -46,11 +48,23 @@ export const i18n: I18n = createI18n({
   messages: {},
 })
 
+function getStoredLocale(): string {
+  try {
+    const { getItem } = useStorage()
+    const storage = getItem<StorageConfig>(`${storagePrefix()}config`)
+    return storage?.locale || defaultLocale
+  }
+  catch {
+    return defaultLocale
+  }
+}
+
 // 异步初始化 i18n
 export async function initializeI18n() {
-  const initialMessages = await loadLocaleMessages(defaultLocale)
-  i18n.global.setLocaleMessage(defaultLocale, initialMessages)
-  ;(i18n.global.locale as any).value = defaultLocale
+  const initialLocale = getStoredLocale()
+  const initialMessages = await loadLocaleMessages(initialLocale)
+  i18n.global.setLocaleMessage(initialLocale, initialMessages)
+  ;(i18n.global.locale as any).value = initialLocale
 }
 
 // 语言切换
@@ -60,7 +74,7 @@ export async function setLanguage(locale: string) {
 
   // 如果语言已加载，直接切换
   if (localeCache.has(locale)) {
-    (i18n.global.locale as any).value = locale
+    ;(i18n.global.locale as any).value = locale
     return
   }
 

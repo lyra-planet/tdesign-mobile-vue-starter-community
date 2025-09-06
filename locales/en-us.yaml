@@ -88,6 +88,26 @@ pages:
       tdoc: Tencent Docs
       tmap: Tencent Map
       data_center: Data Center
+    edit:
+      form:
+        username: Name
+        gender: Gender
+        birthday: Birthday
+        address: Address
+        bio: Bio
+        photo: Photos
+      placeholders:
+        username: Enter username
+        birthday: Select birthday
+        address: Select address
+        bio: Enter a brief bio
+      gender:
+        male: Male
+        female: Female
+        secret: Secret
+      pickers:
+        date_title: Select Date
+        address_title: Select Address
   publish:
     title: Publish Page
     save_draft: Save Draft
