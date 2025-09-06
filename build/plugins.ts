@@ -44,7 +44,10 @@ export function usePlugins(): PluginOption[] {
       dts: './types/vue-router.d.ts',
       routesFolder: ['src/views'],
       exclude: [
-        '**/!(index).vue', // 排除非 index.vue 文件
+        '**/components/**/*',
+        '**/composables/**/*',
+        '**/hooks/**/*',
+        '**/shared/**/*',
       ],
     }),
     // i18n 支持

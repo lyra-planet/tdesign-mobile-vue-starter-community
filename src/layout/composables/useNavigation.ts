@@ -17,6 +17,7 @@ export function useNavigation() {
     '/talklist': () => t('pages.talklist.title'),
     '/my': () => t('pages.my.title'),
     '/publish': () => t('pages.publish.title'),
+    '/search': () => t('pages.home.search'),
     '/my/settings': () => t('pages.my.settings'),
     '/my/general-settings': () => t('pages.my.general_settings.title'),
     '/my/edit': () => t('pages.my.profile_info'),
@@ -31,7 +32,7 @@ export function useNavigation() {
     },
     {
       title: t('pages.home.search'),
-      path: '/home/search',
+      path: '/search',
     },
     {
       title: t('pages.publish.title'),
@@ -148,11 +149,11 @@ export function useNavigation() {
   }
 
   function changeToSearch() {
-    router.push('/home/search')
+    router.push('/search')
   }
 
   // 侧边栏项目点击处理
-  function handleSidebarItemClick(index: number, item: any, context: { e: MouseEvent }) {
+  function handleSidebarItemClick(index: number, item: any, _context: { e: MouseEvent }) {
     if (item.path) {
       if (item.title === t('pages.my.logged_in_page')) {
         simulateLogin()

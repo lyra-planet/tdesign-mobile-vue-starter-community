@@ -31,7 +31,8 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     build: {
       // 最大兼容，👀 参考 https://vite.dev/guide/build.html#browser-compatibility
       target: 'es2015',
-      sourcemap: true,
+      // 仅在报告模式下开启 sourcemap，生产默认关闭
+      sourcemap: mode === 'report',
       // 去除打包过大警告
       chunkSizeWarningLimit: 4000,
       // 打包分类 😎
@@ -51,6 +52,10 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
                 return 'tdesign'
               if (id.includes('vue-i18n'))
                 return 'i18n'
+              if (id.includes('dayjs'))
+                return 'dayjs'
+              if (id.includes('@vueuse'))
+                return 'vueuse'
               return 'vendor'
             }
           },

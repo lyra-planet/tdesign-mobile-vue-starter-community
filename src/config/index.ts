@@ -26,7 +26,8 @@ function getGlobalConfig<K extends keyof GlobalConfig>(k: K): GlobalConfig[K] {
 const storagePrefix = () => getGlobalConfig('storageNS')
 
 function injectStorageConfig(app: App) {
-  const { getItem, setItem } = useStorage()
+  const storageType = getGlobalConfig('storage') === 'sessionStorage' ? 'session' : 'local'
+  const { getItem, setItem } = useStorage(storageType)
   // 当前个性化配置较少，直接扁平化即可
   let storage = getItem<StorageConfig>(`${storagePrefix()}config`)
   if (!storage) {
@@ -73,6 +74,12 @@ export {
   networkConfig,
   storagePrefix,
   themeConfig,
+}
+
+// 提供一个基于配置的存储选择器
+export function useAppStorage() {
+  const storageType = getGlobalConfig('storage') === 'sessionStorage' ? 'session' : 'local'
+  return useStorage(storageType)
 }
 
 // 导出配置类型

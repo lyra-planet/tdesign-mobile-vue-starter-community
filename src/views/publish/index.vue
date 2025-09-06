@@ -17,7 +17,7 @@ defineOptions({
 </script>
 
 <template>
-  <div class="flex flex-col h-full justify-between">
+  <div class="flex flex-col h-full justify-between bg-white">
     <div>
       <PublishUpload />
       <PublishText />

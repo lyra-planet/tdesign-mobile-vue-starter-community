@@ -1,8 +1,11 @@
 import { createRouter } from 'vue-router'
-import { handleHotUpdate, routes } from 'vue-router/auto-routes'
+import { routes as autoRoutes, handleHotUpdate } from 'vue-router/auto-routes'
 import Layout from '@/layout/index.vue'
 
 import { getRouterMode } from './utils'
+
+// 将自动生成的路由作为 Layout 子路由（排除错误页与登录页；登录页手动挂载到 Layout 下）
+const layoutChildren = autoRoutes.filter(r => !r.path.startsWith('/error') && !r.path.startsWith('/login'))
 
 const router = createRouter({
   history: getRouterMode(import.meta.env.VITE_ROUTER_MODE),
@@ -11,116 +14,22 @@ const router = createRouter({
       path: '/',
       component: Layout,
       children: [
-        {
-          path: '',
-          redirect: '/home',
-        },
-        {
-          name: 'Home',
-          path: 'home',
-          component: () => import('@/views/home/index.vue'),
-        },
-        {
-          path: 'my',
-          component: () => import('@/views/my/index.vue'),
-        },
-        {
-          path: 'talklist',
-          component: () => import('@/views/talklist/index.vue'),
-        },
-        {
-          name: 'Publish',
-          path: 'publish',
-          component: () => import('@/views/publish/index.vue'),
-        },
-        {
-          path: 'home/search',
-          name: 'Searchpage',
-          component: () => import('@/views/search/index.vue'),
-        },
-        {
-          path: 'notice/:id',
-          name: 'Notice',
-          component: () => import('@/views/notice/index.vue'),
-        },
-        {
-          path: 'my/settings',
-          name: 'MySettings',
-          component: () => import('@/views/my/settings.vue'),
-        },
-        {
-          path: 'my/general-settings',
-          name: 'MyGeneralSettings',
-          component: () => import('@/views/my/general-settings.vue'),
-        },
-        {
-          path: 'my/black_mode',
-          name: 'MyBlackMode',
-          component: () => import('@/views/my/black_mode.vue'),
-        },
-        {
-          path: 'my/edit',
-          name: 'MyEdit',
-          component: () => import('@/views/my/edit.vue'),
-          meta: {
-            title: '个人信息',
-          },
-        },
-        {
-          path: 'login/phone',
-          name: 'PhoneLogin',
-          component: () => import('@/views/login/PhoneLoginPage.vue'),
-          meta: {
-            title: '手机号登录',
-          },
-        },
-        {
-          path: 'login/password',
-          name: 'PasswordLogin',
-          component: () => import('@/views/login/PasswordLoginPage.vue'),
-          meta: {
-            title: '密码登录',
-          },
-        },
-        {
-          path: 'login/verify',
-          name: 'VerifyCodeLogin',
-          component: () => import('@/views/login/VerifyCodePage.vue'),
-          meta: {
-            title: '验证码登录',
-          },
-        },
-        {
-          path: 'datacenter',
-          name: 'DataCenter',
-          component: () => import('@/views/datacenter/index.vue'),
-        },
+        { path: '', redirect: '/home' },
+        // 自动生成的业务路由
+        ...layoutChildren,
+        { path: 'notice/:id', name: 'Notice', component: () => import('@/views/notice/index.vue') },
+        { path: 'login', redirect: '/login/phone' },
+        { path: 'login/phone', component: () => import('@/views/login/PhoneLoginPage.vue') },
+        { path: 'login/password', component: () => import('@/views/login/PasswordLoginPage.vue') },
+        { path: 'login/verify', component: () => import('@/views/login/VerifyCodePage.vue') },
       ],
     },
-    // 不需要布局的页面
-    // 登录页面重定向
-    {
-      path: '/login',
-      redirect: '/login/phone',
-    },
-    // {
-    //   path: '/error/:code',
-    //   component: () => import('@/views/error/index.vue'),
-    // },
-    // 错误页
-    {
-      path: '/error/403',
-      component: () => import('@/views/error/403/index.vue'),
-    },
-    {
-      path: '/error/404',
-      component: () => import('@/views/error/404/index.vue'),
-    },
+    // 登录重定向
+    { path: '/login', redirect: '/login/phone' },
+    // 错误页面
+    ...autoRoutes.filter(r => r.path.startsWith('/error')),
     // 兜底重定向到 404
-    {
-      path: '/:pathMatch(.*)*',
-      redirect: '/error/404',
-    },
+    { path: '/:pathMatch(.*)*', redirect: '/error/404' },
   ],
 })
 

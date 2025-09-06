@@ -86,3 +86,5 @@ export const useUserStore = defineStore('user', () => {
     pick: ['token', 'userInfo'],
   },
 })
+
+// 自动收集已在 index.ts 中通过插件处理

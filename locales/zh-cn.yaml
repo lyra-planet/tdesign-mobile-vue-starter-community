@@ -97,7 +97,7 @@ pages:
         date_title: 选择日期
         address_title: 选择地址
   publish:
-    title: 发布页
+    title: 发布动态
     save_draft: 存草稿
     publish_action: 发布
     location: 所在位置

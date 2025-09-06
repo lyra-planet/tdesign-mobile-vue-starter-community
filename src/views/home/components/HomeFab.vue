@@ -9,14 +9,8 @@ const iconFunc = () => h(AddIcon, { size: '24px' })
 
 function onClick() {
   console.log('点击了发布')
-  try {
-    // 先尝试使用 router.push
-    router.push({ name: 'Publish' })
-  }
-  catch (error) {
-    // 如果 router.push 失败，尝试使用 window.location
-    window.location.href = '/publish'
-  }
+  // 使用 path 确保与自动路由匹配，避免名称不一致导致失败
+  router.push({ path: '/publish' })
 }
 </script>
 
