@@ -10,6 +10,10 @@ export function useDataCenterStats() {
   // 按区域统计数据
   const regionData = ref<VideoStatistics[]>([])
   const regionColumns = ref<RegionColumn[]>([])
+  // 概览/互动/完成度
+  const overview = ref<{ views: string, pv: string, uv: string } | null>(null)
+  const interaction = ref<{ views: number, likes: number, shares: number, favorites: number } | null>(null)
+  const completion = ref<Array<{ time: string, percentage: number }>>([])
   const loading = ref(false)
 
   // 获取列标题翻译
@@ -38,6 +42,10 @@ export function useDataCenterStats() {
           ...col,
           title: getColumnTitle(col.colKey),
         }))
+        // 新增数据
+        overview.value = response.data.overview
+        interaction.value = response.data.interaction
+        completion.value = response.data.completion
       }
       else {
         $message.error(response.message || '获取数据失败')
@@ -55,6 +63,9 @@ export function useDataCenterStats() {
   return {
     regionData,
     regionColumns,
+    overview,
+    interaction,
+    completion,
     loading,
     loadDataCenterStats,
   }

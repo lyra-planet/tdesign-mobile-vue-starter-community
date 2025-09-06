@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
+const props = defineProps<{ overview: { views: string, pv: string, uv: string } | null }>()
+
 const { t } = useI18n()
 </script>
 
@@ -20,7 +22,7 @@ const { t } = useI18n()
           {{ t('pages.datacenter.overview.views') }}
         </div>
         <div class="overview-number views-number">
-          202W
+          {{ props.overview?.views ?? '—' }}
         </div>
       </div>
       <div class="overview-item">
@@ -28,7 +30,7 @@ const { t } = useI18n()
           {{ t('pages.datacenter.overview.pv') }}
         </div>
         <div class="overview-number">
-          233W
+          {{ props.overview?.pv ?? '—' }}
         </div>
       </div>
       <div class="overview-item">
@@ -36,7 +38,7 @@ const { t } = useI18n()
           {{ t('pages.datacenter.overview.uv') }}
         </div>
         <div class="overview-number">
-          102W
+          {{ props.overview?.uv ?? '—' }}
         </div>
       </div>
     </div>

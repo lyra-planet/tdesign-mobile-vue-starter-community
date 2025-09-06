@@ -2,10 +2,12 @@ import type { Chat, LoginResponse, SendMessageResponse, UserInfo } from '@/api/t
 import { delay, http, HttpResponse } from 'msw'
 // 示例内存数据
 import { talklist } from './data/chat'
-import { regionColumns, videoStatistics } from './data/datacenter'
+import { completion, interaction, overview, regionColumns, videoStatistics } from './data/datacenter'
 import { homeItems } from './data/home'
 
 import { menuItems, serviceGroups, userStats } from './data/profile'
+import { publishTags } from './data/publish'
+import { searchDiscoveries, searchHistoryTags } from './data/search'
 import { users } from './data/users'
 
 function ok<T>(data: T, message = 'Success') {
@@ -194,7 +196,20 @@ export const handlers = [
   http.post('*/api/profile/service-click', async () => ok({ serviceName: 'demo', serviceType: 'internal', timestamp: new Date().toISOString() }, '服务点击记录成功')),
 
   // Datacenter
-  http.get('*/api/datacenter/stats', async () => ok({ regionData: videoStatistics, regionColumns }, '获取数据中心统计数据成功')),
+  http.get('*/api/datacenter/stats', async () => ok({
+    regionData: videoStatistics,
+    regionColumns,
+    overview,
+    interaction,
+    completion,
+  }, '获取数据中心统计数据成功')),
+
+  // Search
+  http.get('*/api/search/history-tags', async () => ok({ tags: searchHistoryTags }, '获取搜索历史标签成功')),
+  http.get('*/api/search/discoveries', async () => ok({ items: searchDiscoveries }, '获取搜索发现成功')),
+
+  // Publish
+  http.get('*/api/publish/tags', async () => ok({ tags: publishTags }, '获取发布页标签成功')),
   http.get('*/api/datacenter/video/:id', async ({ params }) => {
     const id = Number(params.id)
     const video = videoStatistics.find(v => v.index === id) || videoStatistics[0]

@@ -1,7 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { getSearchDiscoveries, getSearchHistoryTags } from '@/api/search'
 
 defineOptions({
   name: 'Searchpage',
@@ -9,25 +10,21 @@ defineOptions({
 
 const { t } = useI18n()
 
-const taglist = computed(() => [
-  t('pages.search.tags.ai_art'),
-  t('pages.search.tags.stable_diffusion'),
-  t('pages.search.tags.copyright_material'),
-  t('pages.search.tags.starry_sky'),
-  t('pages.search.tags.illustration'),
-  t('pages.search.tags.ai_art'),
-])
-
-const findlist = computed(() => [
-  t('pages.search.discoveries.exam_advice'),
-  t('pages.search.discoveries.protein_choice'),
-  t('pages.search.discoveries.online_shopping'),
-  t('pages.search.discoveries.travel_with_kids'),
-  t('pages.search.discoveries.chinese_cars'),
-  t('pages.search.discoveries.hr_question'),
-])
+const taglist = ref<string[]>([])
+const findlist = ref<string[]>([])
 
 const searchQuery = ref('')
+
+onMounted(async () => {
+  const [tagsRes, discRes] = await Promise.all([
+    getSearchHistoryTags(),
+    getSearchDiscoveries(),
+  ])
+  if (tagsRes.success && tagsRes.data)
+    taglist.value = tagsRes.data.tags || []
+  if (discRes.success && discRes.data)
+    findlist.value = discRes.data.items || []
+})
 </script>
 
 <template>
@@ -38,7 +35,7 @@ const searchQuery = ref('')
           <TIcon name="search" size="18px" />
         </template>
       </t-search>
-      <div class="cancel" @click="() => { searchQuery.value = ''; }">
+      <div class="cancel" @click="() => { (searchQuery as any).value = ''; }">
         {{ t('pages.search.cancel') }}
       </div>
     </div>

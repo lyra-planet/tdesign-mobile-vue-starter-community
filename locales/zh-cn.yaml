@@ -10,20 +10,8 @@ pages:
   search:
     cancel: 取消
     history: 历史记录
-    tags:
-      ai_art: AI绘画
-      stable_diffusion: Stable Diffusion
-      copyright_material: 版权素材
-      starry_sky: 星空
-      illustration: illustration
     discoveries:
       title: 搜索发现
-      exam_advice: 考研考编同时上岸应该怎么选？有哪些参考建议
-      protein_choice: 日常饮食中，如何选择优质蛋白
-      online_shopping: 你有没有网购维权成功的经历？求分享经验
-      travel_with_kids: 夏季带孩子旅游，你的必备物品有哪些
-      chinese_cars: 在海外越卖越贵，中国汽车做对了什么
-      hr_question: 当HR问你离职原因，怎么回答最能被接受
   login:
     title: 用户登录
     login: 登录
@@ -116,11 +104,6 @@ pages:
     add_description: 添加描述
     share_thoughts: 分享你此刻的想法
     add_tags: 添加标签
-    tags:
-      ai_art: "#AI绘画"
-      copyright_material: "#版权素材"
-      original: "#原创"
-      style_inspiration: "#风格灵感"
   notice:
     title: 对话页
     today_time: 今天 10:00

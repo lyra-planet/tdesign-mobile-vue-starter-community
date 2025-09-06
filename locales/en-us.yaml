@@ -10,20 +10,8 @@ pages:
   search:
     cancel: Cancel
     history: History
-    tags:
-      ai_art: AI Art
-      stable_diffusion: Stable Diffusion
-      copyright_material: Licensed Material
-      starry_sky: Starry Sky
-      illustration: Illustration
     discoveries:
       title: Discoveries
-      exam_advice: How to choose between graduate school and civil service exams?
-      protein_choice: How to choose quality protein in your daily diet
-      online_shopping: Have you successfully defended your rights when shopping online?
-      travel_with_kids: Essential items for summer travel with children
-      chinese_cars: Why are Chinese cars selling better overseas?
-      hr_question: How to answer when HR asks about your reason for leaving
   login:
     title: User Login
     login: Login
@@ -116,11 +104,6 @@ pages:
     add_description: Add Description
     share_thoughts: Share your thoughts
     add_tags: Add Tags
-    tags:
-      ai_art: "#AI"
-      copyright_material: "#Lic"
-      original: "#Orig"
-      style_inspiration: "#Insp"
   notice:
     title: Chat Page
     today_time: Today 10:00

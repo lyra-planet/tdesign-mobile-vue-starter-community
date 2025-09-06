@@ -20,3 +20,28 @@ export const regionColumns = [
   { colKey: 'westChina', title: '华西', align: 'center' },
   { colKey: 'southChina', title: '华南', align: 'center' },
 ]
+
+// 概览统计（保持原页面数据不变）
+export const overview = {
+  views: '202W',
+  pv: '233W',
+  uv: '102W',
+}
+
+// 互动数据（保持原页面数据不变）
+export const interaction = {
+  views: 919,
+  likes: 887,
+  shares: 104,
+  favorites: 47,
+}
+
+// 完成度进度（保持原页面数据不变）
+export const completion = [
+  { time: '12:00', percentage: 80 },
+  { time: '14:00', percentage: 60 },
+  { time: '16:00', percentage: 85 },
+  { time: '18:00', percentage: 43 },
+  { time: '20:00', percentage: 60 },
+  { time: '22:00', percentage: 95 },
+]

@@ -1,8 +1,16 @@
 <script lang="ts" setup>
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { getPublishTags } from '@/api/publish'
 
 const { t } = useI18n()
-const variants = ['light', 'dark', 'outline', 'light-outline']
+const tags = ref<string[]>([])
+
+onMounted(async () => {
+  const res = await getPublishTags()
+  if (res.success && res.data)
+    tags.value = res.data.tags
+})
 </script>
 
 <template>
@@ -12,10 +20,14 @@ const variants = ['light', 'dark', 'outline', 'light-outline']
     </div>
     <div class="tag-demo overflow-hidden">
       <div class="overflow-x-scroll scrollbar-hidden scroll-smooth flex flex-row flex-nowrap">
-        <t-check-tag class="mx-[6px]" variant="dark" size="medium" :content="t('pages.publish.tags.ai_art')" />
-        <t-check-tag class="mx-[6px]" variant="dark" size="medium" :content="t('pages.publish.tags.copyright_material')" />
-        <t-check-tag class="mx-[6px]" variant="dark" size="medium" :content="t('pages.publish.tags.original')" />
-        <t-check-tag class="mx-[6px]" variant="dark" size="medium" :content="t('pages.publish.tags.style_inspiration')" />
+        <t-check-tag
+          v-for="(text, idx) in tags"
+          :key="idx"
+          class="mx-[6px]"
+          variant="dark"
+          size="medium"
+          :content="text"
+        />
       </div>
     </div>
   </div>

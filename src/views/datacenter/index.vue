@@ -10,7 +10,7 @@ defineOptions({
   name: 'DataCenter',
 })
 
-const { regionData, regionColumns, loadDataCenterStats } = useDataCenterStats()
+const { regionData, regionColumns, overview, interaction, completion, loadDataCenterStats } = useDataCenterStats()
 
 // 表格事件处理
 function handleRowClick(e: any) {
@@ -32,9 +32,9 @@ onMounted(() => {
 
 <template>
   <div class="datacenter-container">
-    <OverviewSection />
-    <InteractionSection />
-    <CompletionSection />
+    <OverviewSection :overview="overview" />
+    <InteractionSection :interaction="interaction" />
+    <CompletionSection :completion="completion" />
     <RegionSection
       :data="regionData"
       :columns="regionColumns"

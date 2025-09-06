@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
+const props = defineProps<{ interaction: { views: number, likes: number, shares: number, favorites: number } | null }>()
+
 const { t } = useI18n()
 </script>
 
@@ -17,7 +19,7 @@ const { t } = useI18n()
           {{ t('pages.datacenter.interaction.views') }}
         </div>
         <div class="interaction-number">
-          <span class="number">919</span>
+          <span class="number">{{ props.interaction?.views ?? '—' }}</span>
           <span class="unit">{{ t('pages.datacenter.interaction.unit') }}</span>
         </div>
       </div>
@@ -26,7 +28,7 @@ const { t } = useI18n()
           {{ t('pages.datacenter.interaction.likes') }}
         </div>
         <div class="interaction-number">
-          <span class="number">887</span>
+          <span class="number">{{ props.interaction?.likes ?? '—' }}</span>
           <span class="unit">{{ t('pages.datacenter.interaction.unit') }}</span>
         </div>
       </div>
@@ -35,7 +37,7 @@ const { t } = useI18n()
           {{ t('pages.datacenter.interaction.shares') }}
         </div>
         <div class="interaction-number">
-          <span class="number">104</span>
+          <span class="number">{{ props.interaction?.shares ?? '—' }}</span>
           <span class="unit">{{ t('pages.datacenter.interaction.unit') }}</span>
         </div>
       </div>
@@ -44,7 +46,7 @@ const { t } = useI18n()
           {{ t('pages.datacenter.interaction.favorites') }}
         </div>
         <div class="interaction-number">
-          <span class="number">47</span>
+          <span class="number">{{ props.interaction?.favorites ?? '—' }}</span>
           <span class="unit">{{ t('pages.datacenter.interaction.unit') }}</span>
         </div>
       </div>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
+const props = defineProps<{ completion: Array<{ time: string, percentage: number }> }>()
+
 const { t } = useI18n()
 </script>
 
@@ -12,52 +14,12 @@ const { t } = useI18n()
       </div>
     </div>
     <div class="completion-content">
-      <div class="completion-item">
+      <div v-for="item in props.completion" :key="item.time" class="completion-item">
         <div class="completion-time">
-          12:00
+          {{ item.time }}
         </div>
         <div class="completion-progress">
-          <t-progress :percentage="80" />
-        </div>
-      </div>
-      <div class="completion-item">
-        <div class="completion-time">
-          14:00
-        </div>
-        <div class="completion-progress">
-          <t-progress :percentage="60" />
-        </div>
-      </div>
-      <div class="completion-item">
-        <div class="completion-time">
-          16:00
-        </div>
-        <div class="completion-progress">
-          <t-progress :percentage="85" />
-        </div>
-      </div>
-      <div class="completion-item">
-        <div class="completion-time">
-          18:00
-        </div>
-        <div class="completion-progress">
-          <t-progress :percentage="43" />
-        </div>
-      </div>
-      <div class="completion-item">
-        <div class="completion-time">
-          20:00
-        </div>
-        <div class="completion-progress">
-          <t-progress :percentage="60" />
-        </div>
-      </div>
-      <div class="completion-item">
-        <div class="completion-time">
-          22:00
-        </div>
-        <div class="completion-progress">
-          <t-progress :percentage="95" />
+          <t-progress :percentage="item.percentage" />
         </div>
       </div>
     </div>

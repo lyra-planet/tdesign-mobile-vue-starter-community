@@ -24,6 +24,18 @@ export interface RegionColumn {
 export interface DataCenterResponse {
   regionData: VideoStatistics[]
   regionColumns: RegionColumn[]
+  overview: {
+    views: string
+    pv: string
+    uv: string
+  }
+  interaction: {
+    views: number
+    likes: number
+    shares: number
+    favorites: number
+  }
+  completion: Array<{ time: string, percentage: number }>
 }
 
 // 获取数据中心统计数据
