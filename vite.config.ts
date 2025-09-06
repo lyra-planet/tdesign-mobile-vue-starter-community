@@ -42,6 +42,18 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
           chunkFileNames: 'static/js/[name]-[hash].js',
           entryFileNames: 'static/js/[name]-[hash].js',
           assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
+          // Vendor 拆包，提升浏览器缓存命中与按需加载
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('/vue') || id.includes('vue-router') || id.includes('pinia'))
+                return 'vue-vendor'
+              if (id.includes('tdesign-mobile-vue') || id.includes('tdesign-icons-vue-next'))
+                return 'tdesign'
+              if (id.includes('vue-i18n'))
+                return 'i18n'
+              return 'vendor'
+            }
+          },
         },
       },
     },

@@ -79,6 +79,8 @@
     "unplugin-vue-components": "^28.8.0",
     "unplugin-vue-router": "^0.14.0",
     "vite": "^7.0.4",
+    "vite-plugin-compression2": "^2.2.1",
+    "vite-plugin-vsharp": "^1.9.1",
     "vite-svg-loader": "^5.1.0",
     "vitepress": "^1.5.0",
     "vue-tsc": "^3.0.1"

@@ -13,6 +13,8 @@ import { TDesignResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
+import { compression, defineAlgorithm } from 'vite-plugin-compression2'
+import vsharp from 'vite-plugin-vsharp'
 import svgLoader from 'vite-svg-loader'
 
 import { buildInfo } from './info'
@@ -56,18 +58,41 @@ export function usePlugins(): PluginOption[] {
     // 处理 SVG 图标
     svgLoader({
       defaultImport: 'url',
+      svgo: true,
+      svgoConfig: {
+        plugins: [
+          { name: 'removeViewBox', active: false },
+          { name: 'removeDimensions', active: true },
+        ],
+      },
       include: [/\.svg\?component$/],
       exclude: [/\/public\//],
-    }),
+    } as any),
+    // 图片压缩（JPG/PNG/WebP/GIF）
+    vsharp(),
     // TailwindCSS 4 新增
     Tailwindcss(),
-    // 代码定位工具，按住 alt + shift 点击页面上的组件可直接跳转到 vscode 对应代码段哦 😍
-    codeInspectorPlugin({
-      bundler: 'vite',
-      hideConsole: true,
-    }),
+    // 代码定位工具（仅开发启用，生产禁用）
+    process.env.NODE_ENV !== 'production'
+      ? codeInspectorPlugin({
+          bundler: 'vite',
+          hideConsole: true,
+        })
+      : null,
     // 手搓 vite 构建信息 plugin 😎
     buildInfo(),
+    // 预压缩静态资源（仅生产环境）
+    process.env.NODE_ENV === 'production'
+      ? compression({
+          algorithms: [
+            defineAlgorithm('brotliCompress'), // 优先使用brotli算法
+            defineAlgorithm('gzip'), // gzip兜底
+          ],
+          include: /\.(js|mjs|css|html|svg|json|txt|xml|wasm)$/i,
+          threshold: 1024,
+          skipIfLargerOrEqual: true,
+        })
+      : null,
     // 打包分析，看看哪个老六最占打包体积 😠
     lifecycle === 'report'
       ? visualizer({ brotliSize: true, open: true, filename: 'report.html' })
