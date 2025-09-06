@@ -1,6 +1,7 @@
 <script setup lang='ts'>
-import { computed, onMounted } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import VirtualList from '@/components/VirtualList.vue'
 import { error, isLoading, loadTalkList, markChatAsRead, talklist } from '../../store/talklist'
 
 defineOptions({
@@ -13,6 +14,10 @@ const mytalklist = computed(() =>
 )
 
 const router = useRouter()
+
+// 虚拟滚动：移交给通用组件处理
+const itemHeight = 82
+const buffer = 5
 
 // 跳转到聊天详情页
 async function goToDetail(id: string) {
@@ -45,7 +50,10 @@ async function refreshTalkList() {
 // 页面加载时获取聊天列表
 onMounted(async () => {
   await loadTalkList()
+  await nextTick()
 })
+
+onUnmounted(() => {})
 </script>
 
 <template>
@@ -66,7 +74,7 @@ onMounted(async () => {
       </t-result>
     </div>
 
-    <!-- 聊天列表 -->
+    <!-- 聊天列表（虚拟滚动） -->
     <div v-else class="list-container">
       <!-- 空状态 -->
       <div v-if="mytalklist.length === 0" class="empty-container">
@@ -79,29 +87,44 @@ onMounted(async () => {
         </t-result>
       </div>
 
-      <!-- 聊天列表 -->
-      <t-cell
-        v-for="item in mytalklist"
-        :key="item.id"
-        class="list-item"
-        style="background-color: var(--td-bg-color-container);"
+      <VirtualList
+        v-else
+        :items="mytalklist"
+        :item-height="itemHeight"
+        :buffer="buffer"
+        item-key="id"
+        container-class="list-container-inner"
       >
-        <t-avatar size="48px" :image="item.picture" class="avatar" />
+        <template #default="{ item }">
+          <t-cell
+            :key="item.id"
+            class="list-item"
+            style="background-color: var(--td-bg-color-container);"
+          >
+            <t-avatar size="48px" :image="item.picture" class="avatar" />
 
-        <t-badge :count="item.count" :offset="[16, 17]" class="flex-auto ml-4 badge" size="medium" shape="circle">
-          <div class="detail" style="background-color: var(--td-bg-color-container);" @click="goToDetail(item.id)">
-            <span class="upper" style="color: var(--td-text-color-secondary);">{{ item.name }}</span>
-            <span class="down" style="color: var(--td-text-color-placeholder);">
-              {{ truncateMessage(getLastMessage(item.message)) }}
-            </span>
-          </div>
-        </t-badge>
-      </t-cell>
+            <t-badge :count="item.count" :offset="[16, 17]" class="flex-auto ml-4 badge" size="medium" shape="circle">
+              <div class="detail" style="background-color: var(--td-bg-color-container);" @click="goToDetail(item.id)">
+                <span class="upper" style="color: var(--td-text-color-secondary);">{{ item.name }}</span>
+                <span class="down" style="color: var(--td-text-color-placeholder);">
+                  {{ truncateMessage(getLastMessage(item.message)) }}
+                </span>
+              </div>
+            </t-badge>
+          </t-cell>
+        </template>
+      </VirtualList>
     </div>
   </div>
 </template>
 
 <style lang='scss' scoped>
+.messege {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 .loading-container {
   position: fixed;
   top: 0;
@@ -122,6 +145,9 @@ onMounted(async () => {
   background-color: var(--td-bg-color-container);
   width: 100%;
   border-top: 0.5px solid #e7e7e7;
+  height: 100%;
+  overflow-y: auto;
+  flex: 1 1 auto;
 }
 .list-item {
   width: 100%;

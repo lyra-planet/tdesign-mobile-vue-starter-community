@@ -51,5 +51,6 @@ declare module 'vue' {
     TTag: typeof import('tdesign-mobile-vue')['Tag']
     TTextarea: typeof import('tdesign-mobile-vue')['Textarea']
     TUpload: typeof import('tdesign-mobile-vue')['Upload']
+    VirtualList: typeof import('./../src/components/VirtualList.vue')['default']
   }
 }
