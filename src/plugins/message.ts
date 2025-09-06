@@ -26,7 +26,7 @@ function show(type: MessageType, message: string, options?: MessageOptions) {
     duration,
     icon: options?.icon,
     offset: options?.offset,
-    context: options?.context as any,
+    context: (options?.context ?? (typeof document !== 'undefined' ? document.body : null)) as any,
     zIndex: options?.zIndex,
   }
   const api: any = TMessage as any

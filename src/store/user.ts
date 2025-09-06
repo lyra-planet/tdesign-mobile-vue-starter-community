@@ -1,6 +1,7 @@
 import type { UserInfo } from '@/api/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { httpClient } from '@/api/request'
 import { STORAGE_KEYS } from '@/config/constants'
 import { getPersistConfig } from './index'
 
@@ -18,6 +19,9 @@ export const useUserStore = defineStore('user', () => {
   // Actions
   const setToken = (newToken: string) => {
     token.value = newToken
+    if (newToken) {
+      httpClient.setAuthToken(newToken)
+    }
   }
 
   const setUserInfo = (info: UserInfo) => {
@@ -38,10 +42,12 @@ export const useUserStore = defineStore('user', () => {
   const resetUserState = () => {
     token.value = ''
     userInfo.value = null
+    httpClient.clearAuthToken()
   }
 
   const initUserData = async () => {
     if (token.value) {
+      httpClient.setAuthToken(token.value)
       const success = await fetchUserInfo()
       if (!success) {
         resetUserState()

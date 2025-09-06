@@ -19,7 +19,7 @@ export function useLayoutState() {
   const showBottomNav = computed(() => {
     const path = route.path
     return path.includes('/home')
-      || path.startsWith('/my')
+      || path === '/my'
       || path.startsWith('/talklist')
   })
 

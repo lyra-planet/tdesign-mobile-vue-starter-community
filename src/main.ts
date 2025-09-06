@@ -4,10 +4,11 @@ import { createApp } from 'vue'
 
 import { initGlobalConfig, injectStorageConfig } from '@/config'
 import * as directives from '@/directives'
+import { startMsw } from '@/mocks'
 import { initializeI18n, useI18n } from '@/plugins/i18n'
 import { MessagePlugin } from '@/plugins/message'
-import { useUserStore } from '@/store/user'
 
+import { useUserStore } from '@/store/user'
 import App from './App.vue'
 import router from './router'
 import { useStore } from './store'
@@ -40,5 +41,6 @@ initGlobalConfig(app).then(async () => {
   // 初始化用户数据
   const userStore = useUserStore()
   userStore.initUserData()
+  await startMsw()
   app.mount('#app')
 })
