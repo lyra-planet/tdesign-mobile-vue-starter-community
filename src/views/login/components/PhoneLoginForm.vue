@@ -136,6 +136,10 @@ async function handleNext() {
         :placeholder="t('pages.login.phone_placeholder')"
         class="phone-number-input"
         borderless
+        type="tel"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        autocomplete="tel"
         maxlength="11"
         status="error"
         :tips="phoneValidationTips"

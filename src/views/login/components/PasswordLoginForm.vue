@@ -73,6 +73,8 @@ async function handleLogin() {
           :placeholder="t('pages.login.account_placeholder')"
           class="account-input"
           borderless
+          inputmode="email"
+          autocomplete="username"
         />
       </div>
       <!-- 密码输入 -->
@@ -84,6 +86,7 @@ async function handleLogin() {
           :placeholder="t('pages.login.password_placeholder')"
           class="password-input"
           borderless
+          autocomplete="current-password"
         />
       </div>
     </div>
