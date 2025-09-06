@@ -1,15 +1,21 @@
+import defaultIconUrl from '@/assets/svgs/default.svg?url'
+import qqIconUrl from '@/assets/svgs/qq.svg?url'
+import tdocIconUrl from '@/assets/svgs/Tdoc.svg?url'
+import tmapIconUrl from '@/assets/svgs/Tmap.svg?url'
+import wechatIconUrl from '@/assets/svgs/wechat.svg?url'
+
 export const serviceGroups = [
   [
-    { name: '微信', icon: '/my/wechat.svg', type: 'external', url: 'weixin://' },
-    { name: 'QQ', icon: '/my/qq.svg', type: 'external', url: 'tencent://' },
-    { name: 'TDoc', icon: '/my/Tdoc.svg', type: 'external' },
-    { name: 'TMap', icon: '/my/Tmap.svg', type: 'external' },
+    { name: '微信', icon: wechatIconUrl, type: 'external', url: 'weixin://' },
+    { name: 'QQ', icon: qqIconUrl, type: 'external', url: 'tencent://' },
+    { name: 'TDoc', icon: tdocIconUrl, type: 'external' },
+    { name: 'TMap', icon: tmapIconUrl, type: 'external' },
   ],
   [
-    { name: '数据中心', icon: '/my/default.svg', type: 'internal', url: '/datacenter' },
-    { name: '数据中心', icon: '/my/default.svg', type: 'internal', url: '/datacenter' },
-    { name: '数据中心', icon: '/my/default.svg', type: 'internal', url: '/datacenter' },
-    { name: '数据中心', icon: '/my/default.svg', type: 'internal', url: '/datacenter' },
+    { name: '数据中心', icon: defaultIconUrl, type: 'internal', url: '/datacenter' },
+    { name: '数据中心', icon: defaultIconUrl, type: 'internal', url: '/datacenter' },
+    { name: '数据中心', icon: defaultIconUrl, type: 'internal', url: '/datacenter' },
+    { name: '数据中心', icon: defaultIconUrl, type: 'internal', url: '/datacenter' },
   ],
 ]
 

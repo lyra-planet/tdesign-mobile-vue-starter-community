@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getProfileServices, getUserStats, trackServiceClick } from '@/api/profile'
+import defaultAvatarUrl from '@/assets/svgs/Avatar.svg?url'
 import { MenuItem, ServiceGrid, StatsSection } from '@/components'
 
 import { useUserStore } from '@/store/user'
@@ -45,7 +46,7 @@ function extractCityName(address: string): string {
 const displayUserInfo = computed(() => {
   if (isLoggedIn && userInfo) {
     return {
-      avatar: userInfo.avatar || '/my/Avatar.svg',
+      avatar: userInfo.avatar || defaultAvatarUrl,
       nickname: userInfo.name,
       tags: userInfo.constellation || userInfo.location
         ? [
