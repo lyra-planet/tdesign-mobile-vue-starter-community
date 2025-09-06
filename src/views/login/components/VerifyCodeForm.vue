@@ -2,7 +2,7 @@
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { sendVerifyCode, verifyCodeLogin } from '@/api/auth'
+import { sendVerifyCode } from '@/api/auth'
 import { FormContainer } from '@/components'
 import { useUserStore } from '@/store/user'
 import { cleanPhoneNumber, validateCode } from '@/utils/validators'
@@ -19,6 +19,7 @@ const countryCode = ref(route.query.countryCode as string || '+86')
 
 const countdown = ref(0)
 let countdownTimer: ReturnType<typeof setInterval> | null = null
+let countdownEndAt: number | null = null
 const verifyCode = ref('')
 const codeValid = ref(false)
 
@@ -74,21 +75,13 @@ async function handleVerify() {
     isLoading.value = true
     errorMessage.value = ''
     const phoneForBackend = phoneNumber.value.replace(/^\+/, '')
-    const result = await verifyCodeLogin({
+    const user = {
+      id: Date.now().toString(),
+      name: `企鹅${phoneForBackend.slice(-4) || '用户'}`,
       phone: phoneForBackend,
-      code: verifyCode.value,
-      countryCode: countryCode.value,
-    })
-
-    if (result.success && result.data) {
-      // 保存用户信息到store
-      userStore.handleLoginSuccess(result.data.token, result.data.user)
-      // 跳转到首页
-      router.push('/home')
     }
-    else {
-      errorMessage.value = result.message
-    }
+    userStore.handleLoginSuccess('mock-token', user)
+    router.push('/home')
   }
   catch (error) {
     console.error(error)
@@ -100,7 +93,7 @@ async function handleVerify() {
 }
 
 async function handleResend() {
-  if (countdown.value > 0 && countdown.value < 60) {
+  if (countdown.value > 0) {
     return
   }
 
@@ -112,7 +105,8 @@ async function handleResend() {
     })
 
     if (result.success) {
-      countdown.value = result.data?.countdown || 60
+      const cd = (result as any).data?.countdown ?? 60
+      countdownEndAt = Date.now() + cd * 1000
       startCountdown()
     }
     else {
@@ -130,13 +124,25 @@ function startCountdown() {
     clearInterval(countdownTimer)
   }
 
-  countdownTimer = setInterval(() => {
-    countdown.value--
-    if (countdown.value <= 0) {
-      clearInterval(countdownTimer!)
-      countdownTimer = null
+  const tick = () => {
+    if (!countdownEndAt) {
+      countdown.value = 0
+      return
     }
-  }, 1000)
+    const remainMs = countdownEndAt - Date.now()
+    const next = Math.max(0, Math.ceil(remainMs / 1000))
+    countdown.value = next
+    if (next <= 0) {
+      if (countdownTimer) {
+        clearInterval(countdownTimer)
+        countdownTimer = null
+      }
+    }
+  }
+
+  // 立即计算一次，保证 UI 立刻切换
+  tick()
+  countdownTimer = setInterval(tick, 500)
 }
 
 onUnmounted(() => {
@@ -169,12 +175,12 @@ onUnmounted(() => {
             <div class="auth-divider auth-divider--24" />
             <div
               class="verify"
-              :class="{ 'verify-disabled': countdown > 0 && countdown < 60 }"
+              :class="{ 'verify-disabled': countdown > 0 }"
               aria-role="button"
               @click="handleResend"
             >
               {{
-                countdown > 0 && countdown < 60
+                countdown > 0
                   ? t('pages.login.resend_countdown', { seconds: countdown })
                   : t('common.buttons.send_code')
               }}
