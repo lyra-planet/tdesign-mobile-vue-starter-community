@@ -175,3 +175,5 @@ common:
     404_message: Sorry, the page you are looking for does not exist
     403_title: Access Denied
     403_message: Sorry, you do not have permission to access this page
+    500_title: Server Error
+    500_message: Sorry, something went wrong on our side. Please try again later
