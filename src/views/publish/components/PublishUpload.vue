@@ -7,6 +7,8 @@ import type {
   UploadRemoveContext,
 } from 'tdesign-mobile-vue'
 import { ref } from 'vue'
+import upload4 from '@/assets/images/upload4.png'
+import upload6 from '@/assets/images/upload6.png'
 
 function onFail({ file, e }: { file: UploadFile, e: ProgressEvent }): any {
   console.log('[onFail] ', { file, e })
@@ -39,18 +41,18 @@ function onClickUpload({ e }: { e: MouseEvent }) {
 const action = 'https://service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo'
 const files = ref([
   {
-    url: 'https://tdesign.gtimg.com/mobile/demos/upload4.png',
+    url: upload4,
     name: 'uploaded1.png',
     type: 'image',
     removeBtn: false,
   },
   {
-    url: 'https://tdesign.gtimg.com/mobile/demos/upload6.png',
+    url: upload6,
     name: 'uploaded2.png',
     type: 'image',
   },
   {
-    url: 'https://tdesign.gtimg.com/mobile/demos/upload4.png',
+    url: upload4,
     name: 'uploaded3.png',
     type: 'image',
   },

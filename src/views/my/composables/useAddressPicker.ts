@@ -1,26 +1,36 @@
 import type { AreaList } from '../edit/types'
-import { computed, reactive, ref } from 'vue'
-import { areaList } from '../edit/data'
+import { computed, onMounted, reactive, ref } from 'vue'
+import { loadAreaList } from '../edit/data'
 
 export function useAddressPicker() {
   // 当前选中的省份索引
   const selectedProvinceIndex = ref(0)
+  const listRef = ref<AreaList[]>([])
 
   // 地址相关状态
-  const provinces = reactive(areaList.map(province => ({
-    label: province.label,
-    value: province.value,
-  })))
+  const provinces = reactive<{ label: string, value: string }[]>([])
+  const cities = reactive<{ label: string, value: string }[]>([])
+  const areas = reactive<{ label: string, value: string }[]>([])
 
-  const cities = reactive(areaList[0]?.children?.map(city => ({
-    label: city.label,
-    value: city.value,
-  })) || [])
+  onMounted(async () => {
+    const list = await loadAreaList()
+    listRef.value = list
+    provinces.splice(0, provinces.length, ...list.map(province => ({
+      label: province.label,
+      value: province.value,
+    })))
 
-  const areas = reactive(areaList[0]?.children?.[0]?.children?.map(area => ({
-    label: area.label,
-    value: area.value,
-  })) || [])
+    const firstProvince = list[0]
+    cities.splice(0, cities.length, ...((firstProvince?.children || []).map(city => ({
+      label: city.label,
+      value: city.value,
+    }))))
+    const firstCity = firstProvince?.children?.[0]
+    areas.splice(0, areas.length, ...((firstCity?.children || []).map(area => ({
+      label: area.label,
+      value: area.value,
+    }))))
+  })
 
   // 检查是否为直辖市
   function isDirectMunicipality(provinceName: string): boolean {
@@ -29,7 +39,7 @@ export function useAddressPicker() {
 
   // 计算地址列数据
   const addressColumns = computed(() => {
-    const currentProvince = areaList[selectedProvinceIndex.value]
+    const currentProvince = listRef.value[selectedProvinceIndex.value]
 
     // 如果是直辖市，只显示省份和区县两列
     if (currentProvince && isDirectMunicipality(currentProvince.label)) {
@@ -47,7 +57,7 @@ export function useAddressPicker() {
     if (column === 0) {
       // 省份变化
       selectedProvinceIndex.value = index
-      const selectedProvince = areaList[index]
+      const selectedProvince = listRef.value[index]
 
       if (isDirectMunicipality(selectedProvince.label)) {
         // 直辖市：直接更新区县数据（跳过城市）
@@ -78,7 +88,7 @@ export function useAddressPicker() {
     }
     else if (column === 1) {
       // 城市变化（只在非直辖市时生效）
-      const selectedProvince = areaList[selectedProvinceIndex.value]
+      const selectedProvince = listRef.value[selectedProvinceIndex.value]
       if (!isDirectMunicipality(selectedProvince.label)) {
         const selectedCity = selectedProvince?.children?.[index]
 

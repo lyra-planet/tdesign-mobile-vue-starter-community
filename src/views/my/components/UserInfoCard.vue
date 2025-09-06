@@ -30,12 +30,14 @@ defineEmits<{
       <div class="avatar-container">
         <div class="avatar-bg">
           <div class="avatar-inner">
-            <img
+            <t-image
               v-if="isLoggedIn && userInfo"
               :src="userInfo.avatar"
               :alt="userInfo.nickname"
+              :lazy="true"
+              fit="cover"
               class="avatar-image"
-            >
+            />
             <t-icon v-else name="user" size="32" color="#0052D9" />
           </div>
         </div>

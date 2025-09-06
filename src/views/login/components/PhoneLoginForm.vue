@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import countries from 'countries-phone-masks'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { sendVerifyCode } from '@/api/auth'
@@ -25,8 +24,22 @@ const agreedToTerms = ref(false)
 const isLoading = ref(false)
 const errorMessage = ref('')
 
+// 国家/地区数据（按需加载以减小首屏体积）
+const countriesData = ref<any[]>([])
+onMounted(async () => {
+  try {
+    const mod = await import('countries-phone-masks')
+    countriesData.value = (mod as any).default || (mod as any)
+  }
+  catch (e) {
+    if (import.meta.env.DEV)
+      console.warn('Failed to load countries-phone-masks:', e)
+    countriesData.value = []
+  }
+})
+
 const countryOptions = computed(() => {
-  return countries.map(country => ({
+  return (countriesData.value || []).map((country: any) => ({
     label: `${country.name} ${country.code}`,
     value: country.iso,
     code: country.code,
@@ -37,8 +50,8 @@ const countryOptions = computed(() => {
 })
 
 const selectedCountryCode = computed(() => {
-  const selected = countries.find(
-    country => country.iso === selectedCountry.value,
+  const selected = (countriesData.value || []).find(
+    (country: any) => country.iso === selectedCountry.value,
   )
   return selected ? selected.code : '+86'
 })

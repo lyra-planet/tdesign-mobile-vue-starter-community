@@ -128,7 +128,7 @@ onMounted(async () => {
           <div class="msg-bubble self">
             {{ item.value }}
           </div>
-          <t-avatar size="40px" image="https://tdesign.gtimg.com/mobile/demos/avatar2.png" />
+          <t-avatar size="40px" :image="current?.picture" />
         </div>
 
         <!-- 对方发送的消息 -->

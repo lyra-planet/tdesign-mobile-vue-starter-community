@@ -1,7 +1,11 @@
+import Avatar2 from '@/assets/svgs/Avatar2.svg'
+import Avatar3 from '@/assets/svgs/Avatar3.svg'
+import Avatar from '@/assets/svgs/Avatar.svg'
+
 export const talklist = [
   {
     id: '1',
-    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
+    picture: Avatar,
     count: 4,
     name: 'Pite',
     message: [
@@ -19,7 +23,7 @@ export const talklist = [
   },
   {
     id: '2',
-    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png',
+    picture: Avatar2,
     count: 2,
     name: 'Bob',
     message: [
@@ -36,7 +40,7 @@ export const talklist = [
   },
   {
     id: '3',
-    picture: 'https://tdesign.gtimg.com/mobile/demos/avatar3.png',
+    picture: Avatar3,
     count: 6,
     name: 'Alice',
     message: [

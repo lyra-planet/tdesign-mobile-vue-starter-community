@@ -1,3 +1,5 @@
+import Avatar from '@/assets/svgs/Avatar.svg'
+
 export const users = [
   {
     id: '1',
@@ -5,7 +7,7 @@ export const users = [
     phone: '8613812345678',
     email: 'penguin1@example.com',
     password: '123456',
-    avatar: 'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
+    avatar: Avatar,
     gender: '男',
     birthday: '1995-06-15',
     address: '北京市 朝阳区',
@@ -20,7 +22,7 @@ export const users = [
     phone: '8613987654321',
     email: 'penguin2@example.com',
     password: '123456',
-    avatar: 'https://tdesign.gtimg.com/mobile/demos/avatar2.png',
+    avatar: Avatar,
     gender: '女',
     birthday: '1992-03-20',
     address: '上海市 浦东新区',

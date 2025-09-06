@@ -39,7 +39,7 @@ defineEmits<{
           @click="$emit('serviceClick', service)"
         >
           <div class="service-icon-wrapper">
-            <img :src="service.icon" :alt="service.name" class="service-icon">
+            <t-image :src="service.icon" :lazy="true" fit="cover" class="service-icon" :alt="service.name" />
           </div>
           <div class="service-name">
             {{ service.name }}

@@ -3,7 +3,6 @@ import type { AppConfig } from './app.config'
 import type { NetworkConfig } from './network.config'
 import type { ThemeConfig } from './theme.config'
 import { toReactive } from '@vueuse/core'
-import axios from 'axios'
 import { useStorage } from '@/utils/global'
 import appConfig from './app.config'
 import networkConfig from './network.config'
@@ -43,18 +42,26 @@ function injectStorageConfig(app: App) {
 }
 
 export async function initGlobalConfig(app: App): Promise<GlobalConfig> {
-  return axios.get(`${VITE_BASE_PATH}config.json`).then(({ data }) => {
-    if (typeof data === 'object') {
-      // 合并外部配置到内部配置
-      Object.assign(config, data)
+  const url = `${VITE_BASE_PATH}config.json`
+  try {
+    const res = await fetch(url, { headers: { Accept: 'application/json' } })
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}))
+      if (typeof data === 'object' && data) {
+        // 合并外部配置到内部配置
+        Object.assign(config, data)
+        app.config.globalProperties.$config = config
+      }
+    }
+    else {
       app.config.globalProperties.$config = config
     }
-    return config
-  }).catch(() => {
-    // 如果外部配置文件不存在，使用默认配置
+  }
+  catch {
+    // 如果外部配置文件不存在或请求失败，使用默认配置
     app.config.globalProperties.$config = config
-    return config
-  })
+  }
+  return config
 }
 
 // 导出配置模块
