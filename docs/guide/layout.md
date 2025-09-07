@@ -1,82 +1,108 @@
 # 布局系统
 
-本项目采用移动端优先的布局设计，提供完整的移动端应用框架。
+移动端应用的核心交互框架：统一的页面容器、响应式导航与状态驱动的 UI 显示逻辑。所有业务路由均嵌套在 `Layout` 下渲染。
 
-## 整体架构
+## 架构设计
 
-布局系统由三个主要部分组成：
-
-- **状态栏模拟**：模拟iOS状态栏显示
-- **主内容区域**：路由视图容器
-- **底部导航栏**：Tab导航组件
-- **Home指示器**：iOS风格的底部指示器
-
-## 核心特性
-
-### 状态栏模拟
-
-```vue
-<div class="status-bar">
-  <div class="status-left">
-    <span class="time">{{ currentTime }}</span>
-  </div>
-
-  <div class="status-right">
-    <div class="signal-icons">
-      <!-- 信号、WiFi、电量图标 -->
-    </div>
-  </div>
-</div>
+```
+                Layout 根容器
+                     │
+        ┌────────────┼────────────┐
+        │            │            │
+  PageHeader     Content      BottomNavigation
+   顶部栏        内容区          底部导航
+        │                          │
+   ┌────┼────┐                ┌────┼────┐
+   │    │    │                │    │    │
+ 返回  标题  搜索             Home Message My
+ 按钮        入口             首页  消息   个人
+                              
+        Drawer 侧边栏
+        │
+    ┌───┴───┐
+    │       │
+  导航菜单  登录状态演示
 ```
 
-**功能特点：**
+## 核心模块
 
-- 实时时间显示
-- iOS风格的信号、WiFi、电量图标
-- 响应式布局适配
+### `src/layout/index.vue` - 根布局
+- **职责**：统一页面框架，集成头部、内容、底部、侧边栏
+- **状态管理**：基于 `useLayoutState()` 响应式控制各区域显示
 
-### 底部导航栏
+### `src/layout/components/PageHeader.vue` - 页面头部
+- **返回逻辑**：智能判断是否显示返回按钮（如发布、登录、个人页面）
+- **标题策略**：动态获取页面标题，支持参数化路由（如 `/notice/:id`）
+- **搜索入口**：仅在首页显示，一键跳转搜索页
 
-```vue
-<div class="bottom-navigation">
-  <div class="tab-bar">
-    <div v-for="tab in tabList" :key="tab.value" class="tab-item">
-      <!-- Tab内容 -->
-    </div>
-  </div>
-</div>
+### `src/layout/components/BottomNavigation.vue` - 底部导航
+- **三段式设计**：Home/Message/My，符合移动端主流交互
+- **徽标支持**：消息页面支持未读数量显示
+- **路由联动**：与 `vue-router` 深度集成，自动高亮当前页面
+
+## 状态驱动的显示逻辑
+
+### `useLayoutState()` - 布局状态管理
+```ts
+// 基于路由动态控制 UI 元素显示
+const showBackButton = computed(() => {
+  const path = route.path
+  return path === '/publish'
+    || path.includes('/login')
+    || path.startsWith('/notice')
+    || path.includes('/my')
+    || path.includes('search')
+    || path.includes('datacenter')
+})
+
+const showBottomNavigation = computed(() => 
+  !path.includes('/login') && !path.includes('/error')
+)
 ```
 
-**导航配置：**
+### `useNavigation()` - 导航数据与行为
+- **侧边栏配置**：`baseSidebar` 提供统一的页面导航入口
+- **Tab 配置**：`tabList` 定义底部导航结构
+- **标题解析**：`getPageTitle(path)` 根据路径返回页面标题
+- **交互行为**：`handleTabChange()`、`changeToSearch()` 等导航方法
 
-- 首页：主要功能入口
-- 消息：消息中心，支持徽章显示
-- 我的：个人中心入口
+## 典型使用场景
 
-### 路由集成
+### 新增页面接入
+1. 在 `src/views/<feature>/index.vue` 创建页面
+2. 自动路由会将页面注册为 `Layout` 子路由
+3. 如需在侧边栏显示，更新 `useNavigation()` 的 `baseSidebar`
+4. 如需自定义标题，在 `PAGE_TITLES` 中添加映射
 
-布局组件与Vue Router深度集成：
+### 控制布局元素显示
+```ts
+// 新页面需要隐藏底部导航
+const showBottomNavigation = computed(() => 
+  !route.path.includes('/special-page')
+)
+```
 
-```typescript
-// 监听路由变化更新激活状态
-watch(() => route.path, (newPath) => {
-  const tab = tabList.value.find(item => newPath.startsWith(item.path))
-  if (tab) {
-    activeTab.value = tab.value
+### 动态标题设置
+```ts
+// 支持参数化路由标题
+const getPageTitle = (path: string) => {
+  if (path.startsWith('/notice/')) {
+    return '消息详情'
   }
-}, { immediate: true })
+  return PAGE_TITLES[path] || '默认标题'
+}
 ```
 
-## 样式设计
+## 设计优势
 
-### 移动端适配
+- **状态驱动**：所有 UI 显示逻辑基于路由状态响应式计算
+- **组件解耦**：页面组件专注业务逻辑，布局组件处理导航与交互
+- **易于扩展**：新增页面只需关注业务实现，布局自动适配
+- **用户体验**：统一的交互模式，符合移动端使用习惯
 
-- 使用viewport单位实现响应式
-- 支持安全区域适配
-- iOS风格的视觉设计
+## 最佳实践
 
-### 主题系统
-
-- 基于TDesign设计规范
-- 支持深色模式适配
-- 统一的颜色和字体规范
+- **标题管理**：在 `useNavigation()` 中集中维护 `PAGE_TITLES`
+- **状态计算**：复杂显示逻辑通过 `computed` 响应式计算
+- **过渡动画**：为 Drawer 与 Tab 切换添加平滑过渡效果
+- **无障碍性**：为导航元素添加适当的 `aria-label` 属性

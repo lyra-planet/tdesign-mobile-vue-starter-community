@@ -1,56 +1,91 @@
 import { defineConfig } from 'vitepress'
+import { navZh, navEn } from './nav'
+import { sidebarZh, sidebarEn } from './sidebar'
 
 export default defineConfig({
-  title: 'TDesign Mobile Vue Starter',
-  description: '基于 TDesign Mobile Vue 的移动端页面模板',
+  title: 'TDesign Mobile Starter',
+  description: '企业级、移动端优先的 TDesign Mobile Vue 应用模板',
   base: '/',
+  lastUpdated: true,
+  ignoreDeadLinks: true,
+  cleanUrls: true,
+  appearance: true,
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['meta', { name: 'theme-color', content: '#41d1ff' }],
+  ],
 
-  themeConfig: {
-    nav: [
-      { text: '首页', link: '/' },
-      { text: '指南', link: '/guide/' },
-      { text: '组件', link: '/components/' },
-      { text: 'GitHub', link: 'https://cnb.cool/hikari0818/tdesign-mobile-vue-starter-community.git' },
-    ],
-
-    sidebar: {
-      '/guide/': [
-        {
-          text: '开始',
-          items: [
-            { text: '介绍', link: '/guide/' },
-            { text: '快速开始', link: '/guide/getting-started' },
-            { text: '目录结构', link: '/guide/directory-structure' },
-          ],
+  locales: {
+    root: {
+      label: '简体中文',
+      lang: 'zh-CN',
+      themeConfig: {
+        siteTitle: '',
+        logo: '/logo.svg',
+        search: { provider: 'local' },
+        nav: navZh,
+        sidebar: sidebarZh,
+        outline: [2, 4],
+        outlineTitle: '本页导航',
+        docFooter: { prev: '上一页', next: '下一页' },
+        sidebarMenuLabel: '目录',
+        returnToTopLabel: '回到顶部',
+        darkModeSwitchLabel: '外观',
+        lightModeSwitchTitle: '切换到浅色主题',
+        darkModeSwitchTitle: '切换到深色主题',
+        externalLinkIcon: true,
+        editLink: {
+          pattern: 'https://github.com/OWNER/REPO/edit/main/docs/:path',
+          text: '在 GitHub 上编辑此页',
         },
-        {
-          text: '核心功能',
-          items: [
-            { text: '布局系统', link: '/guide/layout' },
-            { text: '个人中心', link: '/guide/profile' },
-            { text: '路由配置', link: '/guide/router' },
-            { text: '状态管理', link: '/guide/store' },
-          ],
+        lastUpdated: {
+          text: '上次更新',
+          formatOptions: { dateStyle: 'short', timeStyle: 'short' },
         },
-      ],
-      '/components/': [
-        {
-          text: '组件',
-          items: [
-            { text: '概览', link: '/components/' },
-            { text: '布局组件', link: '/components/layout' },
-          ],
+        socialLinks: [
+          { icon: 'github', link: 'https://cnb.cool/hikari0818/tdesign-mobile-vue-starter-community.git' },
+        ],
+        footer: {
+          message: '基于 TDesign Mobile Vue 构建',
+          copyright: 'Copyright © 2024-2025',
         },
-      ],
+      },
     },
-
-    socialLinks: [
-      { icon: 'github', link: 'https://cnb.cool/hikari0818/tdesign-mobile-vue-starter-community.git' },
-    ],
-
-    footer: {
-      message: '基于 TDesign Mobile Vue 构建',
-      copyright: 'Copyright © 2024',
+    en: {
+      label: 'English',
+      lang: 'en-US',
+      link: '/en/',
+      themeConfig: {
+        siteTitle: 'TDesign Mobile Starter',
+        logo: '/logo.svg',
+        search: { provider: 'local' },
+        nav: navEn,
+        sidebar: sidebarEn,
+        outline: [2, 4],
+        outlineTitle: 'On this page',
+        docFooter: { prev: 'Previous', next: 'Next' },
+        sidebarMenuLabel: 'Menu',
+        returnToTopLabel: 'Back to top',
+        darkModeSwitchLabel: 'Appearance',
+        lightModeSwitchTitle: 'Switch to light theme',
+        darkModeSwitchTitle: 'Switch to dark theme',
+        externalLinkIcon: true,
+        editLink: {
+          pattern: 'https://github.com/OWNER/REPO/edit/main/docs/:path',
+          text: 'Edit this page on GitHub',
+        },
+        lastUpdated: {
+          text: 'Last updated',
+          formatOptions: { dateStyle: 'short', timeStyle: 'short' },
+        },
+        socialLinks: [
+          { icon: 'github', link: 'https://cnb.cool/hikari0818/tdesign-mobile-vue-starter-community.git' },
+        ],
+        footer: {
+          message: 'Powered by TDesign Mobile Vue',
+          copyright: 'Copyright © 2024-2025',
+        },
+      },
     },
   },
 })
