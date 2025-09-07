@@ -11,7 +11,7 @@ const uploadIcon = () => h(UploadIcon, { size: '24px' })
 const fileCopyIcon = () => h(FileCopyIcon, { size: '24px' })
 
 function handlePublish() {
-  router.push({ name: 'Home', query: { success: '1' } })
+  router.push({ path: '/home', query: { success: '1' } })
 }
 </script>
 
