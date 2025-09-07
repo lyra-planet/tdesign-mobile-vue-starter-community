@@ -1,5 +1,6 @@
 import type { App, Plugin } from 'vue'
-import { Message as TMessage } from 'tdesign-mobile-vue'
+import TMessage from 'tdesign-mobile-vue/es/message'
+import 'tdesign-mobile-vue/es/message/style/index.css'
 
 export type MessageType = 'success' | 'error' | 'warning' | 'info'
 

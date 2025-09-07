@@ -54,6 +54,8 @@ export function usePlugins(): PluginOption[] {
     VueI18nPlugin({
       include: [processPath('../locales/**')],
       compositionOnly: true,
+      runtimeOnly: true,
+      fullInstall: false,
     }),
     vue(),
     // 支持 JSX 语法

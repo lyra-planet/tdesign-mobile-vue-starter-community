@@ -16,7 +16,6 @@ import './style/reset.scss'
 import './style/index.scss'
 // [踩坑] TailwindCSS 放在 index 里面整合的话 HMR 会变慢
 import './style/tailwind.css'
-import 'tdesign-mobile-vue/es/style/index.css'
 // import 'tdesign-mobile-vue/es/style/dark.css'
 
 const app = createApp(App)
