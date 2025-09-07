@@ -1,27 +1,23 @@
----
-title: App Config
----
+# Application Configuration
 
-# App Config
+The project manages configuration through "built-in defaults + external overrides": at startup, it reads `public/config.json` and merges it with built-in configuration, then injects it globally into the application.
 
-The project manages configuration with “built-in defaults + external overrides”: on startup it reads `public/config.json`, merges it into the built-in config, then injects it globally.
-
-## Environment variables
+## Environment Variables
 
 - `VITE_ROUTER_MODE`: `history | hash`
 - `VITE_MSW`: `true | false`
-- `VITE_BASE_PATH`: site base path (affects routes and static assets)
-- `VITE_PORT`: dev server port
+- `VITE_BASE_PATH`: Site base path (affects routing and static resources)
+- `VITE_PORT`: Development server port
 
-## Sources and merging
+## Configuration Sources & Merging
 
-Built-in configs:
+Built-in configuration is located in:
 
-- `src/config/app.config.ts`: app title, default `locale`, storage namespace `storageNS`
+- `src/config/app.config.ts`: Application title, default language `locale`, storage namespace `storageNS`
 - `src/config/network.config.ts`: `baseURL`, `storage` (`localStorage | sessionStorage`)
-- `src/config/theme.config.ts`: default theme `defaultTheme`
+- `src/config/theme.config.ts`: Default theme `defaultTheme`
 
-On startup, `initGlobalConfig(app)` fetches `public/config.json` and merges it. The final config is exposed globally as `$config`:
+At startup, `initGlobalConfig(app)` reads `public/config.json` and merges it, finally exposing it globally as `$config`:
 
 ```ts
 // src/config/index.ts (excerpt)
@@ -33,18 +29,18 @@ export async function initGlobalConfig(app: App) {
 }
 ```
 
-## Personalized storage `$storage`
+## Personalized Storage `$storage`
 
-Depending on the `storage` option, choose `localStorage` or `sessionStorage`, and persist with namespace `${storageNS}config`. After injection, expose it as a reactive object:
+Select `localStorage` or `sessionStorage` based on the configuration item `storage`, and persist with namespace `${storageNS}config`; after injection to global, expose as reactive object:
 
 ```ts
 // src/config/index.ts (excerpt)
 ;(app.config.globalProperties as any).$storage = toReactive({ locale: getGlobalConfig('locale') })
 ```
 
-- Usage: save preferences like language; used with i18n/TDesign Provider
+- Purpose: Save preferences like language, work with i18n/TDesign Provider
 - Read: `const { $storage } = useGlobal()`
-- Update: `$storage.locale = 'en-us'` and also `useStorage().setItem(`${storagePrefix()}config`, $storage)`
+- Modify: `$storage.locale = 'en-us'` and also `useStorage().setItem(`${storagePrefix()}config`, $storage)`
 
 ## Example `public/config.json`
 
@@ -56,11 +52,11 @@ Depending on the `storage` option, choose `localStorage` or `sessionStorage`, an
 }
 ```
 
-## VitePress site config
+## VitePress Documentation Site Configuration
 
-See `docs/.vitepress/config.ts`: navigation, sidebar, social links, footer, outline, doc footer.
+See `docs/.vitepress/config.ts`: navigation, sidebar, social links, Footer, Outline, DocFooter.
 
-## Theme & styles
+## Theme & Styling
 
-- Based on TDesign tokens, extend in `src/style/index.scss`
-- Home and Profile backgrounds use 1x/2x assets for clarity
+- Based on TDesign Token, can be extended in `src/style/index.scss`
+- Homepage and profile background images use 1x/2x dual sets of resources to improve clarity

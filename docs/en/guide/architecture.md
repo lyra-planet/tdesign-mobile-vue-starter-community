@@ -1,49 +1,44 @@
----
-title: Architecture & Modules
----
-
 # Architecture & Modules
 
-The project adopts a layered design where pages are modules and components are building blocks:
+Following the philosophy of "pages as modules, components as building blocks", with clear layering and well-defined boundaries:
 
-- View layer (`views/*`): pages and business logic
-- Layout layer (`layout/*`): unified shell (Header, Drawer, BottomNav)
-- State layer (`store/*`): Pinia + persistence
-- Data layer (`api/*`, `mocks/*`): HTTP client and MSW endpoints
-- Utility layer (`utils/*`, `config/*`, `plugins/*`): utilities, runtime config, i18n, message
+- View Layer (`views/*`): Pages and business logic
+- Layout Layer (`layout/*`): Unified framework (Header / Drawer / BottomNav)
+- State Layer (`store/*`): Pinia + modular persistence
+- Data Layer (`api/*`, `mocks/*`): HTTP client and MSW endpoints
+- Utility Layer (`utils/*`, `config/*`, `plugins/*`): Utility functions, runtime configuration, i18n, messaging
 
-## Layer responsibilities and collaboration
+## Layer Responsibilities & Collaboration
 
-- View layer: renders pages by routes, composes components and business logic
-- Layout layer: unified navigation and global interaction container (Header/Drawer/BottomNav)
-- State layer: cross-page shared state, provides side-effect entry (e.g. injecting token to httpClient)
-- Data layer: standardized request, aligned response semantics, centralized endpoints
-- Utility layer: inject runtime config (`$config`/`$storage`), i18n, global message
+- View Layer: Render pages by routes, aggregate components and business logic
+- Layout Layer: Unified navigation and global interaction containers
+- State Layer: Cross-page shared state; side effect entry points (e.g., inject token into httpClient)
+- Data Layer: Standardize requests, unified return semantics
+- Utility Layer: Inject `$config`, `$storage`, provide i18n and global messaging
 
-## Data flow
+## Data Flow & Boundaries
 
-1. Components call APIs (`api/*`)
-2. Requests go through `httpClient` for normalized result/error
-3. Persisted state is written into `store/*` if needed
-4. Pages drive UI via `useNavigation()` and `useLayoutState()`
+1. Components call interfaces through `api/*`
+2. `httpClient` standardizes returns and errors, emits observable results
+3. State that needs persistence is written to `store/*`
+4. Pages drive UI through `useNavigation()`, `useLayoutState()`
 
-## Key design points
+## Design Highlights
 
-- Routing: convention-based + hand-written enhancements for both flexibility and consistency
-- i18n: lazy loading with caching to reduce first-screen pressure
-- Mock: enabled on demand, isolated from real APIs
-- Config: `initGlobalConfig()` allows injecting external `config.json`
+- Routing: Conventional auto + manual enhancement, flexible yet consistent
+- i18n: Lazy loading + caching, reducing first screen pressure
+- Mock: Switchable, independent of real interfaces
+- Configuration: `initGlobalConfig()` supports external `config.json` injection
 
-## Bundle structure and code splitting
+## Packaging Strategy
 
-- Split core dependencies into multiple chunks at build time: `vue-vendor`, `tdesign`, `i18n`, `dayjs`, `vueuse`, `vendor`
-- Improve browser cache hit rate and on-demand loading speed (see `vite.config.ts` `manualChunks`)
+- Split core dependencies into: `vue-vendor`, `tdesign`, `i18n`, `dayjs`, `vueuse`, `vendor`
+- Improve cache hit rates and on-demand loading speed (see `vite.config.ts#manualChunks`)
 
-> Build plugins & engineering enhancements:
-- Auto-import (APIs/components), auto route generation, i18n compiling, SVG component loading, Tailwind 4, production precompression and bundle analysis are configured centrally
+> Engineering enhancements concentrated in `build/plugins.ts`: auto-import, auto-routing, i18n compilation, SVG components, Tailwind 4, resource pre-compression and size analysis.
 
-## Typical interaction flows (example)
+## Typical Interaction Flow
 
-1. First launch: inject `$config/$storage` → install i18n/Router/Store → initialize i18n → start Mock (optional) → `mount`
-2. Login: submit form → call `auth.ts` → on success `useUserStore.handleLoginSuccess()` writes token/user → Authorization header injected for requests
-3. Search: input changes → fire request with `AbortSignal` → navigating away or next input aborts the previous request
+1. Startup: Inject `$config/$storage` → Install i18n/Router/Store → Initialize i18n → Optionally start Mock → `mount`
+2. Login: Submit form → `auth.ts` → `useUserStore.handleLoginSuccess()` write token/user → Inject Authorization header
+3. Search: Input changes → Trigger request (pass `AbortSignal`) → Route switch or next input interrupts previous request
