@@ -17,7 +17,7 @@ hero:
       link: /pages/
     - theme: alt
       text: GitHub
-      link: https://cnb.cool/hikari0818/tdesign-mobile-vue-starter-community.git
+      link: https://github.com/TDesignOteam/tdesign-mobile-vue-starter-community
 
 features:
   - icon: ⚡️

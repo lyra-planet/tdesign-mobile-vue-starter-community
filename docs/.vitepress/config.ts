@@ -43,7 +43,7 @@ export default defineConfig({
           formatOptions: { dateStyle: 'short', timeStyle: 'short' },
         },
         socialLinks: [
-          { icon: 'github', link: 'https://cnb.cool/hikari0818/tdesign-mobile-vue-starter-community.git' },
+          { icon: 'github', link: 'https://github.com/TDesignOteam/tdesign-mobile-vue-starter-community' },
         ],
         footer: {
           message: '基于 TDesign Mobile Vue 构建',
@@ -79,7 +79,7 @@ export default defineConfig({
           formatOptions: { dateStyle: 'short', timeStyle: 'short' },
         },
         socialLinks: [
-          { icon: 'github', link: 'https://cnb.cool/hikari0818/tdesign-mobile-vue-starter-community.git' },
+          { icon: 'github', link: 'https://github.com/TDesignOteam/tdesign-mobile-vue-starter-community' },
         ],
         footer: {
           message: 'Powered by TDesign Mobile Vue',

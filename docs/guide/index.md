@@ -188,8 +188,6 @@
 
 ## 📑 Git 提交规范
 
-以下基于 [vue](https://github.com/vuejs/vue/blob/dev/.github/COMMIT_CONVENTION.md#git-commit-message-convention) 提交规范编写
-
 - `feat` 业务新功能开发
 - `fix` bug 修复
 - `polish` 微调、润色代码或 UI，不影响逻辑（如命名优化、视觉细节调整）
