@@ -2,19 +2,22 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { MenuItem } from '@/components'
+import { storagePrefix } from '@/config'
 import { setLanguage } from '@/plugins/i18n'
+import { useGlobal, useStorage } from '@/utils/global'
 
 defineOptions({
   name: 'GeneralSettings',
 })
 
 const { t, locale } = useI18n()
+const { $storage } = useGlobal()
 
-// 语言相关
-const isEnglish = computed(() => locale.value === 'en-us')
+// 语言相关（以 $storage.locale 为准，驱动 TDesign Provider 与持久化）
+const isEnglish = computed(() => ($storage.locale === 'en-us'))
 
 const currentLanguageText = computed(() => {
-  return locale.value === 'zh-cn' ? '中文' : 'English'
+  return $storage.locale === 'zh-cn' ? '中文' : 'English'
 })
 
 // 通用设置项
@@ -28,10 +31,12 @@ const generalSettings = computed(() => [
   },
 ])
 
-// 处理语言切换
-function handleLanguageChange(value: boolean) {
+// 处理语言切换：同步 i18n 与 $storage，并持久化
+async function handleLanguageChange(value: boolean) {
   const newLocale = value ? 'en-us' : 'zh-cn'
-  setLanguage(newLocale)
+  await setLanguage(newLocale)
+  $storage.locale = newLocale
+  useStorage().setItem(`${storagePrefix()}config`, $storage)
 }
 </script>
 
