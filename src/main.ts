@@ -1,9 +1,9 @@
-import type { Directive } from 'vue'
+// import type { Directive } from 'vue'
 
 import { createApp } from 'vue'
 
 import { initGlobalConfig, injectStorageConfig } from '@/config'
-import * as directives from '@/directives'
+// import * as directives from '@/directives'
 import { initializeI18n, useI18n } from '@/plugins/i18n'
 import { MessagePlugin } from '@/plugins/message'
 
@@ -21,9 +21,9 @@ import './style/tailwind.css'
 const app = createApp(App)
 
 // 自定义指令
-Object.keys((directives as { [k: string]: Directive })).forEach((k) => {
-  app.directive(k, directives[k])
-})
+// Object.keys((directives as { [k: string]: Directive })).forEach((k) => {
+//   app.directive(k, directives[k])
+// })
 
 // 初始化全局配置
 initGlobalConfig(app).then(async () => {

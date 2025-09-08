@@ -10,7 +10,7 @@ class HttpClient {
   private defaultHeaders: any
   private showToastOnError: boolean
 
-  constructor(baseURL: string = 'http://localhost:3001/api') {
+  constructor(baseURL: string = import.meta.env.VITE_API_BASE) {
     this.baseURL = baseURL
     this.defaultHeaders = {
       'Content-Type': 'application/json',

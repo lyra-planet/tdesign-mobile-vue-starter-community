@@ -1,21 +1,18 @@
 import type { App } from 'vue'
 import type { AppConfig } from './app.config'
-import type { NetworkConfig } from './network.config'
 import type { ThemeConfig } from './theme.config'
 import { toReactive } from '@vueuse/core'
 import { useStorage } from '@/utils/global'
 import appConfig from './app.config'
-import networkConfig from './network.config'
 import themeConfig from './theme.config'
 
 const { VITE_BASE_PATH } = import.meta.env
 
 // 合并所有配置
-type GlobalConfig = AppConfig & NetworkConfig & ThemeConfig
+type GlobalConfig = AppConfig & ThemeConfig
 
 const config: GlobalConfig = {
   ...appConfig,
-  ...networkConfig,
   ...themeConfig,
 } as GlobalConfig
 
@@ -71,7 +68,6 @@ export {
   config,
   getGlobalConfig,
   injectStorageConfig,
-  networkConfig,
   storagePrefix,
   themeConfig,
 }
@@ -86,6 +82,5 @@ export function useAppStorage() {
 export type {
   AppConfig,
   GlobalConfig,
-  NetworkConfig,
   ThemeConfig,
 }
