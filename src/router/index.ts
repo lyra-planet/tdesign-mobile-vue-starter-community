@@ -1,11 +1,7 @@
 import { createRouter } from 'vue-router'
-import { routes as autoRoutes, handleHotUpdate } from 'vue-router/auto-routes'
 import Layout from '@/layout/index.vue'
 
 import { getRouterMode } from './utils'
-
-// 将自动生成的路由作为 Layout 子路由
-const layoutChildren = autoRoutes.filter(r => !r.path.startsWith('/error') && !r.path.startsWith('/login'))
 
 const router = createRouter({
   history: getRouterMode(import.meta.env.VITE_ROUTER_MODE),
@@ -15,8 +11,14 @@ const router = createRouter({
       component: Layout,
       children: [
         { path: '', redirect: '/home' },
-        // 自动生成的业务路由
-        ...layoutChildren,
+        { path: 'home', component: () => import('@/views/home/index.vue') },
+        { path: 'publish', component: () => import('@/views/publish/index.vue') },
+        { path: 'search', component: () => import('@/views/search/index.vue') },
+        { path: 'talklist', component: () => import('@/views/talklist/index.vue') },
+        { path: 'datacenter', component: () => import('@/views/datacenter/index.vue') },
+        { path: 'my', component: () => import('@/views/my/index.vue') },
+        { path: 'my/black_mode', component: () => import('@/views/my/black_mode.vue') },
+        { path: 'my/general-settings', component: () => import('@/views/my/general-settings.vue') },
         { path: 'notice/:id', name: 'Notice', component: () => import('@/views/notice/index.vue') },
         { path: 'login', redirect: '/login/phone' },
         { path: 'login/phone', component: () => import('@/views/login/PhoneLoginPage.vue') },
@@ -29,14 +31,12 @@ const router = createRouter({
     // 登录重定向
     { path: '/login', redirect: '/login/phone' },
     // 错误页面
-    ...autoRoutes.filter(r => r.path.startsWith('/error')),
+    { path: '/error/403', component: () => import('@/views/error/403/index.vue') },
+    { path: '/error/404', component: () => import('@/views/error/404/index.vue') },
+    { path: '/error/500', component: () => import('@/views/error/500/index.vue') },
     // 兜底重定向到 404
     { path: '/:pathMatch(.*)*', redirect: '/error/404' },
   ],
 })
-
-if (import.meta.hot) {
-  handleHotUpdate(router)
-}
 
 export default router
