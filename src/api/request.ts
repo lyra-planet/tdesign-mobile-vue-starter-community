@@ -11,6 +11,8 @@ class HttpClient {
   private defaultHeaders: any
   private showToastOnError: boolean
   private defaultTimeoutMs: number
+  private authToken: string | null
+  private bizSuccessWhitelist: Set<number | string>
 
   constructor(baseURL: string = import.meta.env.VITE_API_BASE) {
     this.baseURL = baseURL
@@ -19,16 +21,30 @@ class HttpClient {
     }
     this.showToastOnError = true
     this.defaultTimeoutMs = 5000
+    this.authToken = null
+    // 提供业务码白名单判断
+    this.bizSuccessWhitelist = new Set([200, 0])
+  }
+
+  // 配置业务成功码白名单
+  setBizSuccessWhitelist(codes: Array<number | string>) {
+    this.bizSuccessWhitelist = new Set(codes)
+  }
+
+  // 新增一个业务成功码到白名单
+  addBizSuccessCode(code: number | string) {
+    this.bizSuccessWhitelist.add(code)
   }
 
   // 设置认证token
   setAuthToken(token: string) {
-    this.defaultHeaders.Authorization = `Bearer ${token}`
+    // 仅保存，不直接污染默认头；在每次请求时动态注入
+    this.authToken = token
   }
 
   // 清除认证token
   clearAuthToken() {
-    delete this.defaultHeaders.Authorization
+    this.authToken = null
   }
 
   // 设置默认超时时间（毫秒）
@@ -41,8 +57,10 @@ class HttpClient {
     const url = `${this.baseURL}${endpoint}`
     const { method = 'GET', headers = {}, body, signal, timeout } = config
 
+    const tokenHeader = this.authToken ? { Authorization: `Bearer ${this.authToken}` } : {}
     const requestHeaders = {
       ...this.defaultHeaders,
+      ...tokenHeader,
       ...headers,
     }
 
@@ -104,13 +122,20 @@ class HttpClient {
         data = {}
       }
 
+      const bizCode = (data && (data.code ?? data.status)) as number | string | undefined
+      const bizSuccess = bizCode === undefined ? true : this.bizSuccessWhitelist.has(bizCode)
+
       const result = {
         code: response.status,
         message: data.message || (response.ok ? 'Success' : 'Error'),
         data: data.data || data,
-        success: response.ok && data.code === 200,
-      }
-      if (!result.success && this.showToastOnError) {
+        success: response.ok,
+        // 额外暴露业务码与判定，供业务层按需处理
+        bizCode,
+        bizSuccess,
+      } as any
+
+      if ((this.showToastOnError) && (!result.success || !bizSuccess)) {
         import('@/plugins/message').then(({ message }) => {
           message.error(result.message || '请求失败')
         }).catch(() => {})

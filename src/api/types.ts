@@ -3,6 +3,8 @@ export interface ApiResponse<T = any> {
   message: string
   data?: T
   success: boolean
+  bizCode?: number | string
+  bizSuccess?: boolean
 }
 
 export interface SendCodeRequest {
