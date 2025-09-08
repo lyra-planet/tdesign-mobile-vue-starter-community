@@ -3,12 +3,14 @@ interface RequestConfig {
   headers?: any
   body?: any
   signal?: AbortSignal
+  timeout?: number
 }
 
 class HttpClient {
   private baseURL: string
   private defaultHeaders: any
   private showToastOnError: boolean
+  private defaultTimeoutMs: number
 
   constructor(baseURL: string = import.meta.env.VITE_API_BASE) {
     this.baseURL = baseURL
@@ -16,6 +18,7 @@ class HttpClient {
       'Content-Type': 'application/json',
     }
     this.showToastOnError = true
+    this.defaultTimeoutMs = 5000
   }
 
   // 设置认证token
@@ -28,24 +31,78 @@ class HttpClient {
     delete this.defaultHeaders.Authorization
   }
 
+  // 设置默认超时时间（毫秒）
+  setRequestTimeout(timeoutMs: number) {
+    const parsed = Number(timeoutMs)
+    this.defaultTimeoutMs = Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : 0
+  }
+
   async request(endpoint: string, config: RequestConfig = {}) {
     const url = `${this.baseURL}${endpoint}`
-    const { method = 'GET', headers = {}, body, signal } = config
+    const { method = 'GET', headers = {}, body, signal, timeout } = config
 
     const requestHeaders = {
       ...this.defaultHeaders,
       ...headers,
     }
 
+    const timeoutMs = Number.isFinite(timeout as number) && (timeout as number) > 0 ? (timeout as number) : this.defaultTimeoutMs
+
+    const controller = new AbortController()
+    let didTimeout = false
+    let externalAbortHandler: ((this: AbortSignal, ev: Event) => any) | null = null
+
+    if (signal) {
+      if (signal.aborted) {
+        try {
+          // 传递外部取消原因
+          controller.abort((signal as any).reason)
+        }
+        catch {
+          controller.abort()
+        }
+      }
+      else {
+        externalAbortHandler = () => {
+          try {
+            controller.abort((signal as any).reason)
+          }
+          catch {
+            controller.abort()
+          }
+        }
+        signal.addEventListener('abort', externalAbortHandler)
+      }
+    }
+
+    const timeoutId = timeoutMs > 0
+      ? setTimeout(() => {
+          didTimeout = true
+          try {
+            // 使用 AbortController 触发超时中断
+            controller.abort(new DOMException('Request timeout', 'AbortError'))
+          }
+          catch {
+            controller.abort()
+          }
+        }, timeoutMs)
+      : null
+
     try {
       const response = await fetch(url, {
         method,
         headers: requestHeaders,
         body: body ? JSON.stringify(body) : undefined,
-        signal,
+        signal: controller.signal,
       })
 
-      const data = await response.json()
+      let data: any
+      try {
+        data = await response.json()
+      }
+      catch {
+        data = {}
+      }
 
       const result = {
         code: response.status,
@@ -63,6 +120,18 @@ class HttpClient {
     catch (_error) {
       // 若为主动取消请求，不提示错误
       if ((_error as any)?.name === 'AbortError') {
+        if (didTimeout) {
+          if (this.showToastOnError) {
+            import('@/plugins/message').then(({ message }) => {
+              message.error('请求超时')
+            }).catch(() => {})
+          }
+          return {
+            code: 408,
+            message: '请求超时',
+            success: false,
+          }
+        }
         return {
           code: 499,
           message: '请求已取消',
@@ -80,6 +149,12 @@ class HttpClient {
         message: '网络请求失败',
         success: false,
       }
+    }
+    finally {
+      if (timeoutId)
+        clearTimeout(timeoutId as any)
+      if (signal && externalAbortHandler)
+        signal.removeEventListener('abort', externalAbortHandler)
     }
   }
 
@@ -101,6 +176,10 @@ class HttpClient {
 }
 
 export const httpClient = new HttpClient()
+
+export function setRequestTimeout(timeoutMs: number) {
+  httpClient.setRequestTimeout(timeoutMs)
+}
 
 export function get(endpoint: string, headers?: any, signal?: AbortSignal) {
   return httpClient.get(endpoint, headers, signal)
