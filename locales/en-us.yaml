@@ -20,6 +20,10 @@ pages:
     tabs:
       recommended: Recommended
       following: Following
+    ui:
+      error_title: Load Failed
+      empty_title: No Content
+      empty_description: Please check back later
   search:
     cancel: Cancel
     history: History
@@ -50,6 +54,7 @@ pages:
     other_methods: Other Options
     verify_code_login: Verification Code
     password_code_login: Password Login
+    user: User
   my:
     title: My Profile
     settings: Settings
@@ -73,6 +78,9 @@ pages:
       title: Dark Mode
       light: Light
       dark: Dark
+    errors:
+      user_not_exists: User not exists
+      save_failed_retry: Save failed, please try again later
     login_register: Please Login/Register
     nickname: John Doe
     constellation: Gemini
@@ -122,6 +130,7 @@ pages:
     today_time: Today 10:00
     input_placeholder: Type a message...
     send: Send
+    sending: Sending...
     notification: Notification
     errors:
       send_failed: Failed to send message, please try again
@@ -130,6 +139,7 @@ pages:
     title: Message List Page
     user_nickname: Username
     message_content: This is a message
+    no_message: No messages yet
   datacenter:
     title: Data Center
     overview:
@@ -172,12 +182,22 @@ common:
     success_notification: Success
     warning_notification: Warning
     error_notification: Error
+    refresh: Refresh
   messages:
     success: Operation successful
     error: Operation failed
     loading: Loading...
     info: This is a general notification
     warning: This is a warning that requires user attention
+  errors:
+    load_failed: Load Failed
+    load_failed_retry: Failed to load, please try again later
+  empty:
+    title: No Data
+    description: Try exploring something else
+  language:
+    zh_cn: Chinese
+    en_us: English
   navigation:
     message: Messages
     page_directory: Page Directory

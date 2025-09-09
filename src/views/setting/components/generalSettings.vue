@@ -16,7 +16,7 @@ const { $storage } = useGlobal()
 const isEnglish = computed(() => ($storage.locale === 'en-us'))
 
 const currentLanguageText = computed(() => {
-  return $storage.locale === 'zh-cn' ? '中文' : 'English'
+  return $storage.locale === 'zh-cn' ? t('common.language.zh_cn') : t('common.language.en_us')
 })
 
 const generalSettings = computed(() => [

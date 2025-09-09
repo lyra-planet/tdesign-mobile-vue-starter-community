@@ -20,6 +20,10 @@ pages:
     tabs:
       recommended: 推荐
       following: 我的关注
+    ui:
+      error_title: 加载失败
+      empty_title: 暂无内容
+      empty_description: 稍后再来看看吧
   search:
     cancel: 取消
     history: 历史记录
@@ -50,6 +54,7 @@ pages:
     other_methods: 其他方式
     verify_code_login: 验证码登录
     password_code_login: 密码登录
+    user: 用户
   my:
     title: 我的
     settings: 设置
@@ -73,6 +78,9 @@ pages:
       title: 深色模式
       light: 浅色
       dark: 深色
+    errors:
+      user_not_exists: 用户信息不存在
+      save_failed_retry: 保存失败，请稍后重试
     login_register: 请先登录/注册
     nickname: 张三
     constellation: 双子座
@@ -122,6 +130,7 @@ pages:
     today_time: 今天 10:00
     input_placeholder: 输入消息...
     send: 发送
+    sending: 发送中...
     notification: 通知
     errors:
       send_failed: 发送消息失败，请重试
@@ -130,6 +139,7 @@ pages:
     title: 消息列表页
     user_nickname: 用户昵称
     message_content: 这是一条消息内容
+    no_message: 暂无消息
   datacenter:
     title: 数据中心
     overview:
@@ -172,12 +182,22 @@ common:
     success_notification: 成功通知
     warning_notification: 警示通知
     error_notification: 错误通知
+    refresh: 刷新
   messages:
     success: 操作成功
     error: 操作失败
     loading: 加载中...
     info: 这是一条普通通知信息
     warning: 这是一条需要用户关注到的警示通知
+  errors:
+    load_failed: 加载失败
+    load_failed_retry: 加载失败，请稍后重试
+  empty:
+    title: 暂无数据
+    description: 去看看别的吧
+  language:
+    zh_cn: 中文
+    en_us: English
   navigation:
     message: 消息
     page_directory: 页面目录

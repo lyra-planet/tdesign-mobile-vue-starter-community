@@ -25,7 +25,7 @@ export function useDataCenterStats() {
       eastChina: t('pages.datacenter.region.columns.east_china'),
       westChina: t('pages.datacenter.region.columns.west_china'),
       southChina: t('pages.datacenter.region.columns.south_china'),
-      index: '排名',
+      index: t('pages.datacenter.region.columns.title'),
     }
     return titleMap[colKey] || colKey
   }
@@ -48,12 +48,12 @@ export function useDataCenterStats() {
         completion.value = response.data.completion
       }
       else {
-        $message.error(response.message || '获取数据失败')
+        $message.error(response.message || t('common.messages.error'))
       }
     }
     catch (error) {
-      console.error('加载数据中心统计失败:', error)
-      $message.error('加载数据失败，请重试')
+      console.error('load data center stats failed:', error)
+      $message.error(t('pages.home.errors.load_failed_retry'))
     }
     finally {
       loading.value = false

@@ -100,6 +100,7 @@ function showMessage(theme: string, content = '', duration = 2000) {
     duration,
     icon: true,
     zIndex: 20000,
+    offset: [12, 16],
     context: document.querySelector('.content'),
   }
   if (theme === 'success')
@@ -133,12 +134,19 @@ onMounted(() => {
     <t-pull-down-refresh
       v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
       :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]"
-      class="flex-1 bg-[var(--td-bg-color-page)]"
-      @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
+      class="flex-1 bg-[var(--td-bg-color-page)]" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
     >
       <div class="content h-full overflow-y-auto">
-        <ErrorState v-if="!loading && !refreshing && homeItems.length === 0 && !hasMore" title="加载失败" description="加载内容失败，请重试" @retry="handleRefresh" />
-        <EmptyState v-else-if="!loading && !refreshing && homeItems.length === 0" title="暂无内容" description="稍后再来看看吧" action-text="刷新" @action="handleRefresh" />
+        <ErrorState
+          v-if="!loading && !refreshing && homeItems.length === 0 && !hasMore"
+          :title="t('pages.home.ui.error_title')" :description="t('pages.home.errors.load_failed_retry')"
+          @retry="handleRefresh"
+        />
+        <EmptyState
+          v-else-if="!loading && !refreshing && homeItems.length === 0"
+          :title="t('pages.home.ui.empty_title')" :description="t('pages.home.ui.empty_description')"
+          :action-text="t('common.buttons.refresh')" @action="handleRefresh"
+        />
         <div v-else class="grid-container">
           <template v-for="item in homeItems" :key="item.id">
             <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />

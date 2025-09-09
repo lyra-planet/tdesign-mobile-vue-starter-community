@@ -52,12 +52,12 @@ export function useNotice() {
       }
       else {
         message.value = messageContent
-        console.error('发送消息失败')
+        console.error(t('pages.notice.errors.send_failed'))
         $message.error(t('pages.notice.errors.send_failed'))
       }
     }
     catch (error) {
-      console.error('发送消息失败:', error)
+      console.error(t('pages.notice.errors.send_failed'), error)
       $message.error(t('pages.notice.errors.network_error'))
     }
     finally {
@@ -88,7 +88,7 @@ export function useNotice() {
       scrollToBottom()
     }
     catch (error) {
-      console.error('加载聊天数据或标记已读失败:', error)
+      console.error('load chat or mark read failed:', error)
     }
   })
 

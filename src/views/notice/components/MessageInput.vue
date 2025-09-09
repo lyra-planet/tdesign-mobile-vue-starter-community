@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { defineEmits, defineProps } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
   modelValue: string
@@ -17,6 +18,7 @@ function handleEnter(event: KeyboardEvent) {
     emit('send')
   }
 }
+const { t } = useI18n()
 </script>
 
 <template>
@@ -39,7 +41,7 @@ function handleEnter(event: KeyboardEvent) {
         :loading="props.sending"
         @click="emit('send')"
       >
-        {{ props.sending ? '发送中...' : '发送' }}
+        {{ props.sending ? t('pages.notice.sending') : t('pages.notice.send') }}
       </t-button>
     </div>
   </div>

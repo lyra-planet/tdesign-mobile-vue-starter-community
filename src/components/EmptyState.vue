@@ -1,14 +1,17 @@
 <script setup lang='ts'>
+import { useI18n } from 'vue-i18n'
+
 const props = defineProps<{ title?: string, description?: string, actionText?: string }>()
 const emit = defineEmits<{ (e: 'action'): void }>()
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="empty-container">
-    <t-result theme="default" :title="props.title || '暂无数据'" :description="props.description || '去看看别的吧'">
+    <t-result theme="default" :title="props.title || t('common.empty.title')" :description="props.description || t('common.empty.description')">
       <template #action>
         <t-button theme="primary" @click="emit('action')">
-          {{ props.actionText || '刷新' }}
+          {{ props.actionText || t('common.buttons.refresh') }}
         </t-button>
       </template>
     </t-result>

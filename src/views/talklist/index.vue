@@ -27,7 +27,7 @@ const {
     <LoadingOverlay v-if="isLoading" />
 
     <!-- 错误状态 -->
-    <ErrorState v-else-if="error" :description="error || '加载失败，请稍后重试'" @retry="refreshTalkList" />
+    <ErrorState v-else-if="error" :description="error || undefined" @retry="refreshTalkList" />
 
     <!-- 聊天列表（虚拟滚动） -->
     <div v-else class="list-container">

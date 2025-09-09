@@ -2,6 +2,7 @@ import type { FormInstanceFunctions } from 'tdesign-mobile-vue'
 import type { FormData, FormVisible, UploadFile } from '../types'
 import dayjs from 'dayjs'
 import { computed, reactive, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { updateUserInfo } from '@/api/auth'
 import { message as $message } from '@/plugins/message'
@@ -10,6 +11,7 @@ import { useAddressPicker } from '../composables/useAddressPicker'
 
 export function useEditHook() {
   const router = useRouter()
+  const { t } = useI18n()
   const formRef = ref<FormInstanceFunctions>()
   const userStore = useUserStore()
 
@@ -61,10 +63,10 @@ export function useEditHook() {
 
   // 事件处理函数
   async function handleSave() {
-    console.warn('保存个人信息:', formData.value)
+    console.warn('save profile info:', formData.value)
 
     if (!userStore.userInfo) {
-      $message.error('用户信息不存在')
+      $message.error(t('pages.my.errors.user_not_exists'))
       return
     }
 
@@ -89,16 +91,16 @@ export function useEditHook() {
         }
         userStore.setUserInfo(updatedUserInfo)
 
-        $message.success('保存成功')
+        $message.success(t('common.messages.success'))
         router.back()
       }
       else {
-        $message.error(response.message || '保存失败')
+        $message.error(response.message || t('common.messages.error'))
       }
     }
     catch (error) {
-      console.error('保存用户信息失败:', error)
-      $message.error('保存失败，请稍后重试')
+      console.error('save profile failed:', error)
+      $message.error(t('pages.my.errors.save_failed_retry'))
     }
   }
 
@@ -123,7 +125,7 @@ export function useEditHook() {
 
   // 相片上传处理
   function handlePicChange(files: UploadFile[]) {
-    console.warn('上传文件变化:', files)
+    console.warn('upload files changed:', files)
     formData.value.photos = files
   }
 

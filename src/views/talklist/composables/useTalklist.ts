@@ -1,9 +1,11 @@
 import { computed, nextTick, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { error, isLoading, loadTalkList, markChatAsRead, talklist } from '@/store/talklist'
 
 export function useTalklist() {
   const router = useRouter()
+  const { t } = useI18n()
 
   // 按消息数量排序，未读多的在前
   const mytalklist = computed(() => [...talklist].sort((a, b) => b.count - a.count))
@@ -25,7 +27,7 @@ export function useTalklist() {
 
   function getLastMessage(messages: any[]) {
     if (!messages || messages.length === 0)
-      return '暂无消息'
+      return t('pages.talklist.no_message')
     return messages[messages.length - 1].value
   }
 

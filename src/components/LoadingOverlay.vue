@@ -1,10 +1,13 @@
 <script setup lang='ts'>
+import { useI18n } from 'vue-i18n'
+
 const props = defineProps<{ text?: string, size?: string }>()
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="loading-container">
-    <t-loading :text="props.text || '加载中...'" :size="props.size || '32px'" />
+    <t-loading :text="props.text || t('common.messages.loading')" :size="props.size || '32px'" />
   </div>
 </template>
 

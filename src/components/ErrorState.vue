@@ -1,14 +1,17 @@
 <script setup lang='ts'>
+import { useI18n } from 'vue-i18n'
+
 const props = defineProps<{ title?: string, description?: string }>()
 const emit = defineEmits<{ (e: 'retry'): void }>()
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="error-container">
-    <t-result theme="error" :title="props.title || '加载失败'" :description="props.description || '加载失败，请稍后重试'">
+    <t-result theme="error" :title="props.title || t('common.errors.load_failed')" :description="props.description || t('common.errors.load_failed_retry')">
       <template #action>
         <t-button theme="primary" @click="emit('retry')">
-          重试
+          {{ t('common.buttons.refresh') }}
         </t-button>
       </template>
     </t-result>
