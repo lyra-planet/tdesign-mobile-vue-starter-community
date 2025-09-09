@@ -103,14 +103,17 @@ onUnmounted(() => {})
           >
             <t-avatar size="48px" :image="item.picture" class="avatar" />
 
-            <t-badge :count="item.count" :offset="[16, 17]" class="flex-auto ml-4 badge" size="medium" shape="circle">
+            <div class="flex-auto ml-4 content">
               <div class="detail" style="background-color: var(--td-bg-color-container);" @click="goToDetail(item.id)">
                 <span class="upper" style="color: var(--td-text-color-secondary);">{{ item.name }}</span>
                 <span class="down" style="color: var(--td-text-color-placeholder);">
                   {{ truncateMessage(getLastMessage(item.message)) }}
                 </span>
               </div>
-            </t-badge>
+            </div>
+            <div v-if="item?.count" class="count-wrap">
+              <t-badge :count="item?.count ?? 0" :offset="[-16, 0]" />
+            </div>
           </t-cell>
         </template>
       </VirtualList>
@@ -155,12 +158,17 @@ onUnmounted(() => {})
   opacity: 1;
   padding: 17px 17px 16px 0px;
   border-bottom: 0.5px solid #e7e7e7;
+  position: relative;
   .avatar {
     margin-left: 16px;
   }
 }
+.content {
+  display: flex;
+  align-items: center;
+  padding-right: 36px; /* 给右侧角标留出空间 */
+}
 .detail {
-  width: calc(100%);
   height: 50px;
   opacity: 1;
   display: flex;
@@ -169,7 +177,7 @@ onUnmounted(() => {})
   padding: 0;
 }
 .detail .upper {
-  width: 100%;
+  width: 90%;
   height: 24px;
   opacity: 1;
   color: var(--td-text-color-primary);
@@ -180,7 +188,7 @@ onUnmounted(() => {})
   line-height: 24px;
 }
 .detail .down {
-  width: 100%;
+  width: 90%;
   height: 22px;
   opacity: 1;
   color: var(--td-text-color-placeholder);
@@ -190,5 +198,28 @@ onUnmounted(() => {})
   text-align: left;
   line-height: 22px;
   margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.count-wrap {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.count-badge {
+  background-color: #ff3b30;
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 0 6px;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  text-align: center;
 }
 </style>

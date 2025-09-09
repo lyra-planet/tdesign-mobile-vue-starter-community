@@ -95,11 +95,10 @@ function handleScrolltolower() {
   }
 }
 
-function showMessage(theme: string, content = '这是一条普通通知信息', duration = 2000) {
+function showMessage(theme: string, content = '', duration = 2000) {
   const common = {
     duration,
     icon: true,
-    offset: [108, 16],
     zIndex: 20000,
     context: document.querySelector('.content'),
   }
@@ -137,15 +136,12 @@ onMounted(() => {
         :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]"
         @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
       >
-        <t-grid
-          :column="2" :gutter="12"
-          class="bg-[var(--td-bg-color-page)] p-[12px] justify-center place-items-center  items-center "
-        >
+        <div class="grid-container">
           <template v-for="item in homeItems" :key="item.id">
             <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />
             <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />
           </template>
-        </t-grid>
+        </div>
       </t-pull-down-refresh>
     </div>
 
@@ -158,6 +154,16 @@ onMounted(() => {
 .scroll-area {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  padding: 12px;
+  background: var(--td-bg-color-page);
+  justify-items: center;
+  align-items: start;
 }
 
 :deep(.t-pull-down-refresh) {
@@ -179,6 +185,26 @@ onMounted(() => {
 
   &::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+// 响应式布局
+@media (max-width: 400px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+  }
+}
+
+@media (min-width: 401px) and (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 601px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   }
 }
 </style>

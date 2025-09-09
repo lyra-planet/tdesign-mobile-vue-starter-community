@@ -26,7 +26,7 @@ function show(type: MessageType, message: string, options?: MessageOptions) {
     content: message,
     duration,
     icon: options?.icon,
-    offset: options?.offset,
+    offset: options?.offset ?? [108, 16],
     context: (options?.context ?? (typeof document !== 'undefined' ? document.body : null)) as any,
     zIndex: options?.zIndex,
   }

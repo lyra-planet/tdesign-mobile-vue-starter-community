@@ -2,6 +2,7 @@
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import { getSearchDiscoveries, getSearchHistoryTags, search as searchApi } from '@/api/search'
 
 defineOptions({
@@ -9,6 +10,7 @@ defineOptions({
 })
 
 const { t } = useI18n()
+const router = useRouter()
 
 const taglist = ref<string[]>([])
 const findlist = ref<string[]>([])
@@ -66,7 +68,7 @@ onBeforeUnmount(() => {
           <TIcon name="search" size="18px" />
         </template>
       </t-search>
-      <div class="cancel" @click="() => { (searchQuery as any).value = ''; }">
+      <div class="cancel" @click="() => router.push('/home')">
         {{ t('pages.search.cancel') }}
       </div>
     </div>
