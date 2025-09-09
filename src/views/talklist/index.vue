@@ -15,9 +15,9 @@ const mytalklist = computed(() =>
 
 const router = useRouter()
 
-// 虚拟滚动：移交给通用组件处理
-const itemHeight = 82
-const buffer = 5
+// 虚拟滚动 - 新主导 API
+const itemSize = 82
+const bufferPx = 400
 
 // 跳转到聊天详情页
 async function goToDetail(id: string) {
@@ -90,10 +90,11 @@ onUnmounted(() => {})
       <VirtualList
         v-else
         :items="mytalklist"
-        :item-height="itemHeight"
-        :buffer="buffer"
-        item-key="id"
-        container-class="list-container-inner"
+        :item-size="itemSize"
+        :buffer-px="bufferPx"
+        key-field="id"
+        class="list-container-inner"
+        @update="() => {}"
       >
         <template #default="{ item }">
           <t-cell

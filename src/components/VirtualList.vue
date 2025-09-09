@@ -1,74 +1,55 @@
 <script setup lang='ts'>
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed } from 'vue'
+import { RecycleScroller } from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+
+// - items: any[]
+// - itemSize: number (必填，固定高度)
+// - keyField: string (默认 'id')
+// - bufferPx: number (像素，默认 200)
+// - pageMode: boolean (默认 false)
+// - listClass/itemClass/listTag/itemTag: 透传给 RecycleScroller，自定义样式/标签
+// 事件：
+// - update(startIndex, endIndex, visibleStartIndex?, visibleEndIndex?)
+// 插槽：默认插槽 v-slot="{ item, index }"
 
 interface Props<T = any> {
   items: T[]
-  itemHeight: number
-  buffer?: number
-  itemKey?: string | ((item: T, index: number) => string | number)
-  containerStyle?: string | Record<string, string>
-  containerClass?: string
+  itemSize: number
+  keyField?: string
+  bufferPx?: number
+  pageMode?: boolean
+  listClass?: string
+  itemClass?: string
+  listTag?: string
+  itemTag?: string
+  class?: string
+  style?: string | Record<string, string>
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'scroll', event: Event): void }>()
+const emit = defineEmits<{
+  (e: 'update', startIndex: number, endIndex: number, visibleStartIndex?: number, visibleEndIndex?: number): void
+}>()
 
-const containerRef = ref<HTMLElement | null>(null)
-const scrollTop = ref(0)
-const containerHeight = ref(0)
+const keyField = computed(() => props.keyField ?? 'id')
+const bufferPx = computed(() => props.bufferPx ?? 200)
+const pageMode = computed(() => props.pageMode ?? false)
 
-const normalizedBuffer = computed(() => props.buffer ?? 5)
-const totalCount = computed(() => props.items?.length ?? 0)
-
-const startIndex = computed(() => Math.max(0, Math.floor(scrollTop.value / props.itemHeight) - normalizedBuffer.value))
-const endIndex = computed(() => {
-  const end = Math.ceil((scrollTop.value + containerHeight.value) / props.itemHeight) + normalizedBuffer.value - 1
-  return Math.min(totalCount.value - 1, Math.max(0, end))
-})
-
-const visibleItems = computed(() => props.items.slice(startIndex.value, endIndex.value + 1))
-const paddingTop = computed(() => startIndex.value * props.itemHeight)
-const paddingBottom = computed(() => Math.max(0, (totalCount.value - endIndex.value - 1) * props.itemHeight))
-
-function onScroll(e: Event) {
-  if (containerRef.value)
-    scrollTop.value = containerRef.value.scrollTop
-  emit('scroll', e)
+function onUpdate(startIndex: number, endIndex: number, visibleStartIndex?: number, visibleEndIndex?: number) {
+  emit('update', startIndex, endIndex, visibleStartIndex, visibleEndIndex)
 }
-
-function updateContainerHeight() {
-  containerHeight.value = containerRef.value?.clientHeight || window.innerHeight
-}
-
-function getKey(item: any, index: number) {
-  if (typeof props.itemKey === 'function')
-    return props.itemKey(item, index)
-  if (typeof props.itemKey === 'string' && item)
-    return item[props.itemKey]
-  return index
-}
-
-onMounted(async () => {
-  await nextTick()
-  updateContainerHeight()
-  window.addEventListener('resize', updateContainerHeight)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateContainerHeight)
-})
 </script>
 
 <template>
-  <div ref="containerRef" class="vl-container" :class="props.containerClass" :style="props.containerStyle" @scroll="onScroll">
-    <div :style="{ height: `${paddingTop}px` }" />
-
-    <template v-for="(item, i) in visibleItems" :key="getKey(item, startIndex + i)">
-      <slot :item="item" :index="startIndex + i" />
-    </template>
-
-    <div :style="{ height: `${paddingBottom}px` }" />
-  </div>
+  <RecycleScroller
+    class="vl-container" :class="props.class" :style="props.style" :items="props.items"
+    :item-size="props.itemSize" v-slot="{ item, index }" :buffer="bufferPx" :key-field="keyField"
+    :page-mode="pageMode" :list-class="props.listClass" :item-class="props.itemClass" :list-tag="props.listTag"
+    :item-tag="props.itemTag" :emit-update="true" @update="onUpdate"
+  >
+    <slot :item="item" :index="index" />
+  </RecycleScroller>
 </template>
 
 <style scoped lang='scss'>
