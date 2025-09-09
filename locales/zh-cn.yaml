@@ -4,6 +4,12 @@ pages:
     title: 首页
     welcome: 欢迎回来
     search: 搜索页
+    content:
+      refresh:
+        pull_down: 下拉可以刷新
+        release: 释放立即刷新
+        refreshing: 正在刷新...
+        completed: 刷新完成
     tabs:
       recommended: 推荐
       following: 我的关注

@@ -4,6 +4,12 @@ pages:
     title: Home
     welcome: Welcome back
     search: Search
+    content:
+      refresh:
+        pull_down: Pull down to refresh
+        release: Release to refresh
+        refreshing: Refreshing...
+        completed: Refreshed
     tabs:
       recommended: Recommended
       following: Following
