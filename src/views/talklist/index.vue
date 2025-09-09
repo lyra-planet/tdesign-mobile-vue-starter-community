@@ -112,7 +112,7 @@ onUnmounted(() => {})
               </div>
             </div>
             <div v-if="item?.count" class="count-wrap">
-              <t-badge :count="item?.count ?? 0" :offset="[-16, 0]" />
+              <t-badge :count="item?.count ?? 0" />
             </div>
           </t-cell>
         </template>
@@ -170,6 +170,7 @@ onUnmounted(() => {})
 }
 .detail {
   height: 50px;
+  width: 90%;
   opacity: 1;
   display: flex;
   flex-direction: column;
@@ -177,7 +178,7 @@ onUnmounted(() => {})
   padding: 0;
 }
 .detail .upper {
-  width: 90%;
+  width: 100%;
   height: 24px;
   opacity: 1;
   color: var(--td-text-color-primary);
@@ -188,7 +189,7 @@ onUnmounted(() => {})
   line-height: 24px;
 }
 .detail .down {
-  width: 90%;
+  width: 100%;
   height: 22px;
   opacity: 1;
   color: var(--td-text-color-placeholder);
@@ -204,7 +205,7 @@ onUnmounted(() => {})
 }
 .count-wrap {
   position: absolute;
-  right: 12px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;

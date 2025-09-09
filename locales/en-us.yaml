@@ -79,9 +79,9 @@ pages:
       title: Recommended Services
       wechat: WeChat
       qq: QQ
-      tdoc: Tencent Docs
-      tmap: Tencent Map
-      data_center: Data Center
+      tdoc: TDocs
+      tmap: TMap
+      data_center: DC
     edit:
       form:
         username: Name

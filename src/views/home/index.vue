@@ -64,7 +64,6 @@ async function handleRefreshContent() {
 
     if (response.success) {
       homeItems.value = response.data.items
-      $message.success('刷新成功')
     }
     else {
       $message.error(response.message || '刷新失败')
@@ -130,20 +129,21 @@ onMounted(() => {
     <HomeTabs />
 
     <!-- 中间滚动区 -->
-    <div class="content flex-1 min-h-0 overflow-y-auto scroll-area bg-[var(--td-bg-color-page)]">
-      <t-pull-down-refresh
-        v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
-        :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]"
-        @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
-      >
+    <t-pull-down-refresh
+      v-model="refreshing" :loading-bar-height="80" :max-bar-height="100"
+      :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]"
+      class="flex-1 bg-[var(--td-bg-color-page)]"
+      @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
+    >
+      <div class="content h-full overflow-y-auto">
         <div class="grid-container">
           <template v-for="item in homeItems" :key="item.id">
             <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />
             <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />
           </template>
         </div>
-      </t-pull-down-refresh>
-    </div>
+      </div>
+    </t-pull-down-refresh>
 
     <!-- 底部 -->
     <HomeFab />
@@ -151,7 +151,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.scroll-area {
+.content {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
@@ -164,28 +164,6 @@ onMounted(() => {
   background: var(--td-bg-color-page);
   justify-items: center;
   align-items: start;
-}
-
-:deep(.t-pull-down-refresh) {
-  overflow-y: auto !important;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 2px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 2px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.5);
-  }
 }
 
 // 响应式布局
