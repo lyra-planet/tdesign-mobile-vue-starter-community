@@ -1,5 +1,5 @@
 import type { FormInstanceFunctions } from 'tdesign-mobile-vue'
-import type { FormData, FormVisible, UploadFile } from './types'
+import type { FormData, FormVisible, UploadFile } from '../types'
 import dayjs from 'dayjs'
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'

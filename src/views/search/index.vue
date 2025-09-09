@@ -1,63 +1,12 @@
 <script setup lang="ts">
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { getSearchDiscoveries, getSearchHistoryTags, search as searchApi } from '@/api/search'
+import { useSearch } from './composables/useSearch'
 
 defineOptions({
   name: 'Searchpage',
 })
 
-const { t } = useI18n()
-const router = useRouter()
-
-const taglist = ref<string[]>([])
-const findlist = ref<string[]>([])
-
-const searchQuery = ref('')
-let searchTimer: number | null = null
-let currentSearchController: AbortController | null = null
-
-onMounted(async () => {
-  const [tagsRes, discRes] = await Promise.all([
-    getSearchHistoryTags(),
-    getSearchDiscoveries(),
-  ])
-  if (tagsRes.success && tagsRes.data)
-    taglist.value = tagsRes.data.tags || []
-  if (discRes.success && discRes.data)
-    findlist.value = discRes.data.items || []
-})
-
-// 输入搜索词时触发搜索，但不改动当前页面展示
-watch(searchQuery, (q) => {
-  if (searchTimer)
-    clearTimeout(searchTimer)
-  const text = q?.trim() || ''
-  if (!text) {
-    if (currentSearchController)
-      currentSearchController.abort()
-    currentSearchController = null
-    return
-  }
-  // 防抖 + 取消上一次请求，避免竞态
-  searchTimer = window.setTimeout(async () => {
-    if (currentSearchController)
-      currentSearchController.abort()
-    const controller = new AbortController()
-    currentSearchController = controller
-    await searchApi(text, controller.signal)
-    // 若需要使用搜索结果，可在此处理，但本次不改动 UI
-  }, 300)
-})
-
-onBeforeUnmount(() => {
-  if (searchTimer)
-    clearTimeout(searchTimer)
-  if (currentSearchController)
-    currentSearchController.abort()
-})
+const { t, taglist, findlist, searchQuery, handleCancelClick } = useSearch()
 </script>
 
 <template>
@@ -68,7 +17,7 @@ onBeforeUnmount(() => {
           <TIcon name="search" size="18px" />
         </template>
       </t-search>
-      <div class="cancel" @click="() => router.push('/home')">
+      <div class="cancel" @click="handleCancelClick">
         {{ t('pages.search.cancel') }}
       </div>
     </div>

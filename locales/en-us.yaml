@@ -10,6 +10,13 @@ pages:
         release: Release to refresh
         refreshing: Refreshing...
         completed: Refreshed
+    errors:
+      get_content_failed: Failed to fetch content
+      load_failed_retry: Failed to load content, please retry
+      refresh_failed: Refresh failed
+      refresh_failed_retry: Refresh failed, please retry
+    messages:
+      publish_success: Published successfully
     tabs:
       recommended: Recommended
       following: Following

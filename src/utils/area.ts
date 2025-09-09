@@ -1,4 +1,4 @@
-import type { AreaList } from './types'
+import type { AreaList } from '../views/edit/types'
 
 export async function loadAreaList(): Promise<AreaList[]> {
   const { getPCA } = await import('lcn')

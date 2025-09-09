@@ -1,9 +1,3 @@
-export interface AreaList {
-  label: string
-  value: string
-  children?: AreaList[]
-}
-
 export interface FormData {
   username: string
   gender: string
@@ -26,4 +20,10 @@ export interface UploadFile {
   percent?: number
   status?: 'success' | 'fail' | 'progress' | 'waiting'
   raw?: File
+}
+
+export interface AreaList {
+  label: string
+  value: string
+  children?: AreaList[]
 }

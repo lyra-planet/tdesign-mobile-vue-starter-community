@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { getHomeContent, refreshHomeContent } from '@/api/home'
+import { EmptyState, ErrorState } from '@/components'
 import { message as $message } from '@/plugins/message'
 import HomeCard from './components/HomeCard.vue'
 import HomeFab from './components/HomeFab.vue'
@@ -42,12 +43,12 @@ async function loadHomeContent(page = 1, isRefresh = false) {
       }
     }
     else {
-      $message.error(response.message || '获取内容失败')
+      $message.error(response.message || t('pages.home.errors.get_content_failed'))
     }
   }
   catch (error) {
     console.error('加载首页内容失败:', error)
-    $message.error('加载内容失败，请重试')
+    $message.error(t('pages.home.errors.load_failed_retry'))
   }
   finally {
     loading.value = false
@@ -66,12 +67,12 @@ async function handleRefreshContent() {
       homeItems.value = response.data.items
     }
     else {
-      $message.error(response.message || '刷新失败')
+      $message.error(response.message || t('pages.home.errors.refresh_failed'))
     }
   }
   catch (error) {
     console.error('刷新首页内容失败:', error)
-    $message.error('刷新失败，请重试')
+    $message.error(t('pages.home.errors.refresh_failed_retry'))
   }
   finally {
     refreshing.value = false
@@ -111,7 +112,7 @@ function showMessage(theme: string, content = '', duration = 2000) {
 }
 const route = useRoute()
 const router = useRouter()
-const showSuccessMessage = () => showMessage('success', '发布成功')
+const showSuccessMessage = () => showMessage('success', t('pages.home.messages.publish_success'))
 onMounted(() => {
   if (route.query.success === '1') {
     showSuccessMessage()
@@ -136,7 +137,9 @@ onMounted(() => {
       @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
     >
       <div class="content h-full overflow-y-auto">
-        <div class="grid-container">
+        <ErrorState v-if="!loading && !refreshing && homeItems.length === 0 && !hasMore" title="加载失败" description="加载内容失败，请重试" @retry="handleRefresh" />
+        <EmptyState v-else-if="!loading && !refreshing && homeItems.length === 0" title="暂无内容" description="稍后再来看看吧" action-text="刷新" @action="handleRefresh" />
+        <div v-else class="grid-container">
           <template v-for="item in homeItems" :key="item.id">
             <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />
             <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />

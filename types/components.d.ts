@@ -8,7 +8,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    EmptyState: typeof import('./../src/components/EmptyState.vue')['default']
+    ErrorState: typeof import('./../src/components/ErrorState.vue')['default']
     FormContainer: typeof import('./../src/components/FormContainer.vue')['default']
+    LoadingOverlay: typeof import('./../src/components/LoadingOverlay.vue')['default']
     MenuItem: typeof import('./../src/components/MenuItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

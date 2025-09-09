@@ -19,6 +19,7 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/datacenter/': RouteRecordInfo<'/datacenter/', '/datacenter', Record<never, never>, Record<never, never>>,
+    '/edit/': RouteRecordInfo<'/edit/', '/edit', Record<never, never>, Record<never, never>>,
     '/error/403/': RouteRecordInfo<'/error/403/', '/error/403', Record<never, never>, Record<never, never>>,
     '/error/404/': RouteRecordInfo<'/error/404/', '/error/404', Record<never, never>, Record<never, never>>,
     '/error/500/': RouteRecordInfo<'/error/500/', '/error/500', Record<never, never>, Record<never, never>>,
@@ -28,13 +29,10 @@ declare module 'vue-router/auto-routes' {
     '/login/PhoneLoginPage': RouteRecordInfo<'/login/PhoneLoginPage', '/login/PhoneLoginPage', Record<never, never>, Record<never, never>>,
     '/login/VerifyCodePage': RouteRecordInfo<'/login/VerifyCodePage', '/login/VerifyCodePage', Record<never, never>, Record<never, never>>,
     '/my/': RouteRecordInfo<'/my/', '/my', Record<never, never>, Record<never, never>>,
-    '/my/black_mode': RouteRecordInfo<'/my/black_mode', '/my/black_mode', Record<never, never>, Record<never, never>>,
-    '/my/edit': RouteRecordInfo<'/my/edit', '/my/edit', Record<never, never>, Record<never, never>>,
-    '/my/general-settings': RouteRecordInfo<'/my/general-settings', '/my/general-settings', Record<never, never>, Record<never, never>>,
-    '/my/settings': RouteRecordInfo<'/my/settings', '/my/settings', Record<never, never>, Record<never, never>>,
     '/notice/': RouteRecordInfo<'/notice/', '/notice', Record<never, never>, Record<never, never>>,
     '/publish/': RouteRecordInfo<'/publish/', '/publish', Record<never, never>, Record<never, never>>,
     '/search/': RouteRecordInfo<'/search/', '/search', Record<never, never>, Record<never, never>>,
+    '/setting/': RouteRecordInfo<'/setting/', '/setting', Record<never, never>, Record<never, never>>,
     '/talklist/': RouteRecordInfo<'/talklist/', '/talklist', Record<never, never>, Record<never, never>>,
   }
 }
