@@ -1,7 +1,9 @@
+import { DialogPlugin } from 'tdesign-mobile-vue'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getSearchDiscoveries, getSearchHistoryTags, search as searchApi } from '@/api/search'
+import 'tdesign-mobile-vue/es/dialog/style/index.css'
 
 export function useSearch() {
   const { t } = useI18n()
@@ -56,12 +58,26 @@ export function useSearch() {
     router.push('/home')
   }
 
+  function handleClearHistoryClick() {
+    DialogPlugin.confirm({
+      title: t('pages.search.clear_confirm_title') || t('common.buttons.confirm'),
+      content: t('pages.search.clear_confirm_body') || '',
+      confirmBtn: t('common.buttons.confirm'),
+      cancelBtn: t('common.buttons.cancel'),
+      preventScrollThrough: true,
+      onConfirm: () => {
+        taglist.value = []
+      },
+    })
+  }
+
   return {
     t,
     taglist,
     findlist,
     searchQuery,
     handleCancelClick,
+    handleClearHistoryClick,
   }
 }
 

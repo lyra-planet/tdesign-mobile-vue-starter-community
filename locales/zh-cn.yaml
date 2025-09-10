@@ -27,6 +27,8 @@ pages:
   search:
     cancel: 取消
     history: 历史记录
+    clear_confirm_title: 清空历史记录？
+    clear_confirm_body: 此操作不可恢复，确定要清空所有搜索历史吗？
     discoveries:
       title: 搜索发现
   login:

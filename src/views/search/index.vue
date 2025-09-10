@@ -6,13 +6,16 @@ defineOptions({
   name: 'Searchpage',
 })
 
-const { t, taglist, findlist, searchQuery, handleCancelClick } = useSearch()
+const { t, taglist, findlist, searchQuery, handleCancelClick, handleClearHistoryClick } = useSearch()
 </script>
 
 <template>
   <div class="page">
     <div class="search-container">
-      <t-search v-model="searchQuery" :clearable="true" shape="round" class="search" :placeholder="t('common.search.placeholder')">
+      <t-search
+        v-model="searchQuery" :clearable="true" shape="round" class="search"
+        :placeholder="t('common.search.placeholder')"
+      >
         <template #left-icon>
           <TIcon name="search" size="18px" />
         </template>
@@ -24,6 +27,7 @@ const { t, taglist, findlist, searchQuery, handleCancelClick } = useSearch()
     <div class="recode">
       <div class="recode-title">
         {{ t('pages.search.history') }}
+        <TIcon name="delete" class="deleteIcon" @click="handleClearHistoryClick" />
       </div>
       <div class="recode-detail">
         <t-tag v-for="(tag, index) in taglist" :key="index" variant="light" class="tag">
@@ -82,6 +86,9 @@ const { t, taglist, findlist, searchQuery, handleCancelClick } = useSearch()
   }
   .recode {
     .recode-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       opacity: 1;
       font-size: 18px;
       font-weight: 600;
@@ -89,7 +96,7 @@ const { t, taglist, findlist, searchQuery, handleCancelClick } = useSearch()
       text-align: left;
       line-height: 26px;
       color: var(--td-text-color-primary);
-      margin: 16px auto 16px 16px;
+      margin: 16px;
     }
     .recode-detail {
       font-size: 14px;

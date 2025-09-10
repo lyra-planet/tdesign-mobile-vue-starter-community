@@ -27,6 +27,8 @@ pages:
   search:
     cancel: Cancel
     history: History
+    clear_confirm_title: Clear history?
+    clear_confirm_body: This action cannot be undone. Clear all search history?
     discoveries:
       title: Discoveries
   login:
