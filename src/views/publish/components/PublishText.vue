@@ -21,5 +21,8 @@ const value = ref('')
 <style lang="scss" scoped>
 .textarea-publish {
   height: 132px;
+  :deep(.t-textarea__label) {
+    overflow: visible;
+  }
 }
 </style>
