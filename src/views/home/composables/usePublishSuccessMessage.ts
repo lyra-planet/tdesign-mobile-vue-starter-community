@@ -21,7 +21,7 @@ export function usePublishSuccessMessage(options: UsePublishSuccessMessageOption
       duration: 2000,
       icon: true,
       zIndex: 20000,
-      offset: [12, 16],
+      offset: [108, 16],
       context,
     })
   }
