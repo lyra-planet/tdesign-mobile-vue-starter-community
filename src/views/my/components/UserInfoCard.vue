@@ -31,12 +31,8 @@ defineEmits<{
         <div class="avatar-bg">
           <div class="avatar-inner">
             <t-image
-              v-if="isLoggedIn && userInfo"
-              :src="userInfo.avatar"
-              :alt="userInfo.nickname"
-              :lazy="true"
-              fit="cover"
-              class="avatar-image"
+              v-if="isLoggedIn && userInfo" :src="userInfo.avatar" :alt="userInfo.nickname" :lazy="true"
+              fit="cover" class="avatar-image"
             />
             <t-icon v-else name="user" size="32" color="#0052D9" />
           </div>
@@ -53,13 +49,7 @@ defineEmits<{
       <!-- 用户标签 -->
       <div v-if="isLoggedIn && userInfo && userInfo.tags.length > 0" class="user-details">
         <div class="user-tags">
-          <t-tag
-            v-for="(tag, index) in userInfo.tags"
-            :key="index"
-            size="small"
-            variant="light"
-            class="user-tag"
-          >
+          <t-tag v-for="(tag, index) in userInfo.tags" :key="index" size="small" variant="light" class="user-tag">
             <template #icon>
               <t-icon :name="tag.icon" size="12" />
             </template>

@@ -38,7 +38,13 @@ export function getHomeContent(params?: {
   page?: number
   limit?: number
 }): Promise<ApiResponse<HomeContentResponse>> {
-  return get('/home/content', params)
+  const qs = new URLSearchParams()
+  if (params?.page != null)
+    qs.set('page', String(params.page))
+  if (params?.limit != null)
+    qs.set('limit', String(params.limit))
+  const query = qs.toString()
+  return get(`/home/content${query ? `?${query}` : ''}`)
 }
 
 // 获取指定内容详情

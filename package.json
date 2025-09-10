@@ -46,7 +46,8 @@
     "tdesign-mobile-vue": "^1.10.2",
     "vue": "^3.5.17",
     "vue-i18n": "^11.1.9",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "vue-virtual-scroller": "2.0.0-beta.8"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.17.0",

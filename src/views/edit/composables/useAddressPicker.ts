@@ -1,6 +1,6 @@
-import type { AreaList } from '../edit/types'
+import type { AreaList } from '../types'
 import { computed, onMounted, reactive, ref } from 'vue'
-import { loadAreaList } from '../edit/data'
+import { loadAreaList } from '../../../utils/area'
 
 export function useAddressPicker() {
   // 当前选中的省份索引

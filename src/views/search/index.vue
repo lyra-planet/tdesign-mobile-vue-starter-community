@@ -1,78 +1,33 @@
 <script setup lang="ts">
 import { Icon as TIcon } from 'tdesign-icons-vue-next'
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { getSearchDiscoveries, getSearchHistoryTags, search as searchApi } from '@/api/search'
+import { useSearch } from './composables/useSearch'
 
 defineOptions({
   name: 'Searchpage',
 })
 
-const { t } = useI18n()
-
-const taglist = ref<string[]>([])
-const findlist = ref<string[]>([])
-
-const searchQuery = ref('')
-let searchTimer: number | null = null
-let currentSearchController: AbortController | null = null
-
-onMounted(async () => {
-  const [tagsRes, discRes] = await Promise.all([
-    getSearchHistoryTags(),
-    getSearchDiscoveries(),
-  ])
-  if (tagsRes.success && tagsRes.data)
-    taglist.value = tagsRes.data.tags || []
-  if (discRes.success && discRes.data)
-    findlist.value = discRes.data.items || []
-})
-
-// 输入搜索词时触发搜索，但不改动当前页面展示
-watch(searchQuery, (q) => {
-  if (searchTimer)
-    clearTimeout(searchTimer)
-  const text = q?.trim() || ''
-  if (!text) {
-    if (currentSearchController)
-      currentSearchController.abort()
-    currentSearchController = null
-    return
-  }
-  // 防抖 + 取消上一次请求，避免竞态
-  searchTimer = window.setTimeout(async () => {
-    if (currentSearchController)
-      currentSearchController.abort()
-    const controller = new AbortController()
-    currentSearchController = controller
-    await searchApi(text, controller.signal)
-    // 若需要使用搜索结果，可在此处理，但本次不改动 UI
-  }, 300)
-})
-
-onBeforeUnmount(() => {
-  if (searchTimer)
-    clearTimeout(searchTimer)
-  if (currentSearchController)
-    currentSearchController.abort()
-})
+const { t, taglist, findlist, searchQuery, handleCancelClick, handleClearHistoryClick } = useSearch()
 </script>
 
 <template>
   <div class="page">
     <div class="search-container">
-      <t-search v-model="searchQuery" :clearable="true" shape="round" class="search" :placeholder="t('common.search.placeholder')">
+      <t-search
+        v-model="searchQuery" :clearable="true" shape="round" class="search"
+        :placeholder="t('common.search.placeholder')"
+      >
         <template #left-icon>
           <TIcon name="search" size="18px" />
         </template>
       </t-search>
-      <div class="cancel" @click="() => { (searchQuery as any).value = ''; }">
+      <div class="cancel" @click="handleCancelClick">
         {{ t('pages.search.cancel') }}
       </div>
     </div>
     <div class="recode">
       <div class="recode-title">
         {{ t('pages.search.history') }}
+        <TIcon name="delete" class="deleteIcon" @click="handleClearHistoryClick" />
       </div>
       <div class="recode-detail">
         <t-tag v-for="(tag, index) in taglist" :key="index" variant="light" class="tag">
@@ -131,6 +86,9 @@ onBeforeUnmount(() => {
   }
   .recode {
     .recode-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       opacity: 1;
       font-size: 18px;
       font-weight: 600;
@@ -138,7 +96,7 @@ onBeforeUnmount(() => {
       text-align: left;
       line-height: 26px;
       color: var(--td-text-color-primary);
-      margin: 16px auto 16px 16px;
+      margin: 16px;
     }
     .recode-detail {
       font-size: 14px;

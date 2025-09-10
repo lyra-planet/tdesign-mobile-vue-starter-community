@@ -1,18 +1,18 @@
-import type { UserInfo } from './types'
+import type { LoginRequest, SendCodeRequest, UserInfo, VerifyCodeRequest } from './types'
 import { post, put } from '@/api/request'
 
 // 发送验证码
-export async function sendVerifyCode(params: { phone: string }) {
+export async function sendVerifyCode(params: SendCodeRequest) {
   return post('/auth/send-code', params)
 }
 
 // 验证码登录
-export async function verifyCodeLogin(params: any) {
+export async function verifyCodeLogin(params: VerifyCodeRequest) {
   return post('/auth/verify-login', params)
 }
 
 // 密码登录
-export async function passwordLogin(params: any) {
+export async function passwordLogin(params: LoginRequest) {
   return post('/auth/password-login', params)
 }
 

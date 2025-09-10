@@ -23,7 +23,7 @@ const settingGroups = computed(() => [
     {
       name: t('pages.my.settings_page.notifications'),
       icon: 'notification',
-      action: () => console.warn('通知设置'),
+      action: () => console.warn(t('pages.my.settings_page.notifications')),
     },
   ],
   // 第二组：界面设置
@@ -36,12 +36,12 @@ const settingGroups = computed(() => [
     {
       name: t('pages.my.settings_page.font_size'),
       icon: 'chart',
-      action: () => console.warn('字体大小设置'),
+      action: () => console.warn(t('pages.my.settings_page.font_size')),
     },
     {
       name: t('pages.my.settings_page.playback_settings'),
       icon: 'sound',
-      action: () => console.warn('播放设置'),
+      action: () => console.warn(t('pages.my.settings_page.playback_settings')),
     },
   ],
   // 第三组：安全隐私
@@ -49,12 +49,12 @@ const settingGroups = computed(() => [
     {
       name: t('pages.my.settings_page.account_security'),
       icon: 'secured',
-      action: () => console.warn('账号安全'),
+      action: () => console.warn(t('pages.my.settings_page.account_security')),
     },
     {
       name: t('pages.my.settings_page.privacy'),
       icon: 'info-circle',
-      action: () => console.warn('隐私设置'),
+      action: () => console.warn(t('pages.my.settings_page.privacy')),
     },
   ],
 ])
