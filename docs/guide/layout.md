@@ -106,3 +106,26 @@ const getPageTitle = (path: string) => {
 - **状态计算**：复杂显示逻辑通过 `computed` 响应式计算
 - **过渡动画**：为 Drawer 与 Tab 切换添加平滑过渡效果
 - **无障碍性**：为导航元素添加适当的 `aria-label` 属性
+
+## 滚动与容器高度规范
+
+为确保移动端滚动性能与虚拟列表的稳定渲染，建议遵循以下规范：
+
+- **谁负责滚动**：页面主体在 `Layout` 内部滚动，避免 `body` 滚动。
+- **明确可滚动区域高度**：给主内容区设置 `flex: 1; min-height: 0; overflow-y: auto;`。
+- **iOS 惯性滚动**：开启 `-webkit-overflow-scrolling: touch;`。
+
+示例（节选自 `src/layout/index.vue`）：
+
+```scss
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+```
+
+与虚拟列表的配合：
+
+- `VirtualList` 内部容器 `.vl-container` 已设置 `height: 100%; overflow-y: auto;`，父容器需具备明确高度（例如父级使用 `flex: 1; min-height: 0;`）。
+- 若希望使用“页面滚动”，可在 `VirtualList` 传入 `page-mode` 启用。

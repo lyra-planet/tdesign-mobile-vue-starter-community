@@ -1,6 +1,6 @@
 # 介绍
 
-## 💡 简介
+## 简介
 
 `tdesign-mobile-vue-starter-community` 是一个基于 `TDesign Mobie Vue` 移动端组件库，使用 `Vue3`、`Vite`、`TypeScript` 开发，包含首页、消息中心、个人中心、设置中心、登陆注册等五大功能模块，可进行个性化主题配置的纯前端页面模版。
 
@@ -10,13 +10,13 @@
 - **设置中心**：该模块允许用户对应用的各项功能进行个性化配置，如通知设置、主题切换等；
 - **登陆注册**：该模块是用户进入应用的入口，需要提供便捷、安全的登录注册方式，如验证码登陆、账号密码登录、第三方账号授权等。
 
-## 🎨 视觉稿地址
+## 视觉稿地址
 
 移动端通用场景页面模版：https://codesign.qq.com/s/567449555703953
 
 访问密码：`F2FO`
 
-## 📘 安装使用
+## 安装使用
 
 - 🍖 系统环境
   - `Windows` 或 `macOS`
@@ -67,9 +67,9 @@
   pnpm preview:build
   ```
 
-## 👨‍💻 开发指南
+## 开发指南
 
-### 🎯 技术栈
+### 技术栈
 
 - [Vue](https://vuejs.org/): 版本为 `3.5+`
 
@@ -87,7 +87,7 @@
 
 - [TailwindCSS](https://tailwindcss.com/): 原子化 CSS 框架，极大提升开发效率和样式复用性，项目采用了 `TailwindCSS v4`
 
-### 📁 目录结构
+### 目录结构
 
 ```
 ├── .github/                # 工作流相关
@@ -154,7 +154,7 @@
 ├── vite.config.ts          # vite 配置
 ```
 
-### ✨ 特色功能
+### 特色功能
 
 - `unplugin-vue-components`: 自动导入第三方组件，无需手动 `import`
 
@@ -174,7 +174,7 @@
 
 - 在 `.vue` 空文件里输入 `vue` 可弹出代码片段，快速搭建基础文件结构（仅限 `vscode`）
 
-### 🧪 前端 Mock（MSW）
+### 前端 Mock（MSW）
 
 项目内置 [MSW](https://mswjs.io) 用于在浏览器端拦截 `fetch`/XHR 请求并返回模拟数据。
 
@@ -186,7 +186,7 @@
   - handlers 位于 `src/mocks/handlers.ts`，已覆盖 `/api` 开头接口（使用 `*/api/...` 通配）。
   - 启动逻辑在 `src/mocks/index.ts`，于 `src/main.ts` 初始化阶段调用。
 
-## 📑 Git 提交规范
+## Git 提交规范
 
 - `feat` 业务新功能开发
 - `fix` bug 修复
@@ -206,7 +206,7 @@
 - `release` 版本发布相关
 - `wip` 开发中
 
-## 🌏 浏览器兼容性
+## 浏览器兼容性
 
 推荐使用内核为 `chrome 100+` 的浏览器开发
 

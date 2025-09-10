@@ -41,6 +41,13 @@ export function getRouterMode(mode: string) {
 }
 ```
 
+### 环境变量与部署注意事项
+
+- `.env.*` 中配置 `VITE_ROUTER_MODE=hash | history`。
+- `history` 模式需要服务端将未知路由重写到 `index.html`（Nginx/静态托管需配置 fallback）。
+- GitHub Pages 等不支持自定义回退的托管，推荐使用 `hash` 模式。
+- 如有子路径部署，请设置 `BASE_URL`（Vite 的 `base`），以确保资源路径正确。
+
 ## 导航与标题策略
 
 `useNavigation()` 统一提供：

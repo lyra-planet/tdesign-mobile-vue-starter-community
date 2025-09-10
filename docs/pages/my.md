@@ -1,4 +1,4 @@
-# 我的 My
+# 个人中心 My
 
 - 组成：用户卡片、服务网格、设置/资料编辑
 
@@ -11,18 +11,17 @@
 
 ## 登录态演示
 
-- 侧边栏提供“已登录/未登录”快速切换入口（仅 UI 预览），通过 `useNavigation()` 内部方法模拟 `token` 与 `userInfo`
+- 侧边栏提供“已登录/未登录”快速切换（仅 UI 预览），通过 `useNavigation()` 模拟 `token` 与 `userInfo`
 
-## 实现亮点
+## 亮点
 
-- 用户态切换：基于 store 的登录态模拟，切换后组件自动响应
-- 服务网格：宫格自适应与可达性优化（触控区域与可读性）
-- 设置入口：异步路由懒加载与分路由打包，减少无关开销
+- 登录态模拟：基于 store，切换后组件自动响应
+- 服务网格：自适应与可达性优化
+- 设置入口：路由懒加载，减少无关开销
 
 ## UI 预览
 
 <div style="display: flex; gap: 12px; align-items: flex-start;">
   <img src="../images/user1.png" alt="My Placeholder" style="flex: 1 1 0; max-width: 30%; height: auto;" />
     <img src="../images/user2.png" alt="My Placeholder" style="flex: 1 1 0; max-width: 30%; height: auto;" />
-  <img src="../images/edit.png" alt="My Placeholder" style="flex: 1 1 0; max-width: 30%; height: auto;" />
 </div>

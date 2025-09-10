@@ -106,3 +106,26 @@ const getPageTitle = (path: string) => {
 - **State Calculation**: Complex display logic through `computed` reactive calculation
 - **Transition Animation**: Add smooth transition effects for Drawer and Tab switching
 - **Accessibility**: Add appropriate `aria-label` attributes for navigation elements
+
+## Scrolling & Container Height Guidelines
+
+To ensure smooth mobile scrolling and stable rendering of virtual lists, follow these rules:
+
+- **Who scrolls**: Let the main content scroll inside `Layout`, avoid scrolling on `body`.
+- **Explicit height**: Set `flex: 1; min-height: 0; overflow-y: auto;` on the main content area.
+- **iOS inertia**: Enable `-webkit-overflow-scrolling: touch;`.
+
+Example (excerpt from `src/layout/index.vue`):
+
+```scss
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+```
+
+Working with VirtualList:
+
+- The internal `.vl-container` uses `height: 100%; overflow-y: auto;`. Ensure the parent has explicit height (e.g., parent uses `flex: 1; min-height: 0;`).
+- Use `page-mode` on `VirtualList` if you prefer page-level scrolling.

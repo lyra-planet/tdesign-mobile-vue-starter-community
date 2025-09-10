@@ -33,11 +33,7 @@ export default defineConfig({
         darkModeSwitchLabel: '外观',
         lightModeSwitchTitle: '切换到浅色主题',
         darkModeSwitchTitle: '切换到深色主题',
-        externalLinkIcon: true,
-        editLink: {
-          pattern: 'https://github.com/OWNER/REPO/edit/main/docs/:path',
-          text: '在 GitHub 上编辑此页',
-        },
+        externalLinkIcon: false,
         lastUpdated: {
           text: '上次更新',
           formatOptions: { dateStyle: 'short', timeStyle: 'short' },
@@ -69,7 +65,7 @@ export default defineConfig({
         darkModeSwitchLabel: 'Appearance',
         lightModeSwitchTitle: 'Switch to light theme',
         darkModeSwitchTitle: 'Switch to dark theme',
-        externalLinkIcon: true,
+        externalLinkIcon: false,
         editLink: {
           pattern: 'https://github.com/OWNER/REPO/edit/main/docs/:path',
           text: 'Edit this page on GitHub',

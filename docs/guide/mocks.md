@@ -147,6 +147,12 @@ MSW 提供了灵活的启用控制机制，支持开发过程中的动态切换�
 - 关闭：确保 `VITE_MSW` 未开启，并移除 `window.__MSW_ENABLED__`
 - 局部透传：未匹配的请求因 `onUnhandledRequest: 'bypass'` 会走真实后端，便于“半 Mock 半真实”联调
 
+### 部署与回退策略
+
+- 生产环境默认不启用 MSW；如需演示环境启用，请确保 `public/mockServiceWorker.js` 部署正确，且 `BASE_URL` 与实际子路径一致。
+- 若开启后接口未拦截，首先在 Application → Service Workers 面板停止旧 Worker 并强刷新。
+- MSW 仅拦截在当前作用域内的请求，跨子路径部署需检查作用域与 `serviceWorker.url` 配置。
+
 ## 延迟与错误注入
 
 真实的网络环境充满不确定性，包括网络延迟、服务器错误等各种异常情况。通过模拟这些真实场景，帮助开发者构建更健壮的应用程序。

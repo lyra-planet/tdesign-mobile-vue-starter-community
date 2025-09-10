@@ -234,6 +234,27 @@ const validateAndSyncState = async () => {
 
 UI interaction layer error handling focuses on user experience, ensuring users can continue using core application functions through reasonable degradation strategies and friendly error prompts.
 
+### 📦 List Tri-state (Loading/Error/Empty) Pattern
+
+Standardized tri-state handling for list pages to avoid flickers/blank screens:
+
+```vue
+<!-- src/views/talklist/index.vue (excerpt) -->
+<LoadingOverlay v-if="isLoading" />
+<ErrorState v-else-if="error" :description="error || undefined" @retry="refreshTalkList" />
+<div v-else class="list-container">
+  <EmptyState v-if="mytalklist.length === 0" @refresh="refreshTalkList" />
+  <VirtualList v-else :items="mytalklist" @update="() => {}">
+    <!-- items -->
+  </VirtualList>
+</div>
+```
+
+Key points:
+
+- Loading has higher priority than error/content; error has higher priority than content; empty state before rendering list.
+- Keep container height fixed (`flex: 1; min-height: 0;`) to avoid layout shifts.
+
 ### 🛠️ Route Error Handling
 
 Comprehensive route error handling and page degradation mechanisms:

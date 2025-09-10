@@ -96,6 +96,31 @@ if (!result.success && this.showToastOnError) {
 - 统一的错误提示策略
 - 支持通过 `showToastOnError` 控制是否提示
 
+## 默认行为与容器挂载
+
+- 默认显示时长：`2000ms`
+- 默认偏移：`offset: [108, 16]`（适配沉浸式头部/安全区）
+- 默认挂载容器：`document.body`，也可通过 `context` 将消息挂载到页面局部容器内
+
+```ts
+message.success('操作完成', {
+  context: document.querySelector('.content') as Element,
+  offset: [16, 80],
+})
+```
+
+## 发布成功的一次性提醒
+
+发布完成后回到首页显示一次性提示，避免重复打扰：
+
+```ts
+// src/views/home/index.vue（节选）
+const { checkAndNotifyOnce } = usePublishSuccessMessage({ contextSelector: '.content' })
+onMounted(() => {
+  void checkAndNotifyOnce()
+})
+```
+
 ## 全局注册
 
 ```ts

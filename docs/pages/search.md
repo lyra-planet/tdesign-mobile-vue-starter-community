@@ -19,6 +19,33 @@
 - 智能联想：根据历史/发现权重融合排序，优先展示高相关项
 - 空态与错误：统一空态占位与错误重试按钮，保障体验一致
 
+### 输入防抖与请求竞态处理
+
+配方：`debounce + AbortController`，在下一次输入/组件卸载时取消上一次请求，确保结果一致性：
+
+```ts
+// 伪代码（与项目实现一致）
+let currentController: AbortController | null = null
+const performSearch = async (q: string) => {
+  // 取消上一个请求
+  currentController?.abort()
+  if (!q.trim()) return
+  currentController = new AbortController()
+  try {
+    const res = await get(`/api/search?q=${encodeURIComponent(q)}`, undefined, currentController.signal)
+    if (res.success && !currentController.signal.aborted) {
+      // 渲染结果
+    }
+  } catch (e) {
+    if ((e as any)?.name !== 'AbortError') {
+      message.error('搜索失败，请重试')
+    }
+  } finally {
+    currentController = null
+  }
+}
+```
+
 ## UI 预览
 
 <div style="display: flex; gap: 12px; align-items: flex-start;">

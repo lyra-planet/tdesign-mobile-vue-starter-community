@@ -10,14 +10,16 @@ title: Pages Overview
 - Talklist (`/talklist`): conversation list and unread badge aggregation
 - DataCenter (`/datacenter`): overview, interaction, completion, region
 - My (`/my`): user card, service grid, settings entry
+- Setting (`/my/settings`): general settings and dark mode
+- Edit (`/my/edit`): profile edit (avatar/nickname/gender/birthday/address/album)
 - Login (`/login/*`): phone, verification code, password login
 
-## General Highlights
+## Highlights
 
-- Component decoupling: each page is composed of a "container + business components" pattern for reuse and substitution
-- Data-driven: unified request wrapper and state management keep page state and side effects under control
-- UX optimizations: skeleton/placeholder, progressive loading, friendly error and empty states
-- Maintainability: strong typing and single-responsibility hooks/composables for easier testing and extension
+- Reusable composition: container + business components
+- Data-driven: unified request and state management
+- UX: skeletons, progressive loading, friendly empty/error states
+- Maintainability: strong typing and focused composables
 
 ## UI Preview
 

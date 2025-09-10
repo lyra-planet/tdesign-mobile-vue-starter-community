@@ -127,6 +127,12 @@ http.put("*/api/auth/update-user-info", async ({ request }) => {
 - Disable: ensure `VITE_MSW` is not enabled and remove `window.__MSW_ENABLED__`
 - Partial passthrough: unmatched requests are bypassed to real backend thanks to `onUnhandledRequest: 'bypass'`
 
+### Deployment & Fallback Strategy
+
+- MSW is disabled by default in production. If you enable it for demo environments, ensure `public/mockServiceWorker.js` is deployed and `BASE_URL` matches the sub-path.
+- If endpoints are not intercepted after enabling, stop the old worker in Application → Service Workers and perform a hard refresh.
+- MSW only intercepts within its scope. For sub-path deployments, verify the scope and `serviceWorker.url` configuration.
+
 ## Latency and error injection
 
 - Use `delay(300)` to simulate network conditions

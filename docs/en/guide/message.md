@@ -39,3 +39,28 @@ message.success('OK', {
 ## With the HTTP client
 
 In `src/api/request.ts`, `message.error` is triggered automatically when a request fails to keep error hints consistent.
+
+## Defaults & Container Mounting
+
+- Default duration: `2000ms`
+- Default offset: `offset: [108, 16]` (fits immersive header/safe-area)
+- Default mount container: `document.body`. You can mount to a specific area via `context`.
+
+```ts
+message.success('Done', {
+  context: document.querySelector('.content') as Element,
+  offset: [16, 80],
+})
+```
+
+## One-time "Publish Success" Toast
+
+Show a one-time toast on returning to Home after publishing to avoid repeated prompts:
+
+```ts
+// src/views/home/index.vue (excerpt)
+const { checkAndNotifyOnce } = usePublishSuccessMessage({ contextSelector: '.content' })
+onMounted(() => {
+  void checkAndNotifyOnce()
+})
+```

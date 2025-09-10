@@ -4,7 +4,7 @@ Based on modern frontend best practices, this project has undergone comprehensiv
 
 ## Core Optimization Technologies
 
-### 🚀 Build-time Optimization
+### Build-time Optimization
 **Smart Code Splitting**
 ```ts
 // vite.config.ts - Split by dependency type
@@ -31,7 +31,7 @@ manualChunks(id) {
 - Disable sourcemap by default (`report` mode can enable)
 - Static resource compression and content hashing
 
-### ⚡ Runtime Optimization
+### Runtime Optimization
 **Route-level Lazy Loading**
 ```ts
 // All page components loaded on demand
@@ -58,7 +58,110 @@ async function loadLocaleMessages(locale: string) {
 - **Memory usage reduced by 70%** (thousand-item scenario)
 - **Scroll frame rate stable at 60fps**
 
-### 🌐 Network Layer Optimization
+#### VirtualList Component
+
+We provide a wrapper `src/components/VirtualList.vue` built on top of `vue-virtual-scroller`, unifying two capabilities:
+
+- **Dynamic mode (default)**: for variable-height items (chat messages, dynamic feeds)
+- **Recycle/Grid mode**: for fixed row height or grid layouts (home cards grid)
+
+Key features:
+
+- Pixel-based `buffer-px` (auto converted to item count in Recycle mode) to avoid blank during fast scroll
+- Supports page scrolling (`page-mode`) or container scrolling (default)
+- Unified `update` event exposing render and visible range indexes for infinite loading
+
+Props (partial):
+
+- `items`: list data (required)
+- `item-size?`: estimated item height (Dynamic: min height; Recycle/Grid: row height), default `80`
+- `key-field?`: unique key field name, default `'id'`
+- `buffer-px?`: viewport buffer in pixels, default `200`
+- `add-recycle-buffer?`: extra buffered item count for Recycle/Grid only
+- `page-mode?`: page scroll mode, default `false`
+- `grid-items?`: columns per row (>0 enables Recycle/Grid)
+- `item-secondary-size?`: secondary size for grid cell (e.g., width)
+- `list-class/item-class/list-tag/item-tag`: passthrough classes/tags
+- `class/style`: wrapper container class/style
+
+Events & slots:
+
+- `@update="(start, end, vStart?, vEnd?) => {}"`: fired on visible range changes
+- Default slot: `v-slot="{ item, index, active }"` (`active` only in Recycle/Grid)
+
+When to use which mode:
+
+- Highly variable, unpredictable heights → use **Dynamic** (`<DynamicScroller>`)
+- Stable, fixed row heights or grid layout → use **Recycle/Grid** (`<RecycleScroller>`)
+
+Example 1: Chat messages (dynamic heights)
+
+```vue
+<template>
+  <VirtualList
+    class="messages-area"
+    :items="messages"
+    key-field="id"
+    :item-size="68"
+    :buffer-px="300"
+    @update="onUpdate"
+  >
+    <template #default="{ item }">
+      <MessageRow :item="item" />
+    </template>
+  </VirtualList>
+</template>
+
+<script setup lang="ts">
+function onUpdate(start: number, end: number, vStart?: number, vEnd?: number) {
+  // Infinite loading when approaching the end of visible range
+}
+</script>
+```
+
+Example 2: Home cards grid (fixed-size grid)
+
+```vue
+<template>
+  <VirtualList
+    class="h-full"
+    :items="homeItems"
+    :item-size="256"
+    :grid-items="gridCols"
+    :item-secondary-size="itemSecondarySize"
+    :add-recycle-buffer="300"
+    list-class="grid-list"
+    @update="onVListUpdate"
+  >
+    <template #default="{ item, index }">
+      <div class="grid-cell">
+        <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" />
+        <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />
+      </div>
+    </template>
+  </VirtualList>
+</template>
+```
+
+Tuning tips:
+
+- `buffer-px`: 200–400px on mobile; increase for faster scrolling
+- Dynamic mode `item-size` should be a reasonable min height to reduce reflows
+- Recycle/Grid mode: ensure `item-size` equals real row height; `grid-items` equals column count
+- `key-field` must be unique and stable
+
+Container height & scrolling:
+
+- Internal container `.vl-container` uses `height: 100%; overflow-y: auto;`. Ensure parent has explicit height (e.g., `flex: 1; min-height: 0;`).
+- Use `page-mode` for page-level scroll
+
+Common pitfalls:
+
+- No scroll/blank area: verify parent height and overflow; increase `buffer-px`
+- Flickering: provide stable `key-field`; raise `item-size` estimate if height varies widely
+- Infinite load not triggered: use `visibleEndIndex` (4th arg of `@update`) to detect near-end
+
+### Network Layer Optimization
 **Request Lifecycle Management**
 ```ts
 // Auto-cancel stale requests
@@ -91,7 +194,7 @@ onUnmounted(() => controller.abort())
 
 ## Optimization Suggestions & Best Practices
 
-### 🎯 First Screen Loading Optimization
+### First Screen Loading Optimization
 ```ts
 // Critical resource preloading
 const criticalChunks = [
@@ -110,13 +213,13 @@ router.afterEach((to) => {
 })
 ```
 
-### 📱 Mobile-specific Optimization
+### Mobile-specific Optimization
 - **Touch Response**: Use `passive` event listeners
 - **Scroll Performance**: Enable hardware acceleration `transform3d`
 - **Image Strategy**: 1x/2x adaptation for high-DPI screens, WebP format priority
 - **Network Awareness**: Adjust resource loading strategy based on connection quality
 
-### 🔧 Development Experience Optimization
+### Development Experience Optimization
 ```ts
 // HMR optimization: independent style import
 // main.ts

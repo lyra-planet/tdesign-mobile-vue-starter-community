@@ -20,10 +20,10 @@ title: Home
 
 ## Implementation Highlights
 
-- HomeSwiper: virtualization and lazy loading for instant first-screen and reduced memory usage
-- Card list: chunked rendering + skeleton placeholders to improve scroll and load smoothness
-- Search linkage: input decoupled from list state, supports cross-component event bus
-- FAB: sticky threshold and mis-tap protection to ensure gesture accuracy
+- Virtualization & lazy loading: faster first screen, lower memory
+- Chunked rendering + skeletons: smoother scroll and loading
+- Decoupled search input and list state: event-bus friendly
+- FAB with sticky threshold and mis-tap protection
 
 ## UI Preview
 

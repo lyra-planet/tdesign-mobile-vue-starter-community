@@ -6,7 +6,7 @@ title: Theme & Styles
 
 Modern styling solution based on Tailwind CSS 4 + TDesign Token, supporting dark mode, responsive design, and high-DPI displays.
 
-## 🎨 Tailwind CSS Integration
+## Tailwind CSS Integration
 
 This project adopts Tailwind CSS 4 as the styling framework, combined with the TDesign Token system, providing a modern CSS development experience. Through the combination of atomic class names and design tokens, we achieve efficient, consistent, and maintainable styling solutions.
 
@@ -72,7 +72,7 @@ Performing global style overrides and customization for specific needs. Mainly u
 }
 ```
 
-## 🌓 Dark Mode Implementation
+## Dark Mode Implementation
 
 Complete dark mode solution supporting system-level theme switching and user preference memory. Implementing seamless theme switching through CSS variables and attribute selectors, providing excellent user experience and visual comfort.
 
@@ -116,7 +116,7 @@ Theme switching mechanism based on CSS custom properties, implementing variable 
 }
 ```
 
-## 📱 Responsive & High-DPI
+## Responsive & High-DPI
 
 Comprehensive multi-device adaptation solution covering high-resolution screens, mobile device safe areas, and touch interaction optimization. Ensuring optimal visual effects and user experience across different devices and screen densities.
 
@@ -154,7 +154,7 @@ Style optimizations specifically for mobile devices, including safe area avoidan
 }
 ```
 
-## 🎯 TDesign Token Usage
+## TDesign Token Usage
 
 Deep integration with Tencent TDesign system's design tokens, ensuring visual consistency across the entire application through standardized design variables. Design tokens cover core design elements like colors, sizes, and spacing, supporting theme customization and brand adaptation.
 
@@ -190,7 +190,7 @@ Overriding default styles of TDesign components through CSS custom properties to
 </template>
 ```
 
-## 🔧 Build Optimization
+## Build Optimization
 
 Build process optimization for style files, including CSS compression, code splitting, and performance optimization strategies. Improving application loading speed and runtime performance through build-time processing.
 
@@ -215,7 +215,7 @@ Multi-dimensional performance optimization strategies, comprehensively improving
 - **CSS splitting**: Independent style file packaging
 - **Compression optimization**: Automatic compression in production
 
-## 📋 Best Practices
+## Best Practices
 
 Style development best practices summarized from actual project development experience, covering code standards, team collaboration, and maintainability aspects. Following these practices can improve development efficiency and ensure code quality.
 
@@ -250,7 +250,7 @@ Unified CSS code writing standards, including property order, naming conventions
 
 Development guiding principles for team collaboration, emphasizing consistency, efficiency, and maintainability. Improving overall team development quality through unified development concepts and tool usage.
 
-- **🎯 Prioritize TDesign Tokens**: Ensure theme consistency
-- **🚀 Embrace Tailwind Atomic Classes**: Improve development efficiency
-- **🔄 Regular Style Cleanup**: Keep code clean
-- **📱 Mobile-first Design**: Start designing from small screens
+- **Prioritize TDesign Tokens**: Ensure theme consistency
+- **Embrace Tailwind Atomic Classes**: Improve development efficiency
+- **Regular Style Cleanup**: Keep code clean
+- **Mobile-first Design**: Start designing from small screens

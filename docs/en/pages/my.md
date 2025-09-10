@@ -23,6 +23,20 @@ title: My
 - Service grid: responsive grid and accessibility optimizations (touch target and readability)
 - Settings entry: async route lazy-loading and route-splitting to reduce unrelated overhead
 
+### Address Picker & Region Data
+
+The profile edit page provides an address picker (province/city/district) with modal selection and form fill-in:
+
+- Component: `src/views/edit/components/AddressPickerModal.vue`
+- Composable: `src/views/edit/composables/useAddressPicker.ts`
+- Data source: `src/utils/area.ts`
+
+Form integration:
+
+```vue
+<AddressPickerModal v-model:visible="show" @confirm="onConfirm" />
+```
+
 ## UI Preview
 
 <div style="display: flex; gap: 12px; align-items: flex-start;">

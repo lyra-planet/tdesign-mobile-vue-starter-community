@@ -45,6 +45,13 @@ export function getRouterMode(mode: string) {
 }
 ```
 
+### Environment Variables & Deployment Notes
+
+- Configure `VITE_ROUTER_MODE=hash | history` in `.env.*`.
+- `history` mode requires server fallback to `index.html` for unknown routes (configure rewrite on Nginx/static hosts).
+- For hosts without custom fallback (e.g., GitHub Pages), prefer `hash` mode.
+- If deploying under a sub-path, set `BASE_URL` (Vite `base`) to ensure correct asset paths.
+
 ## Navigation and title strategy
 
 Provided by `useNavigation()`:

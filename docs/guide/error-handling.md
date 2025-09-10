@@ -6,7 +6,7 @@
 
 HTTP 层的错误处理是整个应用容错机制的基础，通过统一的响应格式和智能的错误处理策略，为上层业务提供可靠的数据通信保障。
 
-### 🔄 统一响应格式
+### 统一响应格式
 
 所有API响应都遵循标准化格式，便于统一处理和错误判断：
 
@@ -27,7 +27,7 @@ try {
 }
 ```
 
-### 🛡️ 多层错误处理机制
+### 多层错误处理机制
 
 HTTP客户端实现了完善的错误分类和处理策略：
 
@@ -54,7 +54,7 @@ if (this.showToastOnError && (!result.success || !bizSuccess)) {
 }
 ```
 
-### ⏰ 超时与取消处理
+### 超时与取消处理
 
 智能的请求超时和取消机制，避免长时间等待和资源浪费：
 
@@ -83,7 +83,7 @@ try {
 }
 ```
 
-### 📊 业务码白名单机制
+### 业务码白名单机制
 
 灵活的业务成功码配置，适应不同后端接口规范：
 
@@ -112,7 +112,7 @@ class HttpClient {
 
 状态管理层通过合理的错误处理策略，确保应用状态的一致性和可恢复性，为用户提供稳定的数据体验。
 
-### 🔄 全局状态重置
+### 全局状态重置
 
 提供统一的状态重置能力，特别适用于错误恢复、用户登出等场景：
 
@@ -128,7 +128,7 @@ export function resetAllStores() {
 }
 ```
 
-### 🚨 异步操作错误处理
+### 异步操作错误处理
 
 在状态管理中，异步操作需要特别关注错误处理和状态一致性：
 
@@ -157,7 +157,7 @@ const fetchUserInfo = async () => {
 };
 ```
 
-### 💾 持久化错误容错
+### 持久化错误容错
 
 状态持久化过程中的错误处理，确保数据的完整性：
 
@@ -197,7 +197,7 @@ const handleStorageError = (error: Error, operation: string) => {
 };
 ```
 
-### 🔍 状态同步验证
+### 状态同步验证
 
 定期验证状态与服务端的一致性，及时发现和修复数据不一致问题：
 
@@ -234,7 +234,29 @@ const validateAndSyncState = async () => {
 
 UI交互层的错误处理注重用户体验，通过合理的降级策略和友好的错误提示，确保用户能够继续使用应用的核心功能。
 
-### 🛠️ 路由错误处理
+### 列表三态（加载/错误/空）模式
+
+标准化的列表页面三态处理，避免闪烁与空白：
+
+```vue
+<!-- src/views/talklist/index.vue（节选） -->
+<LoadingOverlay v-if="isLoading" />
+<ErrorState v-else-if="error" :description="error || undefined" @retry="refreshTalkList" />
+<div v-else class="list-container">
+  <EmptyState v-if="mytalklist.length === 0" @refresh="refreshTalkList" />
+  <VirtualList v-else :items="mytalklist" @update="() => {}">
+    <!-- 列表项 -->
+  </VirtualList>
+  
+</div>
+```
+
+要点：
+
+- 加载优先于错误和内容渲染；错误优先于内容；空状态优先于渲染列表。
+- 保证容器高度固定（`flex: 1; min-height: 0;`），避免布局跳动。
+
+### 路由错误处理
 
 完善的路由错误处理和页面降级机制：
 
@@ -277,7 +299,7 @@ router.beforeEach(async (to, from, next) => {
 });
 ```
 
-### 🎯 组件错误边界
+### 组件错误边界
 
 组件级别的错误处理和降级显示：
 
@@ -305,7 +327,7 @@ export const useErrorBoundary = () => {
 };
 ```
 
-### 📱 移动端特殊处理
+### 移动端特殊处理
 
 针对移动端环境的特殊错误处理：
 
@@ -344,7 +366,7 @@ const useNetworkStatus = () => {
 
 针对实际开发中的常见错误场景，提供标准化的处理方案和最佳实践。
 
-### 🔍 列表搜索竞态
+### 列表搜索竞态
 
 搜索场景中的请求竞态处理，确保显示正确的搜索结果：
 
