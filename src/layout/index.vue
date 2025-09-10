@@ -82,9 +82,9 @@ function openDrawer() {
 .layout-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   background-color: var(--td-bg-color-page);
-
+  overflow: hidden;
   &.login-layout {
     // light 模式下透明背景
     background-color: transparent;

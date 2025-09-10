@@ -1,132 +1,72 @@
 <script setup lang="ts">
-import type { HomeItem } from '@/api/home'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { getHomeContent, refreshHomeContent } from '@/api/home'
 import { EmptyState, ErrorState } from '@/components'
-import { message as $message } from '@/plugins/message'
+import VirtualList from '@/components/VirtualList.vue'
 import HomeCard from './components/HomeCard.vue'
 import HomeFab from './components/HomeFab.vue'
 import HomeSwiper from './components/HomeSwiper.vue'
 import HomeTabs from './components/HomeTabs.vue'
+import { useHomeContent } from './composables/useHomeContent'
+import { useHomeGrid } from './composables/useHomeGrid'
+import { usePublishSuccessMessage } from './composables/usePublishSuccessMessage'
 
 defineOptions({ name: 'Home' })
 
 const { t } = useI18n()
 
-const refreshing = ref(false)
-const loading = ref(false)
-const homeItems = ref<HomeItem[]>([])
-const currentPage = ref(1)
-const hasMore = ref(true)
+const {
+  refreshing,
+  loading,
+  homeItems,
+  currentPage,
+  hasMore,
+  loadHomeContent,
+  handleRefreshContent,
+  tryLoadMore,
+} = useHomeContent({ pageLimit: 40 })
 
-// 加载首页内容
-async function loadHomeContent(page = 1, isRefresh = false) {
-  try {
-    if (!isRefresh)
-      loading.value = true
+// Grid 虚拟列表参数（与 HomeCard/HomeSwiper 固定尺寸匹配）
+const {
+  contentRef,
+  gridCols,
+  itemSecondarySize,
+  itemSize,
+  computeGridCols,
+  setupResizeObserver,
+  teardownResizeObserver,
+} = useHomeGrid({ minCardWidth: 170, itemSize: 256, horizontalPadding: 24 })
 
-    const response = await getHomeContent({ page, limit: 10 })
+const { checkAndNotifyOnce } = usePublishSuccessMessage({ contextSelector: '.content' })
 
-    if (response.success) {
-      if (isRefresh || page === 1) {
-        homeItems.value = response.data.items
-      }
-      else {
-        homeItems.value.push(...response.data.items)
-      }
-
-      if (response.data.pagination) {
-        hasMore.value = response.data.pagination.hasMore
-        currentPage.value = response.data.pagination.page
-      }
-    }
-    else {
-      $message.error(response.message || t('pages.home.errors.get_content_failed'))
-    }
-  }
-  catch (error) {
-    console.error('加载首页内容失败:', error)
-    $message.error(t('pages.home.errors.load_failed_retry'))
-  }
-  finally {
-    loading.value = false
-    if (isRefresh)
-      refreshing.value = false
-  }
-}
-
-// 刷新首页内容
-async function handleRefreshContent() {
-  try {
-    refreshing.value = true
-    const response = await refreshHomeContent()
-
-    if (response.success) {
-      homeItems.value = response.data.items
-    }
-    else {
-      $message.error(response.message || t('pages.home.errors.refresh_failed'))
-    }
-  }
-  catch (error) {
-    console.error('刷新首页内容失败:', error)
-    $message.error(t('pages.home.errors.refresh_failed_retry'))
-  }
-  finally {
-    refreshing.value = false
-  }
-}
-
-// 组件挂载时加载数据
+// 组件挂载/卸载
 onMounted(() => {
   loadHomeContent()
+  computeGridCols()
+  setupResizeObserver()
+  void checkAndNotifyOnce()
+})
+onUnmounted(() => {
+  teardownResizeObserver()
 })
 
 function handleRefresh() {
-  handleRefreshContent()
+  void handleRefreshContent()
 }
 
 function handleScrolltolower() {
-  // 加载更多数据
-  if (hasMore.value && !loading.value) {
-    loadHomeContent(currentPage.value + 1)
-  }
+  tryLoadMore()
 }
 
-function showMessage(theme: string, content = '', duration = 2000) {
-  const common = {
-    duration,
-    icon: true,
-    zIndex: 20000,
-    offset: [12, 16],
-    context: document.querySelector('.content'),
-  }
-  if (theme === 'success')
-    $message.success(content, common)
-  else if (theme === 'error')
-    $message.error(content, common)
-  else if (theme === 'warning')
-    $message.warning(content, common)
-  else $message.info(content, common)
+function onVListUpdate(startIndex: number, endIndex: number, visibleStartIndex?: number, visibleEndIndex?: number) {
+  const vEnd = visibleEndIndex ?? endIndex
+  if (hasMore.value && !loading.value && vEnd >= homeItems.value.length - gridCols.value)
+    tryLoadMore()
 }
-const route = useRoute()
-const router = useRouter()
-const showSuccessMessage = () => showMessage('success', t('pages.home.messages.publish_success'))
-onMounted(() => {
-  if (route.query.success === '1') {
-    showSuccessMessage()
-    router.replace({
-      path: route.path,
-      query: { ...route.query, success: undefined },
-    })
-  }
-})
 </script>
 
 <template>
-  <div class="h-[calc(100vh-106px)] flex flex-col overflow-hidden">
+  <div class="h-full flex flex-col overflow-hidden">
     <!-- 顶部 -->
     <HomeTabs />
 
@@ -136,7 +76,7 @@ onMounted(() => {
       :loading-texts="[t('pages.home.content.refresh.pull_down'), t('pages.home.content.refresh.release'), t('pages.home.content.refresh.refreshing'), t('pages.home.content.refresh.completed')]"
       class="flex-1 bg-[var(--td-bg-color-page)]" @refresh="handleRefresh" @scrolltolower="handleScrolltolower"
     >
-      <div class="content h-full overflow-y-auto">
+      <div ref="contentRef" class="content h-full flex flex-col">
         <ErrorState
           v-if="!loading && !refreshing && homeItems.length === 0 && !hasMore"
           :title="t('pages.home.ui.error_title')" :description="t('pages.home.errors.load_failed_retry')"
@@ -147,11 +87,28 @@ onMounted(() => {
           :title="t('pages.home.ui.empty_title')" :description="t('pages.home.ui.empty_description')"
           :action-text="t('common.buttons.refresh')" @action="handleRefresh"
         />
-        <div v-else class="grid-container">
-          <template v-for="item in homeItems" :key="item.id">
-            <HomeCard v-if="item.type === 'card'" :title="item.title" :image-src="item.image" :tags="item.tags" />
-            <HomeSwiper v-else-if="item.type === 'swiper'" :images="item.images" />
-          </template>
+        <div v-else class="cardContainer flex-1 min-h-0">
+          <VirtualList
+            class="h-full" :items="homeItems" :item-size="itemSize" :grid-items="gridCols"
+            :item-secondary-size="itemSecondarySize" :add-recycle-buffer="300" list-class="grid-list"
+            @update="onVListUpdate"
+          >
+            <template #default="{ item, index }">
+              <div
+                class="grid-cell" :class="{
+                  'grid-cell-left': gridCols > 1 && index % gridCols === 0,
+                  'grid-cell-right': gridCols > 1 && (index % gridCols) === gridCols - 1,
+                }"
+              >
+                <template v-if="item.type === 'card'">
+                  <HomeCard :title="item.title" :image-src="item.image" :tags="item.tags" />
+                </template>
+                <template v-else-if="item.type === 'swiper'">
+                  <HomeSwiper :images="item.images" />
+                </template>
+              </div>
+            </template>
+          </VirtualList>
         </div>
       </div>
     </t-pull-down-refresh>
@@ -167,33 +124,25 @@ onMounted(() => {
   overscroll-behavior: contain;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 12px;
-  padding: 12px;
+.cardContainer {
+  margin: 12px;
+}
+
+/* 虚拟网格列表容器：左右贴边，列宽等分，间距自适应 */
+.grid-list {
   background: var(--td-bg-color-page);
-  justify-items: center;
-  align-items: start;
 }
 
-// 响应式布局
-@media (max-width: 400px) {
-  .grid-container {
-    grid-template-columns: 1fr;
-    justify-items: stretch;
-  }
+.grid-cell {
+  display: flex;
+  justify-content: center;
 }
 
-@media (min-width: 401px) and (max-width: 600px) {
-  .grid-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.grid-cell-left {
+  justify-content: flex-start;
 }
 
-@media (min-width: 601px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  }
+.grid-cell-right {
+  justify-content: flex-end;
 }
 </style>

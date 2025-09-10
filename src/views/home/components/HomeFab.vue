@@ -8,8 +8,6 @@ const { t } = useI18n()
 const iconFunc = () => h(AddIcon, { size: '24px' })
 
 function onClick() {
-  console.log('点击了发布')
-  // 使用 path 确保与自动路由匹配，避免名称不一致导致失败
   router.push({ path: '/publish' })
 }
 </script>
