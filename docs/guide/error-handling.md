@@ -424,7 +424,7 @@ const useSearch = () => {
 };
 ```
 
-### 🔐 Token 失效处理
+### Token 失效处理
 
 用户认证失效的检测和处理流程：
 
@@ -459,7 +459,7 @@ httpClient.addResponseInterceptor((response) => {
 });
 ```
 
-### 🔄 Mock/真实接口切换
+### Mock/真实接口切换
 
 开发和生产环境的接口切换错误处理：
 
@@ -497,7 +497,7 @@ const validateApiResponse = (response: any) => {
 };
 ```
 
-### 📱 离线处理策略
+### 离线处理策略
 
 移动端离线场景的错误处理和数据同步：
 
@@ -548,7 +548,7 @@ const useOfflineSync = () => {
 };
 ```
 
-### 🚨 错误监控与上报
+### 错误监控与上报
 
 生产环境的错误收集和分析：
 

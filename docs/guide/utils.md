@@ -2,7 +2,7 @@
 
 提供全局配置访问、存储管理、数据验证等核心工具函数，提升开发效率和代码复用性。
 
-## 🔧 全局配置访问
+## 全局配置访问
 
 ### `useGlobal()` - 全局属性获取
 ```ts
@@ -32,7 +32,7 @@ export function useGlobal<T = GlobalProperties>(): T {
 - 获取响应式存储（`$storage`）
 - 组件内访问全局状态
 
-## 💾 存储管理
+## 存储管理
 
 ### `useStorage()` - 统一存储接口
 ```ts
@@ -79,7 +79,7 @@ export function useStorage(type: 'local' | 'session' = 'local') {
 }
 ```
 
-## ✅ 数据验证
+## 数据验证
 
 ### 手机号验证 `validatePhone()`
 ```ts
@@ -146,7 +146,7 @@ export function validatePassword(password: string): {
 }
 ```
 
-## 🛠️ 实用工具函数
+## 实用工具函数
 
 ### 防抖与节流
 ```ts
@@ -224,7 +224,7 @@ export function formatFileSize(bytes: number): string {
 }
 ```
 
-## 📋 使用建议
+## 使用建议
 
 ### 导入规范
 ```ts

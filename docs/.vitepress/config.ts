@@ -52,7 +52,7 @@ export default defineConfig({
       lang: 'en-US',
       link: '/en/',
       themeConfig: {
-        siteTitle: 'TDesign Mobile Starter',
+        siteTitle: '',
         logo: '/logo.svg',
         search: { provider: 'local' },
         nav: navEn,

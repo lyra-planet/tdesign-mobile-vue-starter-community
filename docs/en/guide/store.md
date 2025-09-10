@@ -6,7 +6,7 @@ Modern state management solution based on Pinia, integrating persistence, reset 
 
 The project adopts a layered state management architecture, implementing highly scalable and maintainable state management solutions through factory patterns and plugin systems. This design ensures state consistency, persistence flexibility, and global control convenience.
 
-### 🏗️ Store Factory & Plugin System
+### Store Factory & Plugin System
 
 Through Pinia's plugin mechanism, automated Store instance management and unified functional enhancement are achieved. The use of factory patterns makes Store creation and configuration standardized and predictable.
 
@@ -28,7 +28,7 @@ export function setupStore(app: App) {
 }
 ```
 
-### 🔄 Global Reset Mechanism
+### Global Reset Mechanism
 
 Provides unified state reset capability, particularly suitable for user logout, test environment cleanup, and other scenarios. Through automatic collection mechanisms, there's no need to manually maintain Store lists, ensuring completeness and reliability of reset operations.
 
@@ -43,7 +43,7 @@ export function resetAllStores() {
 }
 ```
 
-### 💾 Smart Persistence Configuration
+### Smart Persistence Configuration
 
 Dynamic persistence strategy based on global configuration, supporting multiple storage methods and environment adaptation. Through namespace mechanisms, data conflicts between different applications are avoided, providing flexible and secure data persistence solutions.
 
@@ -71,7 +71,7 @@ export function getPersistConfig(key: string) {
 
 User state management is the most core state module in applications, involving authentication, permissions, personal information, and other dimensions. Through complete lifecycle management and side effect handling, it provides stable and reliable user state services for applications.
 
-### 🔐 User Authentication Store
+### User Authentication Store
 
 Demonstrates complete user state management implementation, including authentication state, user information, computed properties, and core operation methods. Special attention is paid to proper handling of side effects and maintaining state consistency.
 
@@ -143,7 +143,7 @@ export const useUserStore = defineStore(
 );
 ```
 
-### 📋 Other Business Store Examples
+### Other Business Store Examples
 
 Demonstrates business-specific state management patterns, such as message list management. Each business Store follows the same design principles but features customized state structures and operation methods tailored to specific business requirements.
 
@@ -175,7 +175,7 @@ export const useTalklistStore = defineStore(
 
 State management best practices summarized from actual project development experience, covering design principles, performance optimization, and maintenance strategies. Following these practices ensures robustness, maintainability, and high performance of the state management system.
 
-### 🎯 Store Design Principles
+### Store Design Principles
 
 Good Store design is the foundation of successful state management. These principles help developers build clear, maintainable, and type-safe state management architectures.
 
@@ -184,7 +184,7 @@ Good Store design is the foundation of successful state management. These princi
 - **Side Effect Isolation**: Only handle side effects in Actions
 - **Selective Persistence**: Use `pick` to avoid over-storage
 
-### 🔄 State Lifecycle
+### State Lifecycle
 
 Understanding the complete lifecycle of state helps in better designing and maintaining state management systems. Each stage from initialization to destruction has its specific concerns and best practices.
 
@@ -194,7 +194,7 @@ Initialize → Load Data → User Interaction → State Update → Persist
   Reset ← ← ← ← ← ← Logout/Error ← ← ← ← ← ← ← ←
 ```
 
-### 📊 Performance Optimization Strategies
+### Performance Optimization Strategies
 
 In mobile applications, the performance of state management directly affects user experience. Through reasonable optimization strategies, application responsiveness and smoothness can be improved while maintaining functional completeness.
 
@@ -207,7 +207,7 @@ In mobile applications, the performance of state management directly affects use
 
 Provides specific usage examples and operational guidance for developers, covering component integration, state management, and global operations. These guides help developers get started quickly and use the state management system correctly.
 
-### 📱 Using in Components
+### Using in Components
 
 Demonstrates the correct way to use Pinia Store in Vue components, including destructuring of reactive data and usage of computed properties. Note the use of `storeToRefs` to maintain reactivity.
 
@@ -224,7 +224,7 @@ const { isLoggedIn, userName } = storeToRefs(userStore);
 </script>
 ```
 
-### 🔧 Global State Reset
+### Global State Reset
 
 In user logout, account switching, or testing scenarios, thorough cleanup of application state is needed. The global reset mechanism ensures complete state cleanup, avoiding data leakage and state pollution.
 

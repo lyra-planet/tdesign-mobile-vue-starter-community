@@ -67,7 +67,7 @@ export const sidebarEn: DefaultTheme.Sidebar = {
         { text: 'Getting Started', link: '/en/guide/getting-started' },
         { text: 'Directory Structure', link: '/en/guide/directory-structure' },
         { text: 'Architecture & Modules', link: '/en/guide/architecture' },
-        { text: 'Initialization Flow', link: '/en/guide/init-flow' },
+        // Initialization Flow removed to align with zh structure
       ],
       collapsed: false,
     },

@@ -6,7 +6,7 @@ Modern frontend application error handling requires design from multiple layers,
 
 HTTP layer error handling is the foundation of the entire application's fault tolerance mechanism, providing reliable data communication guarantee for upper-level business through unified response format and intelligent error handling strategies.
 
-### 🔄 Unified Response Format
+### Unified Response Format
 
 All API responses follow standardized format for unified handling and error judgment:
 
@@ -27,7 +27,7 @@ try {
 }
 ```
 
-### 🛡️ Multi-layer Error Handling Mechanism
+### Multi-layer Error Handling Mechanism
 
 HTTP client implements comprehensive error classification and handling strategies:
 
@@ -54,7 +54,7 @@ if (this.showToastOnError && (!result.success || !bizSuccess)) {
 }
 ```
 
-### ⏰ Timeout & Cancellation Handling
+### Timeout & Cancellation Handling
 
 Intelligent request timeout and cancellation mechanism to avoid long waits and resource waste:
 
@@ -83,7 +83,7 @@ try {
 }
 ```
 
-### 📊 Business Code Whitelist Mechanism
+### Business Code Whitelist Mechanism
 
 Flexible business success code configuration to adapt to different backend interface standards:
 
@@ -112,7 +112,7 @@ class HttpClient {
 
 The state management layer ensures application state consistency and recoverability through reasonable error handling strategies, providing users with stable data experience.
 
-### 🔄 Global State Reset
+### Global State Reset
 
 Provides unified state reset capability, especially suitable for error recovery, user logout scenarios:
 
@@ -128,7 +128,7 @@ export function resetAllStores() {
 }
 ```
 
-### 🚨 Async Operation Error Handling
+### Async Operation Error Handling
 
 In state management, async operations require special attention to error handling and state consistency:
 
@@ -157,7 +157,7 @@ const fetchUserInfo = async () => {
 };
 ```
 
-### 💾 Persistence Error Tolerance
+### Persistence Error Tolerance
 
 Error handling during state persistence to ensure data integrity:
 
@@ -197,7 +197,7 @@ const handleStorageError = (error: Error, operation: string) => {
 };
 ```
 
-### 🔍 State Sync Validation
+### State Sync Validation
 
 Regularly validate state consistency with server, timely detect and fix data inconsistency issues:
 
@@ -234,7 +234,7 @@ const validateAndSyncState = async () => {
 
 UI interaction layer error handling focuses on user experience, ensuring users can continue using core application functions through reasonable degradation strategies and friendly error prompts.
 
-### 📦 List Tri-state (Loading/Error/Empty) Pattern
+### List Tri-state (Loading/Error/Empty) Pattern
 
 Standardized tri-state handling for list pages to avoid flickers/blank screens:
 
@@ -255,7 +255,7 @@ Key points:
 - Loading has higher priority than error/content; error has higher priority than content; empty state before rendering list.
 - Keep container height fixed (`flex: 1; min-height: 0;`) to avoid layout shifts.
 
-### 🛠️ Route Error Handling
+### Route Error Handling
 
 Comprehensive route error handling and page degradation mechanisms:
 
@@ -298,7 +298,7 @@ router.beforeEach(async (to, from, next) => {
 });
 ```
 
-### 🎯 Component Error Boundaries
+### Component Error Boundaries
 
 Component-level error handling and degradation display:
 
@@ -326,7 +326,7 @@ export const useErrorBoundary = () => {
 };
 ```
 
-### 📱 Mobile-specific Handling
+### Mobile-specific Handling
 
 Special error handling for mobile environments:
 
@@ -365,7 +365,7 @@ const useNetworkStatus = () => {
 
 Providing standardized handling solutions and best practices for common error scenarios in actual development.
 
-### 🔍 List Search Race Conditions
+### List Search Race Conditions
 
 Request race condition handling in search scenarios to ensure correct search results display:
 
@@ -423,7 +423,7 @@ const useSearch = () => {
 };
 ```
 
-### 🔐 Token Expiration Handling
+### Token Expiration Handling
 
 User authentication expiration detection and handling workflow:
 
@@ -458,7 +458,7 @@ httpClient.addResponseInterceptor((response) => {
 });
 ```
 
-### 🔄 Mock/Real Interface Switching
+### Mock/Real Interface Switching
 
 Interface switching error handling between development and production environments:
 
@@ -472,7 +472,7 @@ const initializeMockService = async () => {
     if (import.meta.env.VITE_MSW === "true" || window.__MSW_ENABLED__) {
       const { worker } = await import("@/mocks/browser");
       await worker.start();
-      console.log("🔧 Mock Service Worker started");
+      console.log("Mock Service Worker started");
     }
   } catch (error) {
     console.error("Mock service startup failed:", error);
@@ -498,7 +498,7 @@ const validateApiResponse = (response: any) => {
 };
 ```
 
-### 📱 Offline Handling Strategy
+### Offline Handling Strategy
 
 Error handling and data sync for mobile offline scenarios:
 
@@ -551,7 +551,7 @@ const useOfflineSync = () => {
 };
 ```
 
-### 🚨 Error Monitoring & Reporting
+### Error Monitoring & Reporting
 
 Error collection and analysis in production environment:
 
