@@ -32,7 +32,6 @@ declare module 'vue' {
     TFab: typeof import('tdesign-mobile-vue')['Fab']
     TForm: typeof import('tdesign-mobile-vue')['Form']
     TFormItem: typeof import('tdesign-mobile-vue')['FormItem']
-    TGrid: typeof import('tdesign-mobile-vue')['Grid']
     TIcon: typeof import('tdesign-mobile-vue')['Icon']
     TImage: typeof import('tdesign-mobile-vue')['Image']
     TInput: typeof import('tdesign-mobile-vue')['Input']

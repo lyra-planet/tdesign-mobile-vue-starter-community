@@ -56,6 +56,16 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
                 return 'dayjs'
               if (id.includes('@vueuse'))
                 return 'vueuse'
+              if (id.includes('vue-virtual-scroller'))
+                return 'virtual-scroller'
+              if (id.includes('pinia-plugin-persistedstate'))
+                return 'pinia-persist'
+              if (id.includes('countries-phone-masks'))
+                return 'countries-phone-masks'
+              if (id.includes('/phone/'))
+                return 'phone'
+              if (id.includes('/lcn/'))
+                return 'lcn'
               return 'vendor'
             }
           },

@@ -46,6 +46,11 @@ export const i18n: I18n = createI18n({
   locale: defaultLocale,
   fallbackLocale: 'en-us',
   messages: {},
+  // 仅在开发环境输出缺失与回退警告，生产环境关闭以减少噪音与开销
+  missingWarn: import.meta.env.DEV,
+  fallbackWarn: import.meta.env.DEV,
+  // 关闭基于 HTML 的消息警告
+  warnHtmlMessage: false,
 })
 
 function getStoredLocale(): string {
@@ -59,12 +64,51 @@ function getStoredLocale(): string {
   }
 }
 
+// 在浏览器空闲时预取：优先使用 requestIdleCallback，降级为 setTimeout
+function scheduleIdle(task: () => void, timeout = 2000) {
+  const ric = (window as any).requestIdleCallback as undefined | ((cb: IdleRequestCallback, opts?: { timeout?: number }) => number)
+  if (typeof ric === 'function') {
+    ric(() => task(), { timeout })
+  }
+  else {
+    setTimeout(task, 0)
+  }
+}
+
+function getLikelySwitchLocales(current: string): string[] {
+  // 简单策略：中英互为高频切换；其它语言回退到中英
+  if (current === 'zh-cn')
+    return ['en-us']
+  if (current === 'en-us')
+    return ['zh-cn']
+  return ['zh-cn', 'en-us'].filter(l => l !== current)
+}
+
+async function prefetchLikelyLocales(current: string) {
+  const candidates = getLikelySwitchLocales(current)
+  await Promise.all(candidates.map(async (locale) => {
+    if (localeCache.has(locale))
+      return
+    const messages = await loadLocaleMessages(locale)
+    if (messages && Object.keys(messages).length > 0) {
+      i18n.global.setLocaleMessage(locale, messages)
+    }
+  }))
+}
+
+function schedulePrefetch(current: string): void {
+  void prefetchLikelyLocales(current)
+}
+
 // 异步初始化 i18n
 export async function initializeI18n() {
   const initialLocale = getStoredLocale()
   const initialMessages = await loadLocaleMessages(initialLocale)
   i18n.global.setLocaleMessage(initialLocale, initialMessages)
-  ;(i18n.global.locale as any).value = initialLocale
+  const localeRefInit = i18n.global.locale as any
+  localeRefInit.value = initialLocale
+  // 空闲时间预取高概率切换语言包
+  scheduleIdle(() => schedulePrefetch(initialLocale))
 }
 
 // 语言切换
@@ -74,15 +118,21 @@ export async function setLanguage(locale: string) {
 
   // 如果语言已加载，直接切换
   if (localeCache.has(locale)) {
-    ;(i18n.global.locale as any).value = locale
+    const localeRefCached = i18n.global.locale as any
+    localeRefCached.value = locale
+    // 切换完成后在空闲时间预取其它可能语言
+    scheduleIdle(() => schedulePrefetch(locale))
     return
   }
 
   const messages = await loadLocaleMessages(locale)
   if (messages) {
     i18n.global.setLocaleMessage(locale, messages)
-    ;(i18n.global.locale as any).value = locale
+    const localeRef = i18n.global.locale as any
+    localeRef.value = locale
   }
+  // 切换完成后在空闲时间预取其它可能语言
+  scheduleIdle(() => schedulePrefetch(locale))
 }
 
 export function useI18n(app: App) {

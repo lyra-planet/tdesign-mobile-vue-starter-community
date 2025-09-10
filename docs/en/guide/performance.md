@@ -7,16 +7,30 @@ Based on modern frontend best practices, this project has undergone comprehensiv
 ### Build-time Optimization
 **Smart Code Splitting**
 ```ts
-// vite.config.ts - Split by dependency type
+// vite.config.ts - Split by dependency type (aligned with actual build)
 manualChunks(id) {
   if (id.includes('node_modules')) {
     if (id.includes('/vue') || id.includes('vue-router') || id.includes('pinia'))
       return 'vue-vendor'
-    if (id.includes('tdesign-mobile-vue'))
+    if (id.includes('tdesign-mobile-vue') || id.includes('tdesign-icons-vue-next'))
       return 'tdesign'
     if (id.includes('vue-i18n'))
       return 'i18n'
-    // ...other splitting strategies
+    if (id.includes('dayjs'))
+      return 'dayjs'
+    if (id.includes('@vueuse'))
+      return 'vueuse'
+    if (id.includes('vue-virtual-scroller'))
+      return 'virtual-scroller'
+    if (id.includes('pinia-plugin-persistedstate'))
+      return 'pinia-persist'
+    if (id.includes('countries-phone-masks'))
+      return 'countries-phone-masks'
+    if (id.includes('/phone/'))
+      return 'phone'
+    if (id.includes('/lcn/'))
+      return 'lcn'
+    return 'vendor'
   }
 }
 ```

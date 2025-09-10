@@ -7,16 +7,30 @@
 ### 构建时优化
 **智能代码分割**
 ```ts
-// vite.config.ts - 按依赖类型分包
+// vite.config.ts - 按依赖类型分包（与实际构建一致）
 manualChunks(id) {
   if (id.includes('node_modules')) {
     if (id.includes('/vue') || id.includes('vue-router') || id.includes('pinia'))
       return 'vue-vendor'
-    if (id.includes('tdesign-mobile-vue'))
+    if (id.includes('tdesign-mobile-vue') || id.includes('tdesign-icons-vue-next'))
       return 'tdesign'
     if (id.includes('vue-i18n'))
       return 'i18n'
-    // ...其他分包策略
+    if (id.includes('dayjs'))
+      return 'dayjs'
+    if (id.includes('@vueuse'))
+      return 'vueuse'
+    if (id.includes('vue-virtual-scroller'))
+      return 'virtual-scroller'
+    if (id.includes('pinia-plugin-persistedstate'))
+      return 'pinia-persist'
+    if (id.includes('countries-phone-masks'))
+      return 'countries-phone-masks'
+    if (id.includes('/phone/'))
+      return 'phone'
+    if (id.includes('/lcn/'))
+      return 'lcn'
+    return 'vendor'
   }
 }
 ```
