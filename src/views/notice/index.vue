@@ -24,7 +24,7 @@ const { t, message, sending, current, messagesWithTimeInfo, handleSendMessage } 
 
 <style lang='scss' scoped>
 .chat-container {
-  min-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background: var(--td-bg-color-page);

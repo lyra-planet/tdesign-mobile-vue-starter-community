@@ -1,5 +1,6 @@
 <script setup lang='ts'>
-import { defineProps } from 'vue'
+import { computed, defineProps } from 'vue'
+import VirtualList from '@/components/VirtualList.vue'
 
 interface MessageItem {
   id: string | number
@@ -11,33 +12,41 @@ interface MessageItem {
 }
 
 const props = defineProps<{ messages: MessageItem[], avatar?: string }>()
+
+const renderMessages = computed(() => props.messages.filter(m => m.tag !== 'time'))
 </script>
 
 <template>
-  <div class="messages-area">
-    <div v-for="item in props.messages" :key="item.id">
-      <div v-if="item.showTimeDivider" class="time-badge">
-        {{ item.timeText }}
-      </div>
-
-      <div v-if="item.tag === 'me'" class="msg-row right">
-        <div class="msg-bubble self">
-          {{ item.value }}
+  <VirtualList class="messages-area" :items="renderMessages" key-field="id" :item-size="68" :buffer-px="300">
+    <template #default="{ item }">
+      <div class="itemContent">
+        <div v-if="item.showTimeDivider" class="time-badge">
+          {{ item.timeText }}
         </div>
-        <t-avatar size="40px" :image="props.avatar || item.picture" />
-      </div>
 
-      <div v-if="item.tag === 'other'" class="msg-row left">
-        <t-avatar size="40px" :image="props.avatar || item.picture" />
-        <div class="msg-bubble other">
-          {{ item.value }}
+        <div v-if="item.tag === 'me'" class="msg-row right">
+          <div class="msg-bubble self">
+            {{ item.value }}
+          </div>
+          <t-avatar size="40px" :image="props.avatar || item.picture" />
+        </div>
+
+        <div v-else-if="item.tag === 'other'" class="msg-row left">
+          <t-avatar size="40px" :image="props.avatar || item.picture" />
+          <div class="msg-bubble other">
+            {{ item.value }}
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </VirtualList>
 </template>
 
 <style lang='scss' scoped>
+.itemContent {
+  box-sizing: border-box;
+  padding-top: 16px;
+}
 .messages-area {
   flex: 1;
   border-top: 0.5px solid #e7e7e7;
@@ -63,14 +72,13 @@ const props = defineProps<{ messages: MessageItem[], avatar?: string }>()
 
 .time-badge {
   text-align: center;
-  margin: 12px 0;
+  margin: 8px 0 16px 0;
   color: #999;
   font-size: 12px;
 }
 
 .msg-row {
   display: flex;
-  margin-top: 16px;
   align-items: flex-start;
   gap: 8px;
 }
