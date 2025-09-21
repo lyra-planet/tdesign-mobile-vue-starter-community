@@ -12,6 +12,10 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
   return {
     base: VITE_BASE_PATH,
     root,
+    css: {
+      // 使用 lightningcss 做兼容与转换（替代传统 PostCSS 流程）
+      transformer: 'lightningcss',
+    },
     resolve: {
       alias,
     },
@@ -30,13 +34,15 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       : undefined,
     build: {
       // 最大兼容，👀 参考 https://vite.dev/guide/build.html#browser-compatibility
-      target: 'es2015',
+      target: 'es2020',
       // 仅在报告模式下开启 sourcemap，生产默认关闭
       sourcemap: mode === 'report',
       // 去除打包过大警告
       chunkSizeWarningLimit: 4000,
       // 打包分类 😎
       minify: 'esbuild',
+      // 使用 lightningcss 压缩 CSS
+      cssMinify: 'lightningcss',
       terserOptions: undefined,
       rollupOptions: {
         output: {

@@ -14,6 +14,7 @@ import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
+import { VitePWA } from 'vite-plugin-pwa'
 import vsharp from 'vite-plugin-vsharp'
 import svgLoader from 'vite-svg-loader'
 
@@ -98,6 +99,38 @@ export function usePlugins(): PluginOption[] {
           skipIfLargerOrEqual: true,
         })
       : null,
+    // PWA 缓存（仅生产环境生效）
+    VitePWA({
+      registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      manifest: {
+        name: 'tdesign-mobile-vue-starter',
+        short_name: 'tdesign-mobile',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
+        display: 'standalone',
+        icons: [
+          // 使用已有资源，避免缺少 /public/icons 目录导致 404
+          { src: '/favicon.ico', sizes: '16x16 32x32 48x48 64x64', type: 'image/x-icon' },
+          { src: '/logo.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,jpg,jpeg,webp,avif,woff2}'],
+        navigateFallback: '/index.html',
+        clientsClaim: true,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+        runtimeCaching: [
+          {
+            urlPattern: /\/assets\/.*\.(?:png|jpg|jpeg|svg|webp|avif)$/,
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'image-cache', expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 } },
+          },
+        ],
+      },
+      disable: process.env.NODE_ENV !== 'production',
+    }),
     // 打包分析，看看哪个老六最占打包体积 😠
     lifecycle === 'report'
       ? visualizer({ brotliSize: true, open: true, filename: 'report.html' })
