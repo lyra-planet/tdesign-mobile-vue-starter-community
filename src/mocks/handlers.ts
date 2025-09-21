@@ -63,13 +63,14 @@ export const handlers = [
     if (!validateVerifyCode(body.phone, body.code)) {
       return error('验证码错误或已过期', 400)
     }
-    let base = users.find(u => u.phone === body.phone || u.phone.endsWith(body.phone))
+    const phone = body.phone as string
+    let base = users.find(u => u.phone === phone || u.phone.endsWith(phone))
     if (!base) {
-      const purePhone = body.phone.replace(/^\+\d{1,4}/, '')
+      const purePhone = phone.replace(/^\+\d{1,4}/, '')
       base = {
         id: Date.now().toString(),
         name: `企鹅${purePhone.slice(-4)}`,
-        phone: body.phone,
+        phone,
         email: '',
         password: '',
         avatar: '',
@@ -84,17 +85,17 @@ export const handlers = [
       ;(users as any[]).push(base)
     }
     const user: UserInfo = {
-      id: base.id,
-      name: base.name,
-      phone: base.phone,
-      avatar: base.avatar,
-      gender: base.gender,
-      birthday: base.birthday,
-      address: base.address,
-      bio: base.bio,
-      photos: base.photos,
-      constellation: base.constellation,
-      location: base.location,
+      id: base!.id,
+      name: base!.name,
+      phone: base!.phone,
+      avatar: base!.avatar,
+      gender: base!.gender,
+      birthday: base!.birthday,
+      address: base!.address,
+      bio: base!.bio,
+      photos: base!.photos,
+      constellation: base!.constellation,
+      location: base!.location,
     }
     currentUser = user
     const data: LoginResponse = { token: 'mock-token', user }
@@ -106,7 +107,8 @@ export const handlers = [
     if (!body?.account || !body?.password) {
       return error('账号和密码不能为空', 400)
     }
-    const base = users.find(u => u.phone === body.account || u.email === body.account)
+    const account = body.account as string
+    const base = users.find(u => u.phone === account || u.email === account)
     if (!base) {
       return error('账号不存在', 400)
     }

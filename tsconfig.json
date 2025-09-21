@@ -25,7 +25,7 @@
       "unplugin-vue-router/client"
     ],
     "allowJs": false,
-    "strict": false,
+    "strict": true,
     "strictFunctionTypes": false,
     "noImplicitThis": true,
     "importHelpers": true,
