@@ -244,7 +244,7 @@ Standardized tri-state handling for list pages to avoid flickers/blank screens:
 <ErrorState v-else-if="error" :description="error || undefined" @retry="refreshTalkList" />
 <div v-else class="list-container">
   <EmptyState v-if="mytalklist.length === 0" @refresh="refreshTalkList" />
-  <VirtualList v-else :items="mytalklist" @update="() => {}">
+  <VirtualList v-else mode="recycle" :items="mytalklist" @update="() => {}">
     <!-- items -->
   </VirtualList>
 </div>

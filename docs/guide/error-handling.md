@@ -244,7 +244,7 @@ UI交互层的错误处理注重用户体验，通过合理的降级策略和友
 <ErrorState v-else-if="error" :description="error || undefined" @retry="refreshTalkList" />
 <div v-else class="list-container">
   <EmptyState v-if="mytalklist.length === 0" @refresh="refreshTalkList" />
-  <VirtualList v-else :items="mytalklist" @update="() => {}">
+  <VirtualList v-else mode="recycle" :items="mytalklist" @update="() => {}">
     <!-- 列表项 -->
   </VirtualList>
   

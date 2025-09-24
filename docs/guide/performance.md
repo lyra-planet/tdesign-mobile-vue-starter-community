@@ -74,10 +74,10 @@ async function loadLocaleMessages(locale: string) {
 
 #### 虚拟列表组件（VirtualList）
 
-项目内封装了 `src/components/VirtualList.vue`，基于 `vue-virtual-scroller`，统一了两类虚拟滚动能力：
+项目内封装了 `src/components/VirtualList.vue`，基于 `vue-virtual-scroller`，统一了两类虚拟滚动能力，并由外部通过 `mode` 手动切换：
 
-- **Dynamic 模式（默认）**：适合高度不固定的列表（如聊天消息、动态内容）
-- **Recycle/Grid 模式**：适合固定行高或栅格布局（如首页卡片栅格）
+- **Dynamic 模式（默认）**：适合高度不固定的列表（如聊天消息、动态内容），`mode="dynamic"`
+- **Recycle/Grid 模式**：适合固定行高或栅格布局（如首页卡片栅格），`mode="recycle"`
 
 核心特性：
 
@@ -88,35 +88,37 @@ async function loadLocaleMessages(locale: string) {
 可用 Props（部分）：
 
 - `items`：列表数据（必填）
-- `item-size?`：单项估计高度（Dynamic 为最小高度；Recycle/Grid 为行高），默认 `80`
+- `item-size?`：单项估计高度（Dynamic 为最小高度；Recycle 为行高），默认 `80`
 - `key-field?`：唯一键字段名，默认 `'id'`
 - `buffer-px?`：视口缓冲像素，默认 `200`
-- `add-recycle-buffer?`：仅 Recycle/Grid 下的额外缓冲“项数”
+- `add-recycle-buffer?`：仅 Recycle 模式下的额外缓冲“项数”
 - `page-mode?`：页面滚动模式，默认 `false`
-- `grid-items?`：每行列数（>0 则启用 Recycle/Grid 模式）
-- `item-secondary-size?`：栅格次要尺寸（如网格单元宽度）
+- `mode?`: `'dynamic' | 'recycle'`（不传默认 dynamic）
+- `grid-items?`：每行列数（仅在 `recycle` 模式下用于栅格分布）
+- `item-secondary-size?`：栅格次要尺寸（如网格单元宽度，仅 `recycle` 下有效）
 - `list-class/item-class/list-tag/item-tag`：透传底层类名与标签
-- `class/style`：外层容器的类名与样式
+- 其他 HTML attribute（如 `class`/`style`）会透传到内部根组件
 
 事件与插槽：
 
 - `@update="(start, end, vStart?, vEnd?) => {}"`：可见区域变化时触发
 - 默认插槽：`v-slot="{ item, index, active }"`（`active` 仅在 Recycle/Grid 提供）
 
-何时选择哪种模式：
+何时选择哪种模式（由 `mode` 决定）：
 
-- 内容高度差异很大、不可预估 → 选 **Dynamic**（`<DynamicScroller>`）
-- 内容高度稳定且固定行高、或需要栅格布局 → 选 **Recycle/Grid**（`<RecycleScroller>`）
+- 内容高度差异很大、不可预估 → 选 **Dynamic**
+- 内容高度稳定且固定行高、或需要栅格布局 → 选 **Recycle**（注意：`grid-items` 仅在 `recycle` 有效）
 
 示例 1：聊天消息（动态高度）
 
 ```vue
 <template>
   <VirtualList
+    mode="dynamic"
     class="messages-area"
     :items="messages"
     key-field="id"
-    :item-size="68"        
+    :item-size="68"
     :buffer-px="300"
     @update="onUpdate"
   >
@@ -139,10 +141,11 @@ function onUpdate(start: number, end: number, vStart?: number, vEnd?: number) {
 ```vue
 <template>
   <VirtualList
+    mode="recycle"
     class="h-full"
     :items="homeItems"
-    :item-size="256"             
-    :grid-items="gridCols"       
+    :item-size="256"
+    :grid-items="gridCols"
     :item-secondary-size="itemSecondarySize"
     :add-recycle-buffer="300"
     list-class="grid-list"

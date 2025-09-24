@@ -89,6 +89,7 @@ function onVListUpdate(startIndex: number, endIndex: number, visibleStartIndex?:
         />
         <div v-else class="cardContainer flex-1 min-h-0">
           <VirtualList
+            mode="recycle"
             class="h-full" :items="homeItems" :item-size="itemSize" :grid-items="gridCols"
             :item-secondary-size="itemSecondarySize" :add-recycle-buffer="300" list-class="grid-list"
             @update="onVListUpdate"

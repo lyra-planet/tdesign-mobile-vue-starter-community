@@ -36,7 +36,9 @@ const {
 
       <VirtualList
         v-else
+        mode="recycle"
         :items="mytalklist"
+        :item-size="itemSize"
         :buffer-px="bufferPx"
         key-field="id"
         class="list-container-inner"

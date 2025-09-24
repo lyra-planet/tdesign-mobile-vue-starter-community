@@ -30,5 +30,6 @@ const { t, message, sending, current, messagesWithTimeInfo, handleSendMessage } 
   background: var(--td-bg-color-page);
   position: relative;
   overflow: hidden;
+  background-color: #fff;
 }
 </style>

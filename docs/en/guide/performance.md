@@ -74,10 +74,10 @@ async function loadLocaleMessages(locale: string) {
 
 #### VirtualList Component
 
-We provide a wrapper `src/components/VirtualList.vue` built on top of `vue-virtual-scroller`, unifying two capabilities:
+We provide a wrapper `src/components/VirtualList.vue` built on top of `vue-virtual-scroller`, unifying two capabilities, and you switch explicitly via the `mode` prop:
 
-- **Dynamic mode (default)**: for variable-height items (chat messages, dynamic feeds)
-- **Recycle/Grid mode**: for fixed row height or grid layouts (home cards grid)
+- **Dynamic mode (default)**: for variable-height items (chat messages, dynamic feeds), `mode="dynamic"`
+- **Recycle/Grid mode**: for fixed row height or grid layouts (home cards grid), `mode="recycle"`
 
 Key features:
 
@@ -88,31 +88,33 @@ Key features:
 Props (partial):
 
 - `items`: list data (required)
-- `item-size?`: estimated item height (Dynamic: min height; Recycle/Grid: row height), default `80`
+- `item-size?`: estimated item height (Dynamic: min height; Recycle: row height), default `80`
 - `key-field?`: unique key field name, default `'id'`
 - `buffer-px?`: viewport buffer in pixels, default `200`
-- `add-recycle-buffer?`: extra buffered item count for Recycle/Grid only
+- `add-recycle-buffer?`: extra buffered item count for Recycle mode only
 - `page-mode?`: page scroll mode, default `false`
-- `grid-items?`: columns per row (>0 enables Recycle/Grid)
-- `item-secondary-size?`: secondary size for grid cell (e.g., width)
+- `mode?`: `'dynamic' | 'recycle'` (default dynamic)
+- `grid-items?`: columns per row (only effective in `recycle` mode)
+- `item-secondary-size?`: secondary size for grid cell (e.g., width; only in `recycle`)
 - `list-class/item-class/list-tag/item-tag`: passthrough classes/tags
-- `class/style`: wrapper container class/style
+- Other HTML attributes (e.g., `class`/`style`) are forwarded to the internal root component
 
 Events & slots:
 
 - `@update="(start, end, vStart?, vEnd?) => {}"`: fired on visible range changes
 - Default slot: `v-slot="{ item, index, active }"` (`active` only in Recycle/Grid)
 
-When to use which mode:
+When to use which mode (decided by `mode`):
 
-- Highly variable, unpredictable heights → use **Dynamic** (`<DynamicScroller>`)
-- Stable, fixed row heights or grid layout → use **Recycle/Grid** (`<RecycleScroller>`)
+- Highly variable, unpredictable heights → use **Dynamic**
+- Stable, fixed row heights or grid layout → use **Recycle** (note: `grid-items` only works in `recycle`)
 
 Example 1: Chat messages (dynamic heights)
 
 ```vue
 <template>
   <VirtualList
+    mode="dynamic"
     class="messages-area"
     :items="messages"
     key-field="id"
@@ -138,6 +140,7 @@ Example 2: Home cards grid (fixed-size grid)
 ```vue
 <template>
   <VirtualList
+    mode="recycle"
     class="h-full"
     :items="homeItems"
     :item-size="256"

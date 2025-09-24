@@ -17,7 +17,10 @@ const renderMessages = computed(() => props.messages.filter(m => m.tag !== 'time
 </script>
 
 <template>
-  <VirtualList class="messages-area" :items="renderMessages" key-field="id" :item-size="68" :buffer-px="300">
+  <VirtualList
+    mode="dynamic" class="messages-area" :items="renderMessages" key-field="id" :item-size="68"
+    :buffer-px="300"
+  >
     <template #default="{ item }">
       <div class="itemContent">
         <div v-if="item.showTimeDivider" class="time-badge">
@@ -45,8 +48,9 @@ const renderMessages = computed(() => props.messages.filter(m => m.tag !== 'time
 <style lang='scss' scoped>
 .itemContent {
   box-sizing: border-box;
-  padding-top: 16px;
+  padding: 16px 12px 0 12px;
 }
+
 .messages-area {
   flex: 1;
   border-top: 0.5px solid #e7e7e7;

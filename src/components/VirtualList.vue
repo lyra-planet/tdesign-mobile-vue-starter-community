@@ -3,12 +3,13 @@
 // - itemSize?: 单项高度估计值（Dynamic: 最小高度；Recycle/Grid: 行高），默认 80
 // - keyField?: 唯一键字段名，默认 'id'
 // - bufferPx?: 视口缓冲像素（Dynamic 直接使用；Recycle 会按行高换算为“项数”），默认 200
-// - addRecycleBuffer?: 仅 Recycle/Grid 模式下附加的额外缓冲项数，用于精细调优
+// - addRecycleBuffer?: 仅 Recycle 模式下附加的额外缓冲项数，用于精细调优
 // - pageMode?: 是否使用“页面滚动”模式（默认 false；false 表示自身容器滚动）
-// - gridItems?: 每行列数（>0 启用 Recycle/Grid 模式，需固定 itemSize）
+// - mode?: 'dynamic' | 'recycle'（由外部手动切换模式，默认 dynamic）
+// - gridItems?: 每行列数（仅在 recycle 模式下用于开启栅格，需固定 itemSize）
 // - itemSecondarySize?: 栅格单元的次要尺寸（Grid 宽度），与 gridItems 搭配使用
 // - listClass/itemClass/listTag/itemTag: 透传给底层虚拟列表以自定义类名与标签
-// - class/style: 外层容器类名与内联样式
+// - 其他 HTML Attributes（如 class/style）将通过 $attrs 透传到内部根组件
 //
 // Events（事件）
 // - update(startIndex, endIndex, visibleStartIndex?, visibleEndIndex?)
@@ -30,13 +31,12 @@ interface Props<T = any> {
   keyField?: string
   bufferPx?: number
   pageMode?: boolean
+  mode?: 'dynamic' | 'recycle'
   listClass?: string
   itemClass?: string
   listTag?: string
   itemTag?: string
-  class?: string
   addRecycleBuffer?: number
-  style?: string | Record<string, string>
   // Recycle/Grid 模式（固定尺寸/栅格）
   gridItems?: number
   itemSecondarySize?: number
@@ -51,15 +51,15 @@ const keyField = computed(() => props.keyField ?? 'id')
 const bufferPx = computed(() => props.bufferPx ?? 200)
 const pageMode = computed(() => props.pageMode ?? false)
 const minItemSize = computed(() => props.itemSize ?? 80)
-const useGridRecycle = computed(() => typeof props.gridItems === 'number' && props.gridItems > 0)
+const isRecycleMode = computed(() => props.mode === 'recycle')
 
 // 对于 RecycleScroller：其 buffer 表示“项数”，不是像素
 // 将像素缓冲转换为项数缓冲（按行高换算，再乘以列数）
 const recycleBuffer = computed(() => {
   const px = bufferPx.value
   const rows = Math.max(2, Math.ceil(px / (minItemSize.value || 1)))
-  const cols = useGridRecycle.value ? (props.gridItems as number) : 1
-  return rows * Math.max(1, cols) + (props.addRecycleBuffer ?? 0)
+  const cols = isRecycleMode.value ? Math.max(1, Number(props.gridItems) || 1) : 1
+  return rows * cols + (props.addRecycleBuffer ?? 0)
 })
 
 function onUpdate(startIndex: number, endIndex: number, visibleStartIndex?: number, visibleEndIndex?: number) {
@@ -68,9 +68,10 @@ function onUpdate(startIndex: number, endIndex: number, visibleStartIndex?: numb
 </script>
 
 <template>
-  <template v-if="useGridRecycle">
+  <template v-if="isRecycleMode">
+    <!-- @vue-ignore -->
     <RecycleScroller
-      v-slot="{ item, index, active }" class="vl-container" :class="props.class" :style="props.style"
+      v-slot="{ item, index, active }" class="vl-container" v-bind="$attrs"
       :items="props.items" :item-size="minItemSize" :buffer="recycleBuffer" :key-field="keyField"
       :page-mode="pageMode" :list-class="props.listClass" :item-class="props.itemClass" :list-tag="props.listTag"
       :item-tag="props.itemTag" :grid-items="props.gridItems" :item-secondary-size="props.itemSecondarySize"
@@ -80,8 +81,9 @@ function onUpdate(startIndex: number, endIndex: number, visibleStartIndex?: numb
     </RecycleScroller>
   </template>
   <template v-else>
+    <!-- @vue-ignore -->
     <DynamicScroller
-      v-slot="{ item, index, active }" class="vl-container" :class="props.class" :style="props.style"
+      v-slot="{ item, index, active }" class="vl-container" v-bind="$attrs"
       :items="props.items" :min-item-size="minItemSize" :buffer="bufferPx" :key-field="keyField"
       :page-mode="pageMode" :list-class="props.listClass" :item-class="props.itemClass" :list-tag="props.listTag"
       :item-tag="props.itemTag" :emit-update="true" @update="onUpdate"
