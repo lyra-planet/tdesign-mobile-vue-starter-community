@@ -21,7 +21,7 @@ export function getSearchDiscoveries(): Promise<ApiResponse<SearchDiscoveriesRes
   return get('/search/discoveries')
 }
 
-export function search(query: string, signal?: AbortSignal): Promise<ApiResponse<SearchResultsResponse>> {
+export function search(query: string): Promise<ApiResponse<SearchResultsResponse>> {
   const q = encodeURIComponent(query)
-  return get(`/search?q=${q}`, undefined, signal)
+  return get(`/search?q=${q}`)
 }

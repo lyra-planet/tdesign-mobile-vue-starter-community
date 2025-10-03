@@ -5,6 +5,7 @@ export interface ApiResponse<T = any> {
   success: boolean
   bizCode?: number | string
   bizSuccess?: boolean
+  requestId?: number
 }
 
 export interface SendCodeRequest {

@@ -2,6 +2,7 @@ import { DialogPlugin } from 'tdesign-mobile-vue'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { cancelRequest } from '@/api/request'
 import { getSearchDiscoveries, getSearchHistoryTags, search as searchApi } from '@/api/search'
 import 'tdesign-mobile-vue/es/dialog/style/index.css'
 
@@ -14,7 +15,7 @@ export function useSearch() {
 
   const searchQuery = ref('')
   let searchTimer: number | null = null
-  let currentSearchController: AbortController | null = null
+  let currentRequestId: number | null = null
 
   onMounted(async () => {
     const [tagsRes, discRes] = await Promise.all([
@@ -32,26 +33,35 @@ export function useSearch() {
       clearTimeout(searchTimer)
     const text = q?.trim() || ''
     if (!text) {
-      if (currentSearchController)
-        currentSearchController.abort()
-      currentSearchController = null
+      if (currentRequestId)
+        cancelRequest(currentRequestId)
+      currentRequestId = null
       return
     }
     searchTimer = window.setTimeout(async () => {
-      if (currentSearchController)
-        currentSearchController.abort()
-      const controller = new AbortController()
-      currentSearchController = controller
-      await searchApi(text, controller.signal)
-      // 如果后续需要使用搜索结果，可在此扩展返回值
+      // 取消之前的请求
+      if (currentRequestId)
+        cancelRequest(currentRequestId)
+
+      try {
+        const response = await searchApi(text)
+        currentRequestId = response.requestId || null
+        // 如果后续需要使用搜索结果，可在此扩展返回值
+      }
+      catch (error) {
+        // 忽略取消的请求错误
+        if ((error as any)?.name !== 'AbortError') {
+          console.error('搜索失败:', error)
+        }
+      }
     }, 300)
   })
 
   onBeforeUnmount(() => {
     if (searchTimer)
       clearTimeout(searchTimer)
-    if (currentSearchController)
-      currentSearchController.abort()
+    if (currentRequestId)
+      cancelRequest(currentRequestId)
   })
 
   function handleCancelClick() {

@@ -13,6 +13,8 @@ class HttpClient {
   private defaultTimeoutMs: number
   private authToken: string | null
   private bizSuccessWhitelist: Set<number | string>
+  private requestMap: Map<number, AbortController>
+  private requestIdCounter: number
 
   constructor(baseURL: string = import.meta.env.VITE_API_BASE) {
     this.baseURL = baseURL
@@ -24,6 +26,8 @@ class HttpClient {
     this.authToken = null
     // 提供业务码白名单判断
     this.bizSuccessWhitelist = new Set([200, 0])
+    this.requestMap = new Map()
+    this.requestIdCounter = 0
   }
 
   // 配置业务成功码白名单
@@ -53,9 +57,29 @@ class HttpClient {
     this.defaultTimeoutMs = Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : 0
   }
 
+  // 取消指定请求
+  cancelRequest(requestId: number) {
+    const controller = this.requestMap.get(requestId)
+    if (controller) {
+      controller.abort()
+      this.requestMap.delete(requestId)
+      return true
+    }
+    return false
+  }
+
+  // 取消所有请求
+  cancelAllRequests() {
+    this.requestMap.forEach(controller => controller.abort())
+    this.requestMap.clear()
+  }
+
   async request(endpoint: string, config: RequestConfig = {}) {
     const url = `${this.baseURL}${endpoint}`
     const { method = 'GET', headers = {}, body, signal, timeout } = config
+
+    // 生成请求ID
+    const requestId = ++this.requestIdCounter
 
     const tokenHeader = this.authToken ? { Authorization: `Bearer ${this.authToken}` } : {}
     const requestHeaders = {
@@ -67,6 +91,7 @@ class HttpClient {
     const timeoutMs = Number.isFinite(timeout as number) && (timeout as number) > 0 ? (timeout as number) : this.defaultTimeoutMs
 
     const controller = new AbortController()
+    this.requestMap.set(requestId, controller)
     let didTimeout = false
     let externalAbortHandler: ((this: AbortSignal, ev: Event) => any) | null = null
 
@@ -133,6 +158,7 @@ class HttpClient {
         // 额外暴露业务码与判定，供业务层按需处理
         bizCode,
         bizSuccess,
+        requestId,
       } as any
 
       if ((this.showToastOnError) && (!result.success || !bizSuccess)) {
@@ -155,12 +181,14 @@ class HttpClient {
             code: 408,
             message: '请求超时',
             success: false,
+            requestId,
           }
         }
         return {
           code: 499,
           message: '请求已取消',
           success: false,
+          requestId,
         }
       }
       if (this.showToastOnError) {
@@ -173,6 +201,7 @@ class HttpClient {
         code: 500,
         message: '网络请求失败',
         success: false,
+        requestId,
       }
     }
     finally {
@@ -180,6 +209,8 @@ class HttpClient {
         clearTimeout(timeoutId as any)
       if (signal && externalAbortHandler)
         signal.removeEventListener('abort', externalAbortHandler)
+      // 清理请求映射
+      this.requestMap.delete(requestId)
     }
   }
 
@@ -204,6 +235,14 @@ export const httpClient = new HttpClient()
 
 export function setRequestTimeout(timeoutMs: number) {
   httpClient.setRequestTimeout(timeoutMs)
+}
+
+export function cancelRequest(requestId: number) {
+  return httpClient.cancelRequest(requestId)
+}
+
+export function cancelAllRequests() {
+  httpClient.cancelAllRequests()
 }
 
 export function get(endpoint: string, headers?: any, signal?: AbortSignal) {
